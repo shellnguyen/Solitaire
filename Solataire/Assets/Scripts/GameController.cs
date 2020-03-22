@@ -39,8 +39,9 @@ public class GameController : MonoBehaviour
     [SerializeField]private CommonData m_MainData;
     [SerializeField]private GameObject m_CardPrefab;
     [SerializeField]private List<CardElement> m_ListCards;
-    [SerializeField] private GameObject[] m_BottomList;
-    [SerializeField] private GameObject[] m_TopList;
+    [SerializeField]private GameObject[] m_BottomList;
+    [SerializeField]private GameObject[] m_TopList;
+    [SerializeField]private GameObject m_DeckButton;
     public List<int> ListCards;
 
 
@@ -67,6 +68,7 @@ public class GameController : MonoBehaviour
         float xOffset = 0.0f;
         float yOffset = 0.0f;
 
+
         for(int i = 0; i < 4; ++i)
         {
             for(int k = 0; k < 13; ++k)
@@ -80,7 +82,7 @@ public class GameController : MonoBehaviour
                 //ListCards.Add(0 | suitValue | cardValue);
 
                 //CardElement card = new CardElement();
-                GameObject tempCard = Instantiate(m_CardPrefab, new Vector3(this.transform.position.x, this.transform.position.y - yOffset, this.transform.position.z), Quaternion.identity);
+                GameObject tempCard = Instantiate(m_CardPrefab, m_DeckButton.transform.position, Quaternion.identity);
 
 
                 m_ListCards.Add(tempCard.GetComponent<CardElement>());
@@ -90,6 +92,21 @@ public class GameController : MonoBehaviour
                 //Debug.Log("Card = " + ListCards[i] + " - Binary = " + Convert.ToString(ListCards[i], 2));
                 builder.Clear();
             }
+        }
+
+        Shuffle<CardElement>(m_ListCards);
+    }
+
+    public void Shuffle<T>(List<T> list)
+    {
+        var count = list.Count;
+        var last = count - 1;
+        for (var i = 0; i < last; ++i)
+        {
+            var r = UnityEngine.Random.Range(i, count);
+            var tmp = list[i];
+            list[i] = list[r];
+            list[r] = tmp;
         }
     }
 }
