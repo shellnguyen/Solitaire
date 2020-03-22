@@ -12,6 +12,7 @@ public class CardElement : MonoBehaviour
     [SerializeField]private ushort m_CardValue;
     [SerializeField]private string m_CardName;
     public bool isFaceUp = false;
+    public Solitaire.CardPosition position;
 
     private void Awake()
     {
@@ -42,5 +43,6 @@ public class CardElement : MonoBehaviour
         m_CardValue = cardValue;
 
         m_Front = m_SpriteAtlas.GetSprite(m_CardName);
+        position = Solitaire.CardPosition.Deck;
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
-using UnityEngine.U2D;
 
 namespace Solitaire
 {
@@ -32,6 +32,13 @@ namespace Solitaire
         Diamonds = 1 << 14,
         Hearts = 1 << 15
     }
+
+    public enum CardPosition
+    {
+        Deck,
+        Top,
+        Bottom
+    }
 }
 
 public class GameController : MonoBehaviour
@@ -51,6 +58,7 @@ public class GameController : MonoBehaviour
         ListCards = new List<int>();
         m_ListCards = new List<CardElement>();
         GenerateDeck();
+        //StartCoroutine(DealCards());
     }
 
     // Update is called once per frame
@@ -95,6 +103,36 @@ public class GameController : MonoBehaviour
         }
 
         Shuffle<CardElement>(m_ListCards);
+    }
+
+    IEnumerator DealCards()
+    {
+        int cardNum = 1;
+        for(int i = 0; i < m_BottomList.Length; ++i)
+        {
+            yield return new WaitForSeconds(0.5f);
+            for(int j = 0; j < cardNum; ++j)
+            {
+                iTween.MoveTo(m_ListCards[j * 7 + i].gameObject, m_BottomList[i].transform.position, 0.1f);
+
+                if(i == cardNum - 1)
+                {
+                    m_ListCards[j * 7 + i].isFaceUp = true;
+                }
+                m_ListCards[j * 7 + i].position = Solitaire.CardPosition.Bottom;
+            }
+
+            cardNum++;
+        }
+
+        for(int i = 0; i < 28; ++i)
+        {
+            if(i > cardNum)
+            {
+                cardNum++;
+            }
+            iTween.MoveTo(m_ListCards[i].gameObject, m_BottomList[cardNum - 1].transform.position, 0.1f);
+        }
     }
 
     public void Shuffle<T>(List<T> list)
