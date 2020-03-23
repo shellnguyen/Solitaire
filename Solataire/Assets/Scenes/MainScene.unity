@@ -193,6 +193,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Bottom
       objectReference: {fileID: 0}
+    - target: {fileID: 4974211485696007699, guid: 2a3d1a5f78820a84f86049794476bd64,
+        type: 3}
+      propertyPath: m_Layer
+      value: 19
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a3d1a5f78820a84f86049794476bd64, type: 3}
 --- !u!4 &33141291 stripped
@@ -454,6 +459,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Top
+      objectReference: {fileID: 0}
+    - target: {fileID: 4974211485696007699, guid: 2a3d1a5f78820a84f86049794476bd64,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4974211485696007701, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}
@@ -1366,6 +1376,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Top
       objectReference: {fileID: 0}
+    - target: {fileID: 4974211485696007699, guid: 2a3d1a5f78820a84f86049794476bd64,
+        type: 3}
+      propertyPath: m_Layer
+      value: 17
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a3d1a5f78820a84f86049794476bd64, type: 3}
 --- !u!4 &488849078 stripped
@@ -2054,6 +2069,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Top
       objectReference: {fileID: 0}
+    - target: {fileID: 4974211485696007699, guid: 2a3d1a5f78820a84f86049794476bd64,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 4974211485696007701, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}
       propertyPath: m_Enabled
@@ -2138,6 +2158,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Bottom
+      objectReference: {fileID: 0}
+    - target: {fileID: 4974211485696007699, guid: 2a3d1a5f78820a84f86049794476bd64,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 4974211485696007700, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}
@@ -2667,6 +2692,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Bottom
       objectReference: {fileID: 0}
+    - target: {fileID: 4974211485696007699, guid: 2a3d1a5f78820a84f86049794476bd64,
+        type: 3}
+      propertyPath: m_Layer
+      value: 18
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a3d1a5f78820a84f86049794476bd64, type: 3}
 --- !u!4 &1254050775 stripped
@@ -2819,6 +2849,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Top
       objectReference: {fileID: 0}
+    - target: {fileID: 4974211485696007699, guid: 2a3d1a5f78820a84f86049794476bd64,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 4974211485696007701, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}
       propertyPath: m_Enabled
@@ -2903,6 +2938,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Bottom
+      objectReference: {fileID: 0}
+    - target: {fileID: 4974211485696007699, guid: 2a3d1a5f78820a84f86049794476bd64,
+        type: 3}
+      propertyPath: m_Layer
+      value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a3d1a5f78820a84f86049794476bd64, type: 3}
@@ -4538,6 +4578,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Bottom
       objectReference: {fileID: 0}
+    - target: {fileID: 4974211485696007699, guid: 2a3d1a5f78820a84f86049794476bd64,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a3d1a5f78820a84f86049794476bd64, type: 3}
 --- !u!4 &1799369668 stripped
@@ -4705,7 +4750,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1904655132}
   - component: {fileID: 1904655134}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: DrawCardHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5045,7 +5090,7 @@ GameObject:
   - component: {fileID: 1942099064}
   - component: {fileID: 1942099065}
   - component: {fileID: 1942099066}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DeckButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5512,6 +5557,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Top
       objectReference: {fileID: 0}
+    - target: {fileID: 4974211485696007699, guid: 2a3d1a5f78820a84f86049794476bd64,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 4974211485696007701, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}
       propertyPath: m_Enabled
@@ -5596,6 +5646,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Bottom
+      objectReference: {fileID: 0}
+    - target: {fileID: 4974211485696007699, guid: 2a3d1a5f78820a84f86049794476bd64,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 4974211485696007700, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}

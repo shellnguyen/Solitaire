@@ -36,9 +36,9 @@ namespace Solitaire
     [Flags]
     public enum CardPosition
     {
-        Deck,
+        Deck = 8,
         Draw,
-        Top1 = 8,
+        Top1,
         Top2,
         Top3,
         Top4,
@@ -139,7 +139,7 @@ public class GameController : MonoBehaviour
             {
                 m_BottomCards[i].isFaceUp = true;
             }
-            m_BottomCards[i].position = (Solitaire.CardPosition)(bottomNum + 11); //TODO: remove hardcode index
+            m_BottomCards[i].position = (Solitaire.CardPosition)(bottomNum + 13); //TODO: remove hardcode index
             m_BottomCards[i].transform.SetParent(m_BottomList[bottomNum - 1].transform);
             cardNum++;
             yOffset += 0.3f;
