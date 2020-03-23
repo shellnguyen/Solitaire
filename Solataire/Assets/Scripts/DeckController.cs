@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DeckController : MonoBehaviour
 {
+    [SerializeField]private GameData m_GameData;
     [SerializeField]private GameController m_GameController;
     [SerializeField]private SpriteRenderer m_Renderer;
     [SerializeField]private Sprite m_Back;
@@ -15,7 +16,7 @@ public class DeckController : MonoBehaviour
     private void Start()
     {
         m_Renderer = GetComponent<SpriteRenderer>();
-        m_CurrentDrawCard = -1;
+        m_GameData.currentDrawCard = -1;
         isEmpty = false;
     }
 
@@ -29,10 +30,10 @@ public class DeckController : MonoBehaviour
         Debug.Log("DeckController onMouseDown");
         if (!isEmpty)
         {
-            m_CurrentDrawCard++;
-            m_GameController.DrawCardFromDeck(m_CurrentDrawCard);
+            m_GameData.currentDrawCard++;
+            m_GameController.DrawCardFromDeck();
 
-            if(m_CurrentDrawCard >= m_GameController.DecksSize() - 1)
+            if(m_GameData.currentDrawCard >= m_GameData.deckCards.Count - 1)
             {
                 isEmpty = true;
                 m_Renderer.sprite = m_Empty;
@@ -40,7 +41,7 @@ public class DeckController : MonoBehaviour
         }
         else
         {
-            m_CurrentDrawCard = -1;
+            m_GameData.currentDrawCard = -1;
             isEmpty = false;
             m_GameController.PutBackToDeck();
             m_Renderer.sprite = m_Back;

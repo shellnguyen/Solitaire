@@ -33,6 +33,7 @@ namespace Solitaire
         Hearts = 1 << 15
     }
 
+    [Flags]
     public enum CardPosition
     {
         Deck,
@@ -53,25 +54,25 @@ namespace Solitaire
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField]private CommonData m_MainData;
-    [SerializeField]private GameObject m_CardPrefab;
-    [SerializeField]private List<CardElement> m_DeckCards;
-    [SerializeField]private List<CardElement> m_BottomCards;
-    [SerializeField]private List<CardElement> m_TopCards;
-    [SerializeField]private GameObject[] m_BottomList;
-    [SerializeField]private GameObject[] m_TopList;
-    [SerializeField]private GameObject m_DeckButton;
-    [SerializeField]private GameObject m_DrawCardHolder;
+    [SerializeField] private GameData m_GameData;
+    [SerializeField] private CommonData m_MainData;
+    [SerializeField] private GameObject m_CardPrefab;
+    [SerializeField] private List<CardElement> m_DeckCards;
+    [SerializeField] private List<CardElement> m_BottomCards;
+    [SerializeField] private List<CardElement> m_TopCards;
+    [SerializeField] private GameObject[] m_BottomList;
+    [SerializeField] private GameObject[] m_TopList;
+    [SerializeField] private GameObject m_DeckButton;
+    [SerializeField] private GameObject m_DrawCardHolder;
     public List<int> ListCards;
 
-
-    // Start is called before the first frame update
-    private void Start()
+    private void Awake()
     {
         ListCards = new List<int>();
-        m_DeckCards = new List<CardElement>();
-        m_BottomCards = new List<CardElement>();
-        m_TopCards = new List<CardElement>();
+        m_DeckCards = m_GameData.deckCards = new List<CardElement>();
+        m_BottomCards = m_GameData.bottomCards = new List<CardElement>();
+        m_TopCards = m_GameData.topCards = new List<CardElement>();
+
         GenerateDeck();
         StartCoroutine(DealCards());
     }
@@ -79,7 +80,7 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        
+
     }
 
     private void GenerateDeck()
@@ -89,9 +90,9 @@ public class GameController : MonoBehaviour
         ushort cardOffset = 1;
 
 
-        for(int i = 0; i < 4; ++i)
+        for (int i = 0; i < 4; ++i) //Suits
         {
-            for(int k = 0; k < 13; ++k)
+            for (int k = 0; k < 13; ++k) //Card value
             {
                 ushort suitValue = (ushort)(1 << (i + suitOffset));
                 ushort cardValue = (ushort)((k == 0 ? 0 : 1) << (k - cardOffset));
@@ -123,7 +124,7 @@ public class GameController : MonoBehaviour
         for (int i = 0; i < 28; ++i)
         {
             yield return new WaitForSeconds(0.05f);
-            if(cardNum == bottomNum)
+            if (cardNum == bottomNum)
             {
                 bottomNum++;
                 cardNum = 0;
@@ -148,9 +149,9 @@ public class GameController : MonoBehaviour
         m_DeckCards.RemoveRange(0, 28);
     }
 
-    public void DrawCardFromDeck(sbyte currentDrawCard)
+    public void DrawCardFromDeck()
     {
-        StartCoroutine(DrawCard(currentDrawCard));
+        StartCoroutine(DrawCard());
     }
 
     public void PutBackToDeck()
@@ -160,7 +161,7 @@ public class GameController : MonoBehaviour
 
     IEnumerator PutBackCard()
     {
-        foreach(CardElement card in m_DeckCards)
+        foreach (CardElement card in m_DeckCards)
         {
             iTween.MoveTo(card.gameObject, m_DeckButton.transform.position + Vector3.forward, 0.1f);
             card.position = Solitaire.CardPosition.Deck;
@@ -170,15 +171,16 @@ public class GameController : MonoBehaviour
         yield break;
     }
 
-    IEnumerator DrawCard(sbyte currentDrawCard)
+    IEnumerator DrawCard()
     {
         float offSet = 0.5f;
 
-        if(currentDrawCard > 2)
+        sbyte currentDrawCard = m_GameData.currentDrawCard;
+        if (currentDrawCard > 2)
         {
-            for(int i = currentDrawCard - 2; i < currentDrawCard; ++i)
+            for (int i = currentDrawCard - 2; i < currentDrawCard; ++i)
             {
-                iTween.MoveTo(m_DeckCards[i].gameObject, new Vector3(m_DeckCards[i].transform.position.x - offSet, m_DeckCards[i].transform.position.y, - (i * offSet)), 0.0f);
+                iTween.MoveTo(m_DeckCards[i].gameObject, new Vector3(m_DeckCards[i].transform.position.x - offSet, m_DeckCards[i].transform.position.y, -(i * offSet)), 0.0f);
             }
         }
         iTween.MoveTo(m_DeckCards[currentDrawCard].gameObject, new Vector3(m_DrawCardHolder.transform.position.x + (currentDrawCard >= 2 ? 1.0f : currentDrawCard * offSet), m_DrawCardHolder.transform.position.y, -(currentDrawCard * offSet)), 0.1f);
@@ -188,18 +190,13 @@ public class GameController : MonoBehaviour
         yield break;
     }
 
-    public int DecksSize()
-    {
-        return m_DeckCards.Count;
-    }
-
     public bool CheckMoveCard(Collider2D collider)
     {
         switch (collider.tag)
         {
             case "Card":
                 {
-                    
+
                     //element.m_CardValue = 1;
                     break;
                 }
