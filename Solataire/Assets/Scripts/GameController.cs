@@ -36,6 +36,7 @@ namespace Solitaire
     public enum CardPosition
     {
         Deck,
+        Draw,
         Top,
         Bottom
     }
@@ -45,10 +46,13 @@ public class GameController : MonoBehaviour
 {
     [SerializeField]private CommonData m_MainData;
     [SerializeField]private GameObject m_CardPrefab;
-    [SerializeField]private List<CardElement> m_ListCards;
+    [SerializeField]private List<CardElement> m_DeckCards;
+    [SerializeField]private List<CardElement> m_BottomCards;
+    [SerializeField]private List<CardElement> m_TopCards;
     [SerializeField]private GameObject[] m_BottomList;
     [SerializeField]private GameObject[] m_TopList;
     [SerializeField]private GameObject m_DeckButton;
+    [SerializeField]private GameObject m_DrawCardHolder;
     public List<int> ListCards;
 
 
@@ -56,7 +60,9 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         ListCards = new List<int>();
-        m_ListCards = new List<CardElement>();
+        m_DeckCards = new List<CardElement>();
+        m_BottomCards = new List<CardElement>();
+        m_TopCards = new List<CardElement>();
         GenerateDeck();
         StartCoroutine(DealCards());
     }
@@ -84,22 +90,17 @@ public class GameController : MonoBehaviour
                 builder.Append("_");
                 builder.Append(Enum.GetName(typeof(Solitaire.CardValue), cardValue));
                 Debug.Log("cardName = " + builder);
-                //ListCards.Add(0 | suitValue | cardValue);
 
-                //CardElement card = new CardElement();
-                GameObject tempCard = Instantiate(m_CardPrefab, m_DeckButton.transform.position, Quaternion.identity);
+                GameObject card = Instantiate(m_CardPrefab, m_DeckButton.transform.position, Quaternion.identity);
 
+                m_DeckCards.Add(card.GetComponent<CardElement>());
+                m_DeckCards[i * 13 + k].SetCardProperties((ushort)(0 | suitValue | cardValue), builder.ToString());
 
-                m_ListCards.Add(tempCard.GetComponent<CardElement>());
-                m_ListCards[i * 13 + k].SetCardProperties((ushort)(0 | suitValue | cardValue), builder.ToString());
-
-                //yOffset += 0.5f;
-                //Debug.Log("Card = " + ListCards[i] + " - Binary = " + Convert.ToString(ListCards[i], 2));
                 builder.Clear();
             }
         }
 
-        Shuffle<CardElement>(m_ListCards);
+        Shuffle<CardElement>(m_DeckCards);
     }
 
     IEnumerator DealCards()
@@ -120,16 +121,53 @@ public class GameController : MonoBehaviour
                 zOffset = 0.0f;
             }
 
-            iTween.MoveTo(m_ListCards[i].gameObject, new Vector3(m_BottomList[bottomNum - 1].transform.position.x, m_BottomList[bottomNum - 1].transform.position.y - yOffset, m_BottomList[bottomNum - 1].transform.position.z - zOffset), 0.1f);
+            m_BottomCards.Add(m_DeckCards[i]);
+
+            iTween.MoveTo(m_BottomCards[i].gameObject, new Vector3(m_BottomList[bottomNum - 1].transform.position.x, m_BottomList[bottomNum - 1].transform.position.y - yOffset, m_BottomList[bottomNum - 1].transform.position.z - zOffset), 0.1f);
             if (cardNum == bottomNum - 1)
             {
-                m_ListCards[i].isFaceUp = true;
+                m_BottomCards[i].isFaceUp = true;
             }
-            m_ListCards[i].position = Solitaire.CardPosition.Bottom;
+            m_BottomCards[i].position = Solitaire.CardPosition.Bottom;
             cardNum++;
             yOffset += 0.3f;
             zOffset += 0.1f;
-        }     
+        }
+
+        m_DeckCards.RemoveRange(0, 28);
+    }
+
+    public void DrawCardFromDeck(sbyte currentDrawCard)
+    {
+        StartCoroutine(DrawCard(currentDrawCard));
+    }
+
+    public void PutBackToDeck()
+    {
+    }
+
+    IEnumerator DrawCard(sbyte currentDrawCard)
+    {
+        float xOffSet = 0.5f;
+
+        if(currentDrawCard > 2)
+        {
+            for(int i = currentDrawCard - 2; i < currentDrawCard; ++i)
+            {
+                iTween.MoveTo(m_DeckCards[i].gameObject, new Vector3(m_DeckCards[i].transform.position.x - xOffSet, m_DeckCards[i].transform.position.y, -i), 0.0f);
+            }
+        }
+        iTween.MoveTo(m_DeckCards[currentDrawCard].gameObject, new Vector3(m_DrawCardHolder.transform.position.x + (currentDrawCard >= 2 ? 1.0f : currentDrawCard * xOffSet), m_DrawCardHolder.transform.position.y, -currentDrawCard), 0.1f);
+        m_DeckCards[currentDrawCard].isFaceUp = true;
+        m_DeckCards[currentDrawCard].position = Solitaire.CardPosition.Draw;
+
+        yield break;
+    }
+
+    public bool CheckDecks()
+    {
+        
+        return true;
     }
 
     public void Shuffle<T>(List<T> list)
