@@ -89,7 +89,7 @@ public class GameController : MonoBehaviour
                 builder.Append(Enum.GetName(typeof(Solitaire.SuitType), suitValue));
                 builder.Append("_");
                 builder.Append(Enum.GetName(typeof(Solitaire.CardValue), cardValue));
-                Debug.Log("cardName = " + builder);
+                //Debug.Log("cardName = " + builder);
 
                 GameObject card = Instantiate(m_CardPrefab, m_DeckButton.transform.position + Vector3.forward, Quaternion.identity);
 
