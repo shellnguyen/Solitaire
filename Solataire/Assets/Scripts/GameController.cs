@@ -103,7 +103,7 @@ public class GameController : MonoBehaviour
         Shuffle<CardElement>(m_DeckCards);
     }
 
-    IEnumerator DealCards()
+    private IEnumerator DealCards()
     {
         int bottomNum = 1;
         int cardNum = 0;
@@ -144,6 +144,19 @@ public class GameController : MonoBehaviour
 
     public void PutBackToDeck()
     {
+        StartCoroutine(PutBackCard());
+    }
+
+    IEnumerator PutBackCard()
+    {
+        foreach(CardElement card in m_DeckCards)
+        {
+            iTween.MoveTo(card.gameObject, m_DeckButton.transform.position + Vector3.forward, 0.1f);
+            card.position = Solitaire.CardPosition.Deck;
+            card.isFaceUp = false;
+        }
+
+        yield break;
     }
 
     IEnumerator DrawCard(sbyte currentDrawCard)
