@@ -91,7 +91,7 @@ public class GameController : MonoBehaviour
                 builder.Append(Enum.GetName(typeof(Solitaire.CardValue), cardValue));
                 Debug.Log("cardName = " + builder);
 
-                GameObject card = Instantiate(m_CardPrefab, m_DeckButton.transform.position, Quaternion.identity);
+                GameObject card = Instantiate(m_CardPrefab, m_DeckButton.transform.position + Vector3.forward, Quaternion.identity);
 
                 m_DeckCards.Add(card.GetComponent<CardElement>());
                 m_DeckCards[i * 13 + k].SetCardProperties((ushort)(0 | suitValue | cardValue), builder.ToString());
@@ -148,16 +148,16 @@ public class GameController : MonoBehaviour
 
     IEnumerator DrawCard(sbyte currentDrawCard)
     {
-        float xOffSet = 0.5f;
+        float offSet = 0.5f;
 
         if(currentDrawCard > 2)
         {
             for(int i = currentDrawCard - 2; i < currentDrawCard; ++i)
             {
-                iTween.MoveTo(m_DeckCards[i].gameObject, new Vector3(m_DeckCards[i].transform.position.x - xOffSet, m_DeckCards[i].transform.position.y, -i), 0.0f);
+                iTween.MoveTo(m_DeckCards[i].gameObject, new Vector3(m_DeckCards[i].transform.position.x - offSet, m_DeckCards[i].transform.position.y, - (i * offSet)), 0.0f);
             }
         }
-        iTween.MoveTo(m_DeckCards[currentDrawCard].gameObject, new Vector3(m_DrawCardHolder.transform.position.x + (currentDrawCard >= 2 ? 1.0f : currentDrawCard * xOffSet), m_DrawCardHolder.transform.position.y, -currentDrawCard), 0.1f);
+        iTween.MoveTo(m_DeckCards[currentDrawCard].gameObject, new Vector3(m_DrawCardHolder.transform.position.x + (currentDrawCard >= 2 ? 1.0f : currentDrawCard * offSet), m_DrawCardHolder.transform.position.y, -(currentDrawCard * offSet)), 0.1f);
         m_DeckCards[currentDrawCard].isFaceUp = true;
         m_DeckCards[currentDrawCard].position = Solitaire.CardPosition.Draw;
 
