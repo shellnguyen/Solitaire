@@ -164,10 +164,9 @@ public class GameController : MonoBehaviour
         yield break;
     }
 
-    public bool CheckDecks()
+    public int DecksSize()
     {
-        
-        return true;
+        return m_DeckCards.Count;
     }
 
     public void Shuffle<T>(List<T> list)
