@@ -37,8 +37,17 @@ namespace Solitaire
     {
         Deck,
         Draw,
-        Top,
-        Bottom
+        Top1 = 8,
+        Top2,
+        Top3,
+        Top4,
+        Bottom1,
+        Bottom2,
+        Bottom3,
+        Bottom4,
+        Bottom5,
+        Bottom6,
+        Bottom7
     }
 }
 
@@ -92,9 +101,10 @@ public class GameController : MonoBehaviour
                 //Debug.Log("cardName = " + builder);
 
                 GameObject card = Instantiate(m_CardPrefab, m_DeckButton.transform.position + Vector3.forward, Quaternion.identity);
+                card.transform.SetParent(m_DeckButton.transform);
 
                 m_DeckCards.Add(card.GetComponent<CardElement>());
-                m_DeckCards[i * 13 + k].SetCardProperties((ushort)(0 | suitValue | cardValue), builder.ToString());
+                m_DeckCards[i * 13 + k].SetCardProperties(this, (ushort)(0 | suitValue | cardValue), builder.ToString());
 
                 builder.Clear();
             }
@@ -112,7 +122,7 @@ public class GameController : MonoBehaviour
 
         for (int i = 0; i < 28; ++i)
         {
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.05f);
             if(cardNum == bottomNum)
             {
                 bottomNum++;
@@ -123,12 +133,13 @@ public class GameController : MonoBehaviour
 
             m_BottomCards.Add(m_DeckCards[i]);
 
-            iTween.MoveTo(m_BottomCards[i].gameObject, new Vector3(m_BottomList[bottomNum - 1].transform.position.x, m_BottomList[bottomNum - 1].transform.position.y - yOffset, m_BottomList[bottomNum - 1].transform.position.z - zOffset), 0.1f);
+            iTween.MoveTo(m_BottomCards[i].gameObject, new Vector3(m_BottomList[bottomNum - 1].transform.position.x, m_BottomList[bottomNum - 1].transform.position.y - yOffset, m_BottomList[bottomNum - 1].transform.position.z - zOffset), 0.05f);
             if (cardNum == bottomNum - 1)
             {
                 m_BottomCards[i].isFaceUp = true;
             }
-            m_BottomCards[i].position = Solitaire.CardPosition.Bottom;
+            m_BottomCards[i].position = (Solitaire.CardPosition)(bottomNum + 11); //TODO: remove hardcode index
+            m_BottomCards[i].transform.SetParent(m_BottomList[bottomNum - 1].transform);
             cardNum++;
             yOffset += 0.3f;
             zOffset += 0.1f;
@@ -180,6 +191,32 @@ public class GameController : MonoBehaviour
     public int DecksSize()
     {
         return m_DeckCards.Count;
+    }
+
+    public bool CheckMoveCard(Collider2D collider)
+    {
+        switch (collider.tag)
+        {
+            case "Card":
+                {
+                    
+                    //element.m_CardValue = 1;
+                    break;
+                }
+            case "Bottom":
+                {
+                    break;
+                }
+            case "Top":
+                {
+                    break;
+                }
+            default:
+                {
+                    break;
+                }
+        }
+        return false;
     }
 
     public void Shuffle<T>(List<T> list)

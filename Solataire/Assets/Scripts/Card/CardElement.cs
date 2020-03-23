@@ -5,13 +5,15 @@ using UnityEngine.U2D;
 
 public class CardElement : MonoBehaviour
 {
+    [SerializeField]private GameController m_GameController;
     [SerializeField]private Sprite m_Front;
     [SerializeField]private Sprite m_Back;
     [SerializeField]private SpriteAtlas m_SpriteAtlas;
-    private SpriteRenderer m_Renderer;
+    [SerializeField]private SpriteRenderer m_Renderer;
     [SerializeField]private ushort m_CardValue;
     [SerializeField]private string m_CardName;
     private Vector3 m_PrevPos;
+    private bool m_IsNewPosValid;
     public bool isFaceUp = false;
     public Solitaire.CardPosition position;
 
@@ -19,6 +21,7 @@ public class CardElement : MonoBehaviour
     {
         m_Renderer = GetComponent<SpriteRenderer>();
         m_PrevPos = Vector3.zero;
+        m_IsNewPosValid = false;
     }
 
     // Start is called before the first frame update
@@ -39,8 +42,9 @@ public class CardElement : MonoBehaviour
         }
     }
 
-    public void SetCardProperties(ushort cardValue, string cardName)
+    public void SetCardProperties(GameController controller, ushort cardValue, string cardName)
     {
+        m_GameController = controller;
         m_CardName = cardName;
         m_CardValue = cardValue;
 
@@ -51,6 +55,7 @@ public class CardElement : MonoBehaviour
     private void OnMouseDown()
     {
         Debug.Log("Down Name = " + m_CardName);
+        m_PrevPos = this.transform.position;
     }
 
     private void OnMouseDrag()
@@ -65,28 +70,17 @@ public class CardElement : MonoBehaviour
     private void OnMouseUp()
     {
         Debug.Log("Up Name = " + m_CardName);
+        if(!m_IsNewPosValid)
+        {
+            this.transform.position = m_PrevPos;
+        }
+        else
+        {
+            m_IsNewPosValid = false;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        switch(collision.tag)
-        {
-            case "Card":
-                {
-                    break;
-                }
-            case "Bottom":
-                {
-                    break;
-                }
-            case "Top":
-                {
-                    break;
-                }
-            default:
-                {
-                    break;
-                }
-        }
     }
 }
