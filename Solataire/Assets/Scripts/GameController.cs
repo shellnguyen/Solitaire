@@ -36,24 +36,25 @@ namespace Solitaire
     [Flags]
     public enum CardPosition
     {
-        Deck = 8,
-        Draw,
-        Top1,
-        Top2,
-        Top3,
-        Top4,
-        Bottom1,
-        Bottom2,
-        Bottom3,
-        Bottom4,
-        Bottom5,
-        Bottom6,
-        Bottom7
+        Deck = 1 << 8,
+        Draw = 1 << 9,
+        Top1 = 1 << 10,
+        Top2 = 1 << 11,
+        Top3 = 1 << 12,
+        Top4 = 1 << 13,
+        Bottom1 = 1 << 14,
+        Bottom2 = 1 << 15,
+        Bottom3 = 1 << 16,
+        Bottom4 = 1 << 17,
+        Bottom5 = 1 << 18,
+        Bottom6 = 1 << 19,
+        Bottom7 = 1 << 20
     }
 }
 
 public class GameController : MonoBehaviour
 {
+    [SerializeField] private Camera m_MainCamera;
     [SerializeField] private GameData m_GameData;
     [SerializeField] private CommonData m_MainData;
     [SerializeField] private GameObject m_CardPrefab;
@@ -64,6 +65,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject[] m_TopList;
     [SerializeField] private GameObject m_DeckButton;
     [SerializeField] private GameObject m_DrawCardHolder;
+    [SerializeField] private CardElement m_CurrentSelected;
     public List<int> ListCards;
 
     private void Awake()
@@ -72,6 +74,7 @@ public class GameController : MonoBehaviour
         m_DeckCards = m_GameData.deckCards = new List<CardElement>();
         m_BottomCards = m_GameData.bottomCards = new List<CardElement>();
         m_TopCards = m_GameData.topCards = new List<CardElement>();
+        m_CurrentSelected = null;
 
         GenerateDeck();
         StartCoroutine(DealCards());
@@ -80,7 +83,90 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        Vector3 mousePos = Input.mousePosition;
+        //Left mouse clicked
+        if(Input.GetMouseButtonDown(0))
+        {
+            RaycastHit2D hit = Physics2D.Raycast(m_MainCamera.ScreenToWorldPoint(mousePos), Vector2.zero);
 
+            if(hit)
+            {
+                switch(hit.collider.tag)
+                {
+                    case "Card":
+                        {
+                            CardElement card = hit.collider.gameObject.GetComponent<CardElement>();
+
+                            /*
+                            if(!selected && (card.position & (CardPosition.Top1 | CardPosition.Top2 | CardPostion.Top3 | CardPositon.Top4)) == 0)
+                                if((card.positon & CardPosition.Draw) > 0 && card.CardValue != m_DeckCards[m_GameData.currentDrawCard].CardValue)
+                                    return
+
+                                selected = card
+                                return
+
+                            if(card.position & (CardPosition.Top1 | CardPosition.Top2 | CardPostion.Top3 | CardPositon.Top4) > 0)
+                                if(!selected)
+                                    return
+                                    
+                                if(selected.cardValue is CanStack && !selected.IsInStack())
+                                    move selected to Top
+                            
+                                
+                               
+
+                            //if Card.position in Top
+                            //if no selected => return
+                            //else
+                            //if(selected.cardValue is valid && !selected.IsInStack) => move selected to Top deck -> change selected.position = Top -> set selected = null
+                            //else => set selected = null -> return
+                            //else
+                            //if Card.position in Bottom
+                            */
+                            break;
+                        }
+                    case "Bottom":
+                        {
+                            break;
+                        }
+                    case "Top":
+                        {
+                            break;
+                        }
+                }
+            }
+        }
+
+        //Left mouse held down
+        if(Input.GetMouseButton(0))
+        {
+
+        }
+
+        //Left mouse release
+        if(Input.GetMouseButtonUp(0))
+        {
+
+        }
+    }
+
+    private bool CanStack(ushort selected, ushort target)
+    {
+        ushort selectedValue = (ushort)Utilities.Instance.ExtractBit(selected, 12, 1);
+        ushort selectedSuit = (ushort)Utilities.Instance.ExtractBit(selected, 4, 13);
+        ushort targetValue = (ushort)Utilities.Instance.ExtractBit(target, 12, 1);
+        ushort targetSuit = (ushort)Utilities.Instance.ExtractBit(target, 4, 13);
+
+        //selectedSuit OR targetSuit and check any bit is adjacent
+        ushort suit = (ushort)Utilities.Instance.CheckAdjacentBit(selectedSuit | targetSuit);
+        //CardValue: right shift 1 bit of target card value and if == selectedCard.value => OK 
+        //CardSuit: suit == 0 => 2 card is not both black/red. special case suit == 2 (meaning Clubs + Diamonds). 
+        if ((selectedValue == (targetValue >> 1)) && (suit == 2 || suit == 0))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private void GenerateDeck()
@@ -134,10 +220,10 @@ public class GameController : MonoBehaviour
 
             m_BottomCards.Add(m_DeckCards[i]);
 
-            iTween.MoveTo(m_BottomCards[i].gameObject, new Vector3(m_BottomList[bottomNum - 1].transform.position.x, m_BottomList[bottomNum - 1].transform.position.y - yOffset, m_BottomList[bottomNum - 1].transform.position.z - zOffset), 0.05f);
+            iTween.MoveTo(m_BottomCards[i].gameObject, new Vector3(m_BottomList[bottomNum - 1].transform.position.x, m_BottomList[bottomNum - 1].transform.position.y - yOffset, m_BottomList[bottomNum - 1].transform.position.z - 1.0f - zOffset), 0.05f);
             if (cardNum == bottomNum - 1)
             {
-                m_BottomCards[i].isFaceUp = true;
+                m_BottomCards[i].IsFaceUp = true;
             }
             m_BottomCards[i].position = (Solitaire.CardPosition)(bottomNum + 13); //TODO: remove hardcode index
             m_BottomCards[i].transform.SetParent(m_BottomList[bottomNum - 1].transform);
@@ -147,6 +233,21 @@ public class GameController : MonoBehaviour
         }
 
         m_DeckCards.RemoveRange(0, 28);
+    }
+
+    private void OnClickCard(CardElement card)
+    {
+
+    }
+
+    private void OnClickButtom(CardElement card)
+    {
+
+    }
+
+    private void OnClickTop(CardElement card)
+    {
+
     }
 
     public void DrawCardFromDeck()
@@ -159,19 +260,19 @@ public class GameController : MonoBehaviour
         StartCoroutine(PutBackCard());
     }
 
-    IEnumerator PutBackCard()
+    private IEnumerator PutBackCard()
     {
         foreach (CardElement card in m_DeckCards)
         {
             iTween.MoveTo(card.gameObject, m_DeckButton.transform.position + Vector3.forward, 0.1f);
             card.position = Solitaire.CardPosition.Deck;
-            card.isFaceUp = false;
+            card.IsFaceUp = false;
         }
 
         yield break;
     }
 
-    IEnumerator DrawCard()
+    private IEnumerator DrawCard()
     {
         float offSet = 0.5f;
 
@@ -184,19 +285,20 @@ public class GameController : MonoBehaviour
             }
         }
         iTween.MoveTo(m_DeckCards[currentDrawCard].gameObject, new Vector3(m_DrawCardHolder.transform.position.x + (currentDrawCard >= 2 ? 1.0f : currentDrawCard * offSet), m_DrawCardHolder.transform.position.y, -(currentDrawCard * offSet)), 0.1f);
-        m_DeckCards[currentDrawCard].isFaceUp = true;
+        m_DeckCards[currentDrawCard].IsFaceUp = true;
         m_DeckCards[currentDrawCard].position = Solitaire.CardPosition.Draw;
 
         yield break;
     }
 
-    public bool CheckMoveCard(Collider2D collider)
+    public bool CheckMoveCard(CardElement cardValue, Collider2D collider)
     {
+
+
         switch (collider.tag)
         {
             case "Card":
                 {
-
                     //element.m_CardValue = 1;
                     break;
                 }
@@ -214,6 +316,18 @@ public class GameController : MonoBehaviour
                 }
         }
         return false;
+    }
+
+    public void SetCurrentCard(CardElement card)
+    {
+        if(m_CurrentSelected && m_CurrentSelected.CardValue != card.CardValue)
+        {
+            m_CurrentSelected.IsSelected = false;
+        }
+
+
+        m_CurrentSelected = card;
+        m_CurrentSelected.IsSelected = true;
     }
 
     public void Shuffle<T>(List<T> list)

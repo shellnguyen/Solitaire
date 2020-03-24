@@ -36,9 +36,8 @@ public sealed class Utilities
         return snapped;
     }
 
-    public Vector3 GetWorldPosition(Vector3 position)
+    public Vector3 GetWorldPosition(Camera cam, Vector3 position)
     {
-        Camera cam = Camera.main;
         Ray ray = cam.ScreenPointToRay(position);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
@@ -49,9 +48,8 @@ public sealed class Utilities
         return Vector3.zero;
     }
 
-    public Vector3 GetWorldPosition2D(Vector3 position)
+    public Vector3 GetWorldPosition2D(Camera cam, Vector3 position)
     {
-        Camera cam = Camera.main;
         //Ray2D ray = cam.ScreenPointToRay(position);
         RaycastHit2D hit = Physics2D.Raycast(cam.ScreenToWorldPoint(position), Vector2.zero);
         if (hit)
@@ -78,6 +76,20 @@ public sealed class Utilities
         Debug.DrawRay(ray.origin, ray.direction * 100, Color.cyan, 30.0f);
         Debug.Log("Dit not Hit");
         return null;
+    }
+    //
+
+    //Bitwise support
+    // Function to extract k bits from p position 
+    // and returns the extracted value as integer 
+    public int ExtractBit(int number, int k, int p)
+    {
+        return (((1 << k) - 1) & (number >> (p - 1)));
+    }
+
+    public int CheckAdjacentBit(int number)
+    {
+        return (number & (number >> 1));
     }
     //
 

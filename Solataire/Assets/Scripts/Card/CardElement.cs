@@ -12,16 +12,48 @@ public class CardElement : MonoBehaviour
     [SerializeField]private SpriteRenderer m_Renderer;
     [SerializeField]private ushort m_CardValue;
     [SerializeField]private string m_CardName;
+    [SerializeField]private CardElement m_NextInStack;
     private Vector3 m_PrevPos;
     private bool m_IsNewPosValid;
-    public bool isFaceUp = false;
+    private bool m_IsSelected;
+    private bool m_IsFaceUp;
     public Solitaire.CardPosition position;
+
+    public bool IsSelected
+    {
+        get
+        {
+            return m_IsSelected;
+        }
+        set
+        {
+            m_IsSelected = value;
+            OnSelectedChange();
+        }
+    }
+
+    public bool IsFaceUp
+    {
+        get
+        {
+            return m_IsFaceUp;
+        }
+        set
+        {
+            m_IsFaceUp = value;
+            OnCardFaceChanged();
+        }
+    }
+
+    public ushort CardValue { get => m_CardValue; }
 
     private void Awake()
     {
         m_Renderer = GetComponent<SpriteRenderer>();
+        m_NextInStack = null;
         m_PrevPos = Vector3.zero;
         m_IsNewPosValid = false;
+        m_IsSelected = false;
     }
 
     // Start is called before the first frame update
@@ -32,14 +64,6 @@ public class CardElement : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if(isFaceUp)
-        {
-            m_Renderer.sprite = m_Front;
-        }
-        else
-        {
-            m_Renderer.sprite = m_Back;
-        }
     }
 
     public void SetCardProperties(GameController controller, ushort cardValue, string cardName)
@@ -54,23 +78,39 @@ public class CardElement : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if(!IsFaceUp && (position & (Solitaire.CardPosition.Top1 | Solitaire.CardPosition.Top2 | Solitaire.CardPosition.Top3 | Solitaire.CardPosition.Top4)) >= 0)
+        {
+            return;
+        }
         Debug.Log("Down Name = " + m_CardName);
         m_PrevPos = this.transform.position;
+        //IsSelected = true;
+        m_GameController.SetCurrentCard(this);
     }
 
     private void OnMouseDrag()
     {
-        Debug.Log("Drag Name = " + m_CardName);
-        Vector3 mousePos = Utilities.Instance.GetWorldPosition2D(Input.mousePosition);
-        mousePos.z = -15.0f;
+        if (!IsSelected)
+        {
+            return;
+        }
 
-        this.gameObject.transform.position = mousePos;
+        Debug.Log("Drag Name = " + m_CardName);
+        Vector3 mousePos; //= Utilities.Instance.GetWorldPosition2D(Input.mousePosition);
+        mousePos.z = -1.5f;
+
+        //this.gameObject.transform.position = mousePos;    
     }
 
     private void OnMouseUp()
     {
+        if (!m_IsSelected)
+        {
+            return;
+        }
+
         Debug.Log("Up Name = " + m_CardName);
-        if(!m_IsNewPosValid)
+        if (!m_IsNewPosValid)
         {
             this.transform.position = m_PrevPos;
         }
@@ -78,13 +118,47 @@ public class CardElement : MonoBehaviour
         {
             m_IsNewPosValid = false;
         }
+
+        //m_IsSelected = false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.transform.parent == this.transform.parent)
+        if (!IsFaceUp && (position & (Solitaire.CardPosition.Top1 | Solitaire.CardPosition.Top2 | Solitaire.CardPosition.Top3 | Solitaire.CardPosition.Top4)) >= 0)
         {
             return;
+        }
+        m_GameController.CheckMoveCard(this, collision);
+    }
+
+    public bool IsInStack()
+    {
+        return m_NextInStack ? true : false;
+    }
+
+    public void OnSelectedChange()
+    {
+        if(!m_IsSelected)
+        {
+            m_Renderer.color = Color.white;
+            this.transform.position = m_PrevPos;
+        }
+        else
+        {
+            m_Renderer.color = Color.yellow;
+        }
+        
+    }
+
+    public void OnCardFaceChanged()
+    {
+        if (IsFaceUp)
+        {
+            m_Renderer.sprite = m_Front;
+        }
+        else
+        {
+            m_Renderer.sprite = m_Back;
         }
     }
 }
