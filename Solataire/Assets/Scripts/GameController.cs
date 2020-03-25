@@ -114,9 +114,9 @@ public class GameController : MonoBehaviour
                             //Card in Top position
                             if((card.position & (Solitaire.CardPosition.Top1 | Solitaire.CardPosition.Top2 | Solitaire.CardPosition.Top3 | Solitaire.CardPosition.Top4)) > 0)
                             {
-                                if(CanStack(m_CurrentSelected.CardValue, card.CardValue) && !m_CurrentSelected.IsInStack())
+                                if(CanStack(m_CurrentSelected.CardValue, card.CardValue, true) && !m_CurrentSelected.IsInStack())
                                 {
-                                    StackCard(card, true);
+                                    StackToCard(card, true);
                                     //TODO: check win condition
                                     return;
                                 }
@@ -127,7 +127,7 @@ public class GameController : MonoBehaviour
                             {
                                 if(CanStack(m_CurrentSelected.CardValue, card.CardValue))
                                 {
-                                    StackCard(card, false);
+                                    StackToCard(card, false);
                                     return;
                                 }
                                 else
@@ -144,6 +144,7 @@ public class GameController : MonoBehaviour
                             {
                                 if(card.CardValue == m_DeckCards[m_GameData.currentDrawCard].CardValue)
                                 {
+                                    m_CurrentSelected.IsSelected = false;
                                     m_CurrentSelected = card;
                                     m_CurrentSelected.IsSelected = true;
                                 }
@@ -196,6 +197,18 @@ public class GameController : MonoBehaviour
                         }
                     case "Bottom":
                         {
+                            if (!m_CurrentSelected)
+                            {
+                                return;
+                            }
+
+                            ushort selectedCardValue = (ushort)Utilities.Instance.ExtractBit(m_CurrentSelected.CardValue, 12, 1);
+
+                            if (selectedCardValue == (ushort)Solitaire.CardValue.King)
+                            {
+                                StackToPosition(hit.collider.gameObject, false);
+                                return;
+                            }
                             /*
                             if(!selected)
                                 return
@@ -211,6 +224,18 @@ public class GameController : MonoBehaviour
                         }
                     case "Top":
                         {
+                            if (!m_CurrentSelected)
+                            {
+                                return;
+                            }
+
+                            ushort selectedCardValue = (ushort)Utilities.Instance.ExtractBit(m_CurrentSelected.CardValue, 12, 1);
+
+                            if (selectedCardValue == (ushort)Solitaire.CardValue.Ace)
+                            {
+                                StackToPosition(hit.collider.gameObject, true);
+                                return;
+                            }
                             /*
                             if(!selected)
                                 return
@@ -241,26 +266,39 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private bool CanStack(ushort selected, ushort target)
+    private bool CanStack(ushort selected, ushort target, bool isStackTop = false)
     {
         ushort selectedValue = (ushort)Utilities.Instance.ExtractBit(selected, 12, 1);
         ushort selectedSuit = (ushort)Utilities.Instance.ExtractBit(selected, 4, 13);
         ushort targetValue = (ushort)Utilities.Instance.ExtractBit(target, 12, 1);
         ushort targetSuit = (ushort)Utilities.Instance.ExtractBit(target, 4, 13);
 
-        //selectedSuit OR targetSuit and check any bit is adjacent
-        ushort suit = (ushort)Utilities.Instance.CheckAdjacentBit(selectedSuit | targetSuit);
-        //CardValue: right shift 1 bit of target card value and if == selectedCard.value => OK 
-        //CardSuit: suit == 0 => 2 card is not both black/red. special case suit == 2 (meaning Clubs + Diamonds). 
-        if ((selectedValue == (targetValue >> 1)) && (suit == 2 || suit == 0))
+        if(!isStackTop)
         {
-            return true;
+            //selectedSuit OR targetSuit and check any bit is adjacent
+            ushort suit = (ushort)Utilities.Instance.CheckAdjacentBit(selectedSuit | targetSuit);
+            //CardValue: right shift 1 bit of target card value and if == selectedCard.value => OK 
+            //CardSuit: suit == 0 => 2 card is not both black/red. special case suit == 2 (meaning Clubs + Diamonds). 
+            if ((selectedValue == (targetValue >> 1)) && (suit == 2 || suit == 0))
+            {
+                return true;
+            }
+        }
+        else
+        {
+            //Check for when stack card to TopCard \>_</
+            //CardValue: left shift 1 bit of target card value and if == selectedCard.value => OK. Special case when target card = Ace => selectedValue - targetValue = 1
+            //CardSuit: suit must be the same 
+            if (((selectedValue - targetValue == 1) || (selectedValue == (targetValue << 1))) && (selectedSuit == targetSuit))
+            {
+                return true;
+            }
         }
 
         return false;
     }
 
-    private void StackCard(CardElement target, bool isStackToTop)
+    private void StackToCard(CardElement target, bool isStackToTop)
     {
         m_CurrentSelected.IsSelected = false;
         if((m_CurrentSelected.position & Solitaire.CardPosition.Draw) > 0)
@@ -269,7 +307,11 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            m_BottomCards.Remove(m_CurrentSelected);
+            //TODO: any better way to check what list the card need to remove/add from/to
+            if(isStackToTop)
+            {
+                m_BottomCards.Remove(m_CurrentSelected);
+            }
         }
 
         if(isStackToTop)
@@ -279,13 +321,54 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            m_BottomCards.Add(m_CurrentSelected);
-            m_CurrentSelected.position = target.position;
+            if(m_CurrentSelected.position < Solitaire.CardPosition.Bottom1)
+            {
+                m_BottomCards.Add(m_CurrentSelected);
+            }
             iTween.MoveTo(m_CurrentSelected.gameObject, new Vector3(target.transform.position.x, target.transform.position.y - Common.YOFFSET, target.transform.position.z - Common.ZOFFSET), Common.MOVE_TIME);
-
         }
 
+        m_CurrentSelected.position = target.position;
+        m_CurrentSelected.transform.SetParent(target.transform.parent);
         m_CurrentSelected = null;
+    }
+
+    private void StackToPosition(GameObject positionObj, bool isStackToTop)
+    {
+        ushort cardPos;
+        m_CurrentSelected.IsSelected = false;
+        if ((m_CurrentSelected.position & Solitaire.CardPosition.Draw) > 0)
+        {
+            m_DeckCards.Remove(m_CurrentSelected);
+        }
+        else
+        {
+            if(isStackToTop)
+            {
+                m_BottomCards.Remove(m_CurrentSelected);
+            }
+        }
+
+        if(isStackToTop)
+        {
+            m_TopCards.Add(m_CurrentSelected);
+            ushort.TryParse(positionObj.name.Substring(0, 1), out cardPos);
+            m_CurrentSelected.position = (Solitaire.CardPosition)(1 << (cardPos + 13));
+        }
+        else
+        {
+            if (m_CurrentSelected.position < Solitaire.CardPosition.Bottom1)
+            {
+                m_BottomCards.Add(m_CurrentSelected);
+            }
+
+            ushort.TryParse(positionObj.name.Substring(0, 1), out cardPos);
+            m_CurrentSelected.position = (Solitaire.CardPosition)(1 << (cardPos + 9));
+        }
+
+        iTween.MoveTo(m_CurrentSelected.gameObject, new Vector3(positionObj.transform.position.x, positionObj.transform.position.y, positionObj.transform.position.z - Common.ZOFFSET), Common.MOVE_TIME);
+        
+        m_CurrentSelected.transform.SetParent(positionObj.transform);
     }
 
     private void GenerateDeck()
@@ -347,8 +430,8 @@ public class GameController : MonoBehaviour
             m_BottomCards[i].position = (Solitaire.CardPosition)(1 << (bottomNum + 13)); //TODO: remove hardcode index
             m_BottomCards[i].transform.SetParent(m_BottomList[bottomNum - 1].transform);
             cardNum++;
-            yOffset += 0.3f;
-            zOffset += 0.1f;
+            yOffset += Common.YOFFSET;
+            zOffset += Common.ZOFFSET;
         }
 
         m_DeckCards.RemoveRange(0, 28);
