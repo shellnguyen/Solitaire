@@ -87,6 +87,7 @@ public class GameController : MonoBehaviour
         //Left mouse clicked
         if(Input.GetMouseButtonDown(0))
         {
+            Debug.Log("GameController MouseButton down");
             RaycastHit2D hit = Physics2D.Raycast(m_MainCamera.ScreenToWorldPoint(mousePos), Vector2.zero);
 
             if(hit)
@@ -97,40 +98,130 @@ public class GameController : MonoBehaviour
                         {
                             CardElement card = hit.collider.gameObject.GetComponent<CardElement>();
 
-                            /*
-                            if(!selected && (card.position & (CardPosition.Top1 | CardPosition.Top2 | CardPostion.Top3 | CardPositon.Top4)) == 0)
-                                if((card.positon & CardPosition.Draw) > 0 && card.CardValue != m_DeckCards[m_GameData.currentDrawCard].CardValue)
+                            //No selected and card not in top position
+                            if(!m_CurrentSelected && (card.position & (Solitaire.CardPosition.Top1 | Solitaire.CardPosition.Top2 | Solitaire.CardPosition.Top3 | Solitaire.CardPosition.Top4)) == 0)
+                            {
+                                if(((card.position & Solitaire.CardPosition.Draw) > 0) && card.CardValue != m_DeckCards[m_GameData.currentDrawCard].CardValue)
+                                {
+                                    return;
+                                }
+
+                                m_CurrentSelected = card;
+                                m_CurrentSelected.IsSelected = true;
+                                break;
+                            }
+
+                            //Card in Top position
+                            if((card.position & (Solitaire.CardPosition.Top1 | Solitaire.CardPosition.Top2 | Solitaire.CardPosition.Top3 | Solitaire.CardPosition.Top4)) > 0)
+                            {
+                                if(CanStack(m_CurrentSelected.CardValue, card.CardValue) && !m_CurrentSelected.IsInStack())
+                                {
+                                    StackCard(card, true);
+                                    //TODO: check win condition
+                                    return;
+                                }
+                            }
+
+                            //Card in Bottom position
+                            if ((card.position & (Solitaire.CardPosition.Bottom1 | Solitaire.CardPosition.Bottom2 | Solitaire.CardPosition.Bottom3 | Solitaire.CardPosition.Bottom4 | Solitaire.CardPosition.Bottom5 | Solitaire.CardPosition.Bottom6 | Solitaire.CardPosition.Bottom7)) > 0)
+                            {
+                                if(CanStack(m_CurrentSelected.CardValue, card.CardValue))
+                                {
+                                    StackCard(card, false);
+                                    return;
+                                }
+                                else
+                                {
+                                    m_CurrentSelected.IsSelected = false;
+                                    m_CurrentSelected = card;
+                                    m_CurrentSelected.IsSelected = true;
+                                    return;
+                                }
+                            }
+
+                            //Card in draw position
+                            if ((card.position & Solitaire.CardPosition.Draw) > 0)
+                            {
+                                if(card.CardValue == m_DeckCards[m_GameData.currentDrawCard].CardValue)
+                                {
+                                    m_CurrentSelected = card;
+                                    m_CurrentSelected.IsSelected = true;
+                                }
+                            }
+
+                                /*
+                                if(!selected && (card.position & (CardPosition.Top1 | CardPosition.Top2 | CardPostion.Top3 | CardPositon.Top4)) == 0)
+                                    if((card.positon & CardPosition.Draw) > 0 && card.CardValue != m_DeckCards[m_GameData.currentDrawCard].CardValue)
+                                        return
+
+                                    selected = card
+                                    selected.IsSelect = true
                                     return
 
-                                selected = card
-                                return
+                                if(card.position & (CardPosition.Top1 | CardPosition.Top2 | CardPostion.Top3 | CardPositon.Top4) > 0)
+                                    if(!selected)
+                                        return
 
-                            if(card.position & (CardPosition.Top1 | CardPosition.Top2 | CardPostion.Top3 | CardPositon.Top4) > 0)
-                                if(!selected)
-                                    return
-                                    
-                                if(selected.cardValue is CanStack && !selected.IsInStack())
-                                    move selected to Top
-                            
-                                
-                               
+                                    if(CanStack(selected.CardValue, card.CardValue) && !selected.IsInStack())
+                                        move selected to card position
+                                        remove seleteced from current ListCard
+                                        add selected to TopCards
+                                        selected.IsSelect = false
+                                        set selected = null
+                                        CheckWinCondition()
+                                        return
 
-                            //if Card.position in Top
-                            //if no selected => return
-                            //else
-                            //if(selected.cardValue is valid && !selected.IsInStack) => move selected to Top deck -> change selected.position = Top -> set selected = null
-                            //else => set selected = null -> return
-                            //else
-                            //if Card.position in Bottom
-                            */
-                            break;
+                                if((card.position & (CardPosition.Bottom1 | CardPosition.Bottom2 | CardPosition.Bottom3 | CardPosition.Bottom4 | CardPosition.Bottom5 | CardPosition.Bottom6 | CardPosition.Bottom7)) > 0)
+                                    if(!selected)
+                                        selected = card
+                                        selected.IsSelect = true
+                                        return
+
+                                    if(CanStack(selected.CardValue, card.CardValue))
+                                        move selected to card position
+                                        remove seleteced from current ListCard
+                                        add selected to TopCards
+                                        selected.IsSelect = false
+                                        set selected = null
+                                        return
+
+
+                                if((card.position & CardPosition.Draw) > 0)
+                                    if(!selected && (card.CardValue == m_MainData.currentDrawCard.CardValue))
+                                        selected = card
+                                        selected.IsSelect = true
+                                        return
+                                */
+                                break;
                         }
                     case "Bottom":
                         {
+                            /*
+                            if(!selected)
+                                return
+                            
+                            selectedValue = Utilities.Instance.ExtractBit(selected, 12, 1);
+                            if(selectedValue == CardValue.King)
+                                move selected to bottom position
+                                remove selected from current ListCard
+                                add selected to BottomCards
+                                set selected = null
+                            */
                             break;
                         }
                     case "Top":
                         {
+                            /*
+                            if(!selected)
+                                return
+                            
+                            selectedValue = Utilities.Instance.ExtractBit(selected, 12, 1);
+                            if(selectedValue == CardValue.King)
+                                move selected to top position
+                                remove selected from current ListCard
+                                add selected to TopCards
+                                set selected = null
+                            */
                             break;
                         }
                 }
@@ -167,6 +258,34 @@ public class GameController : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void StackCard(CardElement target, bool isStackToTop)
+    {
+        m_CurrentSelected.IsSelected = false;
+        if((m_CurrentSelected.position & Solitaire.CardPosition.Draw) > 0)
+        {
+            m_DeckCards.Remove(m_CurrentSelected);
+        }
+        else
+        {
+            m_BottomCards.Remove(m_CurrentSelected);
+        }
+
+        if(isStackToTop)
+        {
+            m_TopCards.Add(m_CurrentSelected);
+            iTween.MoveTo(m_CurrentSelected.gameObject, new Vector3 (target.transform.position.x, target.transform.position.y, target.transform.position.z - Common.ZOFFSET), Common.MOVE_TIME);
+        }
+        else
+        {
+            m_BottomCards.Add(m_CurrentSelected);
+            m_CurrentSelected.position = target.position;
+            iTween.MoveTo(m_CurrentSelected.gameObject, new Vector3(target.transform.position.x, target.transform.position.y - Common.YOFFSET, target.transform.position.z - Common.ZOFFSET), Common.MOVE_TIME);
+
+        }
+
+        m_CurrentSelected = null;
     }
 
     private void GenerateDeck()
@@ -225,7 +344,7 @@ public class GameController : MonoBehaviour
             {
                 m_BottomCards[i].IsFaceUp = true;
             }
-            m_BottomCards[i].position = (Solitaire.CardPosition)(bottomNum + 13); //TODO: remove hardcode index
+            m_BottomCards[i].position = (Solitaire.CardPosition)(1 << (bottomNum + 13)); //TODO: remove hardcode index
             m_BottomCards[i].transform.SetParent(m_BottomList[bottomNum - 1].transform);
             cardNum++;
             yOffset += 0.3f;

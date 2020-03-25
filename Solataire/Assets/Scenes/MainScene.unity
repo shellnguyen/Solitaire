@@ -4717,6 +4717,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52d21b29a5389a746a1eb82188743369, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_MainCamera: {fileID: 1819705103}
   m_GameData: {fileID: 11400000, guid: a8e77fdfd7eeb1d4bb056d73c1723930, type: 2}
   m_MainData: {fileID: 11400000, guid: 922ef7dd40a9c494687f94dfd4c594b1, type: 2}
   m_CardPrefab: {fileID: 7929930174070069193, guid: 793c88bc348ed934e811436b2f1473bb,
@@ -4739,6 +4740,7 @@ MonoBehaviour:
   - {fileID: 1741318672}
   m_DeckButton: {fileID: 1942099062}
   m_DrawCardHolder: {fileID: 1904655131}
+  m_CurrentSelected: {fileID: 0}
   ListCards: 
 --- !u!1 &1904655131
 GameObject:

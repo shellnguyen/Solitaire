@@ -45,7 +45,26 @@ public class CardElement : MonoBehaviour
         }
     }
 
-    public ushort CardValue { get => m_CardValue; }
+    public ushort CardValue
+    {
+        get
+        {
+            return m_CardValue;
+        }
+    }
+
+    public bool IsNewPosValid
+    {
+        get
+        {
+            return m_IsNewPosValid;
+        }
+
+        set
+        {
+            m_IsNewPosValid = value;
+        }
+    }
 
     private void Awake()
     {
@@ -76,60 +95,60 @@ public class CardElement : MonoBehaviour
         position = Solitaire.CardPosition.Deck;
     }
 
-    private void OnMouseDown()
-    {
-        if(!IsFaceUp && (position & (Solitaire.CardPosition.Top1 | Solitaire.CardPosition.Top2 | Solitaire.CardPosition.Top3 | Solitaire.CardPosition.Top4)) >= 0)
-        {
-            return;
-        }
-        Debug.Log("Down Name = " + m_CardName);
-        m_PrevPos = this.transform.position;
-        //IsSelected = true;
-        m_GameController.SetCurrentCard(this);
-    }
+    //private void OnMouseDown()
+    //{
+    //    if(!IsFaceUp && (position & (Solitaire.CardPosition.Top1 | Solitaire.CardPosition.Top2 | Solitaire.CardPosition.Top3 | Solitaire.CardPosition.Top4)) >= 0)
+    //    {
+    //        return;
+    //    }
+    //    Debug.Log("Down Name = " + m_CardName);
+    //    m_PrevPos = this.transform.position;
+    //    //IsSelected = true;
+    //    m_GameController.SetCurrentCard(this);
+    //}
 
-    private void OnMouseDrag()
-    {
-        if (!IsSelected)
-        {
-            return;
-        }
+    //private void OnMouseDrag()
+    //{
+    //    if (!IsSelected)
+    //    {
+    //        return;
+    //    }
 
-        Debug.Log("Drag Name = " + m_CardName);
-        Vector3 mousePos; //= Utilities.Instance.GetWorldPosition2D(Input.mousePosition);
-        mousePos.z = -1.5f;
+    //    Debug.Log("Drag Name = " + m_CardName);
+    //    Vector3 mousePos; //= Utilities.Instance.GetWorldPosition2D(Input.mousePosition);
+    //    mousePos.z = -1.5f;
 
-        //this.gameObject.transform.position = mousePos;    
-    }
+    //    //this.gameObject.transform.position = mousePos;    
+    //}
 
-    private void OnMouseUp()
-    {
-        if (!m_IsSelected)
-        {
-            return;
-        }
+    //private void OnMouseUp()
+    //{
+    //    if (!m_IsSelected)
+    //    {
+    //        return;
+    //    }
 
-        Debug.Log("Up Name = " + m_CardName);
-        if (!m_IsNewPosValid)
-        {
-            this.transform.position = m_PrevPos;
-        }
-        else
-        {
-            m_IsNewPosValid = false;
-        }
+    //    Debug.Log("Up Name = " + m_CardName);
+    //    if (!m_IsNewPosValid)
+    //    {
+    //        this.transform.position = m_PrevPos;
+    //    }
+    //    else
+    //    {
+    //        m_IsNewPosValid = false;
+    //    }
 
-        //m_IsSelected = false;
-    }
+    //    //m_IsSelected = false;
+    //}
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (!IsFaceUp && (position & (Solitaire.CardPosition.Top1 | Solitaire.CardPosition.Top2 | Solitaire.CardPosition.Top3 | Solitaire.CardPosition.Top4)) >= 0)
-        {
-            return;
-        }
-        m_GameController.CheckMoveCard(this, collision);
-    }
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (!IsFaceUp && (position & (Solitaire.CardPosition.Top1 | Solitaire.CardPosition.Top2 | Solitaire.CardPosition.Top3 | Solitaire.CardPosition.Top4)) >= 0)
+    //    {
+    //        return;
+    //    }
+    //    m_GameController.CheckMoveCard(this, collision);
+    //}
 
     public bool IsInStack()
     {
@@ -141,7 +160,7 @@ public class CardElement : MonoBehaviour
         if(!m_IsSelected)
         {
             m_Renderer.color = Color.white;
-            this.transform.position = m_PrevPos;
+            //this.transform.position = m_PrevPos;
         }
         else
         {
@@ -159,6 +178,14 @@ public class CardElement : MonoBehaviour
         else
         {
             m_Renderer.sprite = m_Back;
+        }
+    }
+
+    public void OnCardMove()
+    {
+        if(!m_NextInStack)
+        {
+            m_NextInStack.OnCardMove();
         }
     }
 }
