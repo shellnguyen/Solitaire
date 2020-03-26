@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public sealed class Utilities
 {
@@ -90,6 +91,17 @@ public sealed class Utilities
     public int CheckAdjacentBit(int number)
     {
         return (number & (number >> 1));
+    }
+    //
+
+    //iTween functions
+    public void MoveToWithCallBack(GameObject target, Vector3 position, float time, string fnCallBackName)
+    {
+        Hashtable hash = new Hashtable();
+        hash.Add("position", position);
+        hash.Add("time", time);
+        hash.Add("oncomplete", fnCallBackName);
+        iTween.MoveTo(target, hash);
     }
     //
 
