@@ -301,7 +301,8 @@ public class GameController : MonoBehaviour
     private void StackToCard(CardElement target, bool isStackToTop)
     {
         m_CurrentSelected.IsSelected = false;
-        if((m_CurrentSelected.position & Solitaire.CardPosition.Draw) > 0)
+        target.SetNextInStack(m_CurrentSelected); //Add current selected to stack of target card
+        if ((m_CurrentSelected.position & Solitaire.CardPosition.Draw) > 0)
         {
             m_DeckCards.Remove(m_CurrentSelected);
         }

@@ -188,4 +188,9 @@ public class CardElement : MonoBehaviour
             m_NextInStack.OnCardMove();
         }
     }
+
+    public void SetNextInStack(CardElement card)
+    {
+        m_NextInStack = card;
+    }
 }
