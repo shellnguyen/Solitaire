@@ -327,7 +327,9 @@ public class GameController : MonoBehaviour
             {
                 m_BottomCards.Add(m_CurrentSelected);
             }
-            iTween.MoveTo(m_CurrentSelected.gameObject, new Vector3(target.transform.position.x, target.transform.position.y - Common.YOFFSET, target.transform.position.z - Common.ZOFFSET), Common.MOVE_TIME);
+            //iTween.MoveTo(m_CurrentSelected.gameObject, new Vector3(target.transform.position.x, target.transform.position.y - Common.YOFFSET, target.transform.position.z - Common.ZOFFSET), Common.MOVE_TIME);
+            Vector3 newPos = new Vector3(target.transform.position.x, target.transform.position.y - Common.YOFFSET, target.transform.position.z - Common.ZOFFSET);
+            Utilities.Instance.MoveToWithCallBack(m_CurrentSelected.gameObject, newPos, Common.MOVE_TIME, "OnCardMove");
         }
 
         m_CurrentSelected.position = target.position;
@@ -369,8 +371,10 @@ public class GameController : MonoBehaviour
             m_CurrentSelected.position = (Solitaire.CardPosition)(1 << (cardPos + 9));
         }
 
-        iTween.MoveTo(m_CurrentSelected.gameObject, new Vector3(positionObj.transform.position.x, positionObj.transform.position.y, positionObj.transform.position.z - Common.ZOFFSET), Common.MOVE_TIME);
-        
+        //iTween.MoveTo(m_CurrentSelected.gameObject, new Vector3(positionObj.transform.position.x, positionObj.transform.position.y, positionObj.transform.position.z - Common.ZOFFSET), Common.MOVE_TIME);
+        Vector3 newPos = new Vector3(positionObj.transform.position.x, positionObj.transform.position.y, positionObj.transform.position.z - Common.ZOFFSET);
+        Utilities.Instance.MoveToWithCallBack(m_CurrentSelected.gameObject, newPos, Common.MOVE_TIME, "OnCardMove");
+
         m_CurrentSelected.transform.SetParent(positionObj.transform);
     }
 

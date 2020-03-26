@@ -197,8 +197,9 @@ public class CardElement : MonoBehaviour
 
     public void OnCardMove()
     {
-        if(!m_NextInStack)
+        if(m_NextInStack)
         {
+            m_NextInStack.transform.position = new Vector3(transform.position.x, transform.position.y - Common.YOFFSET, transform.position.z - Common.ZOFFSET);
             m_NextInStack.OnCardMove();
         }
     }
