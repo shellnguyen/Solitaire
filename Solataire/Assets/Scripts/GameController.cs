@@ -279,7 +279,7 @@ public class GameController : MonoBehaviour
             ushort suit = (ushort)Utilities.Instance.CheckAdjacentBit(selectedSuit | targetSuit);
             //CardValue: right shift 1 bit of target card value and if == selectedCard.value => OK 
             //CardSuit: suit == 0 => 2 card is not both black/red. special case suit == 2 (meaning Clubs + Diamonds). 
-            if ((selectedValue == (targetValue >> 1)) && (suit == 2 || suit == 0))
+            if ((selectedValue == (targetValue >> 1)) && (targetSuit != selectedSuit) && (suit == 2 || suit == 0))
             {
                 return true;
             }

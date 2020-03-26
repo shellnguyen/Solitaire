@@ -160,13 +160,20 @@ public class CardElement : MonoBehaviour
         if(!m_IsSelected)
         {
             m_Renderer.color = Color.white;
+            if(m_NextInStack)
+            {
+                m_NextInStack.IsSelected = false;
+            }
             //this.transform.position = m_PrevPos;
         }
         else
         {
             m_Renderer.color = Color.yellow;
+            if (m_NextInStack)
+            {
+                m_NextInStack.IsSelected = true;
+            }
         }
-        
     }
 
     public void OnCardFaceChanged()
