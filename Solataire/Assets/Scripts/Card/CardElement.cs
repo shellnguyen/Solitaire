@@ -12,6 +12,7 @@ public class CardElement : MonoBehaviour
     [SerializeField]private SpriteRenderer m_Renderer;
     [SerializeField]private ushort m_CardValue;
     [SerializeField]private string m_CardName;
+    [SerializeField]private CardElement m_PrevFaceDown;
     [SerializeField]private CardElement m_NextInStack;
     private Vector3 m_PrevPos;
     private bool m_IsNewPosValid;
@@ -70,6 +71,7 @@ public class CardElement : MonoBehaviour
     {
         m_Renderer = GetComponent<SpriteRenderer>();
         m_NextInStack = null;
+        m_PrevFaceDown = null;
         m_PrevPos = Vector3.zero;
         m_IsNewPosValid = false;
         m_IsSelected = false;
@@ -155,6 +157,11 @@ public class CardElement : MonoBehaviour
         return m_NextInStack ? true : false;
     }
 
+    public bool HasPrevFaceDown()
+    {
+        return m_PrevFaceDown ? true : false;
+    }
+
     public void OnSelectedChange()
     {
         if(!m_IsSelected)
@@ -199,5 +206,19 @@ public class CardElement : MonoBehaviour
     public void SetNextInStack(CardElement card)
     {
         m_NextInStack = card;
+    }
+
+    public void SetPrevFaceDown(CardElement card)
+    {
+        m_PrevFaceDown = card;
+    }
+
+    public void FlipPreDownCard()
+    {
+        if(m_PrevFaceDown)
+        {
+            m_PrevFaceDown.IsFaceUp = true;
+            m_PrevFaceDown = null;
+        }
     }
 }

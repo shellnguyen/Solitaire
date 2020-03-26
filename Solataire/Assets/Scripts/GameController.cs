@@ -301,13 +301,14 @@ public class GameController : MonoBehaviour
     private void StackToCard(CardElement target, bool isStackToTop)
     {
         m_CurrentSelected.IsSelected = false;
+        m_CurrentSelected.FlipPreDownCard();
         target.SetNextInStack(m_CurrentSelected); //Add current selected to stack of target card
         if ((m_CurrentSelected.position & Solitaire.CardPosition.Draw) > 0)
         {
             m_DeckCards.Remove(m_CurrentSelected);
         }
         else
-        {
+        {   
             //TODO: any better way to check what list the card need to remove/add from/to
             if(isStackToTop)
             {
@@ -338,13 +339,14 @@ public class GameController : MonoBehaviour
     {
         ushort cardPos;
         m_CurrentSelected.IsSelected = false;
+        m_CurrentSelected.FlipPreDownCard();
         if ((m_CurrentSelected.position & Solitaire.CardPosition.Draw) > 0)
         {
             m_DeckCards.Remove(m_CurrentSelected);
         }
         else
         {
-            if(isStackToTop)
+            if (isStackToTop)
             {
                 m_BottomCards.Remove(m_CurrentSelected);
             }
@@ -430,6 +432,13 @@ public class GameController : MonoBehaviour
             }
             m_BottomCards[i].position = (Solitaire.CardPosition)(1 << (bottomNum + 13)); //TODO: remove hardcode index
             m_BottomCards[i].transform.SetParent(m_BottomList[bottomNum - 1].transform);
+
+            //Set Previous face down card so we know which card to flip when this card move to other stack
+            if(i > 1 && !m_BottomCards[i - 1].IsFaceUp)
+            {
+                m_BottomCards[i].SetPrevFaceDown(m_BottomCards[i - 1]);
+            }
+
             cardNum++;
             yOffset += Common.YOFFSET;
             zOffset += Common.ZOFFSET;
