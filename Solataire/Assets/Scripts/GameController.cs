@@ -327,7 +327,7 @@ public class GameController : MonoBehaviour
         if(isStackToTop)
         {
             m_TopCards.Add(m_CurrentSelected);
-            iTween.MoveTo(m_CurrentSelected.gameObject, new Vector3 (target.transform.position.x, target.transform.position.y, target.transform.position.z + Common.ZOFFSET), Common.MOVE_TIME);
+            iTween.MoveTo(m_CurrentSelected.gameObject, new Vector3 (target.transform.position.x, target.transform.position.y, target.transform.position.z - Common.ZOFFSET), Common.MOVE_TIME);
         }
         else
         {
@@ -348,6 +348,7 @@ public class GameController : MonoBehaviour
     private void StackToPosition(GameObject positionObj, bool isStackToTop)
     {
         ushort cardPos;
+        ushort.TryParse(positionObj.name.Substring(positionObj.name.Length - 1, 1), out cardPos);
         m_CurrentSelected.IsSelected = false;
         m_CurrentSelected.FlipPreDownCard();
         if ((m_CurrentSelected.position & Solitaire.CardPosition.Draw) > 0)
@@ -356,7 +357,7 @@ public class GameController : MonoBehaviour
             {
                 for (int i = m_GameData.currentDrawCard - 1; i > m_GameData.currentDrawCard - 3; --i)
                 {
-                    iTween.MoveTo(m_DeckCards[i].gameObject, new Vector3(m_DeckCards[i].transform.position.x - Common.XOFFSET, m_DeckCards[i].transform.position.y, m_DeckCards[i].transform.position.z), Common.MOVE_TIME);
+                    iTween.MoveTo(m_DeckCards[i].gameObject, new Vector3(m_DeckCards[i].transform.position.x + Common.XOFFSET, m_DeckCards[i].transform.position.y, m_DeckCards[i].transform.position.z), Common.MOVE_TIME);
                 }
             }
             m_DeckCards.Remove(m_CurrentSelected);
@@ -373,7 +374,6 @@ public class GameController : MonoBehaviour
         if(isStackToTop)
         {
             m_TopCards.Add(m_CurrentSelected);
-            ushort.TryParse(positionObj.name.Substring(0, 1), out cardPos);
             m_CurrentSelected.position = (Solitaire.CardPosition)(1 << (cardPos + 9));
         }
         else
@@ -382,8 +382,6 @@ public class GameController : MonoBehaviour
             {
                 m_BottomCards.Add(m_CurrentSelected);
             }
-
-            ushort.TryParse(positionObj.name.Substring(0, 1), out cardPos);
             m_CurrentSelected.position = (Solitaire.CardPosition)(1 << (cardPos + 13));
         }
 
