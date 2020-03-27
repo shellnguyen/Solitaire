@@ -250,6 +250,15 @@ public class GameController : MonoBehaviour
                             */
                             break;
                         }
+                    default:
+                        {
+                            if(m_CurrentSelected)
+                            {
+                                m_CurrentSelected.IsSelected = false;
+                                m_CurrentSelected = null;
+                            }
+                            break;
+                        }
                 }
             }
         }
