@@ -66,6 +66,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject m_DeckButton;
     [SerializeField] private GameObject m_DrawCardHolder;
     [SerializeField] private CardElement m_CurrentSelected;
+    [SerializeField] private bool m_IsWin;
     public List<int> ListCards;
 
     private void Awake()
@@ -75,7 +76,7 @@ public class GameController : MonoBehaviour
         m_BottomCards = m_GameData.bottomCards = new List<CardElement>();
         m_TopCards = m_GameData.topCards = new List<CardElement>();
         m_CurrentSelected = null;
-
+        m_IsWin = false;
         GenerateDeck();
         StartCoroutine(DealCards());
     }
@@ -328,6 +329,7 @@ public class GameController : MonoBehaviour
         {
             m_TopCards.Add(m_CurrentSelected);
             iTween.MoveTo(m_CurrentSelected.gameObject, new Vector3 (target.transform.position.x, target.transform.position.y, target.transform.position.z - Common.ZOFFSET), Common.MOVE_TIME);
+            CheckWinCondition();
         }
         else
         {
@@ -521,13 +523,12 @@ public class GameController : MonoBehaviour
         yield break;
     }
 
-    private bool CheckWinCondition()
+    private void CheckWinCondition()
     {
         if(m_TopCards.Count >= 52)
         {
-            return true;
+            m_IsWin = true;
         }
-        return false;
     }
 
     public bool CheckMoveCard(CardElement cardValue, Collider2D collider)

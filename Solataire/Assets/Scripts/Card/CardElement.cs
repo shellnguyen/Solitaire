@@ -16,8 +16,9 @@ public class CardElement : MonoBehaviour
     [SerializeField]private CardElement m_NextInStack;
     private Vector3 m_PrevPos;
     private bool m_IsNewPosValid;
-    private bool m_IsSelected;
+    [SerializeField]private bool m_IsSelected;
     private bool m_IsFaceUp;
+    private bool m_IsInCollision;
     public Solitaire.CardPosition position;
 
     public bool IsSelected
@@ -75,6 +76,7 @@ public class CardElement : MonoBehaviour
         m_PrevPos = Vector3.zero;
         m_IsNewPosValid = false;
         m_IsSelected = false;
+        m_IsInCollision = false;
     }
 
     // Start is called before the first frame update
@@ -143,14 +145,18 @@ public class CardElement : MonoBehaviour
     //    //m_IsSelected = false;
     //}
 
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (!IsFaceUp && (position & (Solitaire.CardPosition.Top1 | Solitaire.CardPosition.Top2 | Solitaire.CardPosition.Top3 | Solitaire.CardPosition.Top4)) >= 0)
-    //    {
-    //        return;
-    //    }
-    //    m_GameController.CheckMoveCard(this, collision);
-    //}
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        /*
+        if(m_IsSelected)
+            
+        */ 
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        
+    }
 
     public bool IsInStack()
     {
@@ -164,22 +170,17 @@ public class CardElement : MonoBehaviour
 
     public void OnSelectedChange()
     {
-        if(!m_IsSelected)
+        m_Renderer.color = m_IsSelected ? Color.yellow : Color.white;
+        if(m_NextInStack && ((m_NextInStack.position & this.position) > 0))
         {
-            m_Renderer.color = Color.white;
-            if(m_NextInStack)
+            if(((m_NextInStack.position & (Solitaire.CardPosition.Top1 | Solitaire.CardPosition.Top2 | Solitaire.CardPosition.Top3 | Solitaire.CardPosition.Top4)) == 0))
             {
-                m_NextInStack.IsSelected = false;
+                m_NextInStack.IsSelected = m_IsSelected;
             }
-            //this.transform.position = m_PrevPos;
         }
         else
         {
-            m_Renderer.color = Color.yellow;
-            if (m_NextInStack)
-            {
-                m_NextInStack.IsSelected = true;
-            }
+            m_NextInStack = null;
         }
     }
 
@@ -197,7 +198,7 @@ public class CardElement : MonoBehaviour
 
     public void OnCardMove()
     {
-        if(m_NextInStack)
+        if (m_NextInStack && ((m_NextInStack.position & (Solitaire.CardPosition.Top1 | Solitaire.CardPosition.Top2 | Solitaire.CardPosition.Top3 | Solitaire.CardPosition.Top4)) == 0))
         {
             m_NextInStack.transform.position = new Vector3(transform.position.x, transform.position.y - Common.YOFFSET, transform.position.z - Common.ZOFFSET);
             m_NextInStack.OnCardMove();
