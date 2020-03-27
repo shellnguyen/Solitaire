@@ -374,7 +374,7 @@ public class GameController : MonoBehaviour
         {
             m_TopCards.Add(m_CurrentSelected);
             ushort.TryParse(positionObj.name.Substring(0, 1), out cardPos);
-            m_CurrentSelected.position = (Solitaire.CardPosition)(1 << (cardPos + 13));
+            m_CurrentSelected.position = (Solitaire.CardPosition)(1 << (cardPos + 9));
         }
         else
         {
@@ -384,7 +384,7 @@ public class GameController : MonoBehaviour
             }
 
             ushort.TryParse(positionObj.name.Substring(0, 1), out cardPos);
-            m_CurrentSelected.position = (Solitaire.CardPosition)(1 << (cardPos + 9));
+            m_CurrentSelected.position = (Solitaire.CardPosition)(1 << (cardPos + 13));
         }
 
         //iTween.MoveTo(m_CurrentSelected.gameObject, new Vector3(positionObj.transform.position.x, positionObj.transform.position.y, positionObj.transform.position.z - Common.ZOFFSET), Common.MOVE_TIME);
@@ -523,10 +523,17 @@ public class GameController : MonoBehaviour
         yield break;
     }
 
+    private bool CheckWinCondition()
+    {
+        if(m_TopCards.Count >= 52)
+        {
+            return true;
+        }
+        return false;
+    }
+
     public bool CheckMoveCard(CardElement cardValue, Collider2D collider)
     {
-
-
         switch (collider.tag)
         {
             case "Card":
