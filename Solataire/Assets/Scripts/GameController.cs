@@ -266,13 +266,105 @@ public class GameController : MonoBehaviour
         //Left mouse held down
         if(Input.GetMouseButton(0))
         {
+            Debug.Log("GameController MouseButton drag");
 
+            if(m_CurrentSelected)
+            {
+                Vector3 cardNewPos = Utilities.Instance.GetWorldPosition2D(m_MainCamera, mousePos);
+                m_CurrentSelected.IsDragging = true;
+                m_CurrentSelected.OnCardDrag(cardNewPos);
+            }
+            /*
+
+            if(selected)
+                Vector3 cardNewPos = Utilities.Instance.GetWorldPosition2D(mousePos)
+                selected.IsDragging = true;
+                selected.OnCardDrag(cardNewPos)                    
+            */
         }
 
         //Left mouse release
-        if(Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0))
         {
+            Debug.Log("GameController MouseButton up");
+            if(m_CurrentSelected && m_CurrentSelected.IsDragging)
+            {
+                switch(m_CurrentSelected.CollidedTag)
+                {
+                    case 1:
+                        {
+                            break;
+                        }
+                    case 2:
+                        {
+                            break;
+                        }
+                    case 3:
+                        {
+                            break;
+                        }
+                }
 
+                m_CurrentSelected.ResetCardPosition();
+                m_CurrentSelected = null;
+            }
+
+            /*
+            if(selected && IsDragging)
+                switch(selected.CollidedTag)
+                    case 1: //Card
+                        CardElement card = selected.Collided.GetComponent<CardElement>()
+                        if(card.position & (CardPosition.Top1 | CardPosition.Top2 | CardPostion.Top3 | CardPositon.Top4) > 0)
+                            if(!selected)
+                                return
+
+                            if(CanStack(selected.CardValue, card.CardValue) && !selected.IsInStack())
+                                move selected to card position
+                                remove seleteced from current ListCard
+                                add selected to TopCards
+                                selected.IsSelect = false
+                                set selected = null
+                                CheckWinCondition()
+                                return
+
+                        if((card.position & (CardPosition.Bottom1 | CardPosition.Bottom2 | CardPosition.Bottom3 | CardPosition.Bottom4 | CardPosition.Bottom5 | CardPosition.Bottom6 | CardPosition.Bottom7)) > 0)
+                            if(!selected)
+                                selected = card
+                                selected.IsSelect = true
+                                return
+
+                            if(CanStack(selected.CardValue, card.CardValue))
+                                move selected to card position
+                                remove seleteced from current ListCard
+                                add selected to TopCards
+                                selected.IsSelect = false
+                                set selected = null
+                                return
+                        break;
+                        
+                    case 2: //Top
+                        selectedValue = Utilities.Instance.ExtractBit(selected, 12, 1);
+                            if(selectedValue == CardValue.King)
+                                move selected to top position
+                                remove selected from current ListCard
+                                add selected to TopCards
+                                set selected = null
+                                return
+                        break
+
+                    case 3: //Bottom
+                        selectedValue = Utilities.Instance.ExtractBit(selected, 12, 1);
+                            if(selectedValue == CardValue.King)
+                                move selected to bottom position
+                                remove selected from current ListCard
+                                add selected to BottomCards
+                                set selected = null
+                                return
+                        break
+
+                selected.ResetCardPosition()
+                selected = null
+            */
         }
     }
 

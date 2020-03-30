@@ -14,11 +14,13 @@ public class CardElement : MonoBehaviour
     [SerializeField]private string m_CardName;
     [SerializeField]private CardElement m_PrevFaceDown;
     [SerializeField]private CardElement m_NextInStack;
+    [SerializeField]private GameObject m_Collided;
     private Vector3 m_PrevPos;
     private bool m_IsNewPosValid;
     [SerializeField]private bool m_IsSelected;
     private bool m_IsFaceUp;
-    private bool m_IsInCollision;
+    private byte m_CollidedTag;
+    private bool m_IsDragging;
     public Solitaire.CardPosition position;
 
     public bool IsSelected
@@ -68,6 +70,45 @@ public class CardElement : MonoBehaviour
         }
     }
 
+    public byte CollidedTag
+    {
+        get
+        {
+            return m_CollidedTag;
+        }
+
+        set
+        {
+            m_CollidedTag = value;
+        }
+    }
+
+    public bool IsDragging
+    {
+        get
+        {
+            return m_IsDragging;
+        }
+
+        set
+        {
+            m_IsDragging = value;
+        }
+    }
+
+    public GameObject Collided
+    {
+        get
+        {
+            return m_Collided;
+        }
+
+        set
+        {
+            m_Collided = value;
+        }
+    }
+
     private void Awake()
     {
         m_Renderer = GetComponent<SpriteRenderer>();
@@ -76,7 +117,9 @@ public class CardElement : MonoBehaviour
         m_PrevPos = Vector3.zero;
         m_IsNewPosValid = false;
         m_IsSelected = false;
-        m_IsInCollision = false;
+        m_IsDragging = false;
+        m_CollidedTag = 0;
+        m_Collided = null;
     }
 
     // Start is called before the first frame update
@@ -148,14 +191,36 @@ public class CardElement : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         /*
-        if(m_IsSelected)
-            
-        */ 
+        if(!m_IsSelected)
+            return
+        
+        switch(collision.gameObject.tag)
+            case "Card":
+                if(!card.IsInStack && card.IsFaceUp)
+                    m_CollidedTag = 1
+                break
+                
+            case "Top":
+                    m_CollidedTag = 2
+                break
+
+            case "Bottom":
+                    m_CollidedTag = 3
+                break
+
+        m_Collided = collision.gameObject
+        */
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        
+        /*
+        if(!m_IsSelected)
+            return
+        m_CollidedTag = 0
+        m_Collided = null
+
+        */
     }
 
     public bool IsInStack()
@@ -170,12 +235,23 @@ public class CardElement : MonoBehaviour
 
     public void OnSelectedChange()
     {
-        m_Renderer.color = m_IsSelected ? Color.yellow : Color.white;
+        if (m_IsSelected)
+        {
+            m_Renderer.color = Color.yellow;
+            m_PrevPos = this.transform.position;
+        }
+        else
+        {
+            m_Renderer.color = Color.white;
+            m_PrevPos = Vector3.zero;
+        }
+
         if(m_NextInStack && ((m_NextInStack.position & this.position) > 0))
         {
             if(((m_NextInStack.position & (Solitaire.CardPosition.Top1 | Solitaire.CardPosition.Top2 | Solitaire.CardPosition.Top3 | Solitaire.CardPosition.Top4)) == 0))
             {
                 m_NextInStack.IsSelected = m_IsSelected;
+                
             }
         }
         else
@@ -221,6 +297,31 @@ public class CardElement : MonoBehaviour
         {
             m_PrevFaceDown.IsFaceUp = true;
             m_PrevFaceDown = null;
+        }
+    }
+
+    public void OnCardDrag(Vector3 position)
+    {
+        position.z = transform.position.z;
+        transform.position = position;
+        if(m_NextInStack)
+        {
+            m_NextInStack.OnCardDrag(position);
+        }
+    }
+
+    public void ResetCardPosition()
+    {
+        this.transform.position = m_PrevPos;
+        m_PrevPos = Vector3.zero;
+        IsSelected = false;
+        m_IsDragging = false;
+        m_CollidedTag = 0;
+        m_Collided = null;
+
+        if(m_NextInStack)
+        {
+            m_NextInStack.ResetCardPosition();
         }
     }
 }
