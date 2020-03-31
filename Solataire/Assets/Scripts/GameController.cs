@@ -271,6 +271,7 @@ public class GameController : MonoBehaviour
             if(m_CurrentSelected)
             {
                 Vector3 cardNewPos = Utilities.Instance.GetWorldPosition2D(m_MainCamera, mousePos);
+                cardNewPos.z = -Common.DRAGGING_Z;
                 m_CurrentSelected.IsDragging = true;
                 m_CurrentSelected.OnCardDrag(cardNewPos);
             }
@@ -293,6 +294,38 @@ public class GameController : MonoBehaviour
                 {
                     case 1:
                         {
+                            if(!m_CurrentSelected.Collided)
+                            {
+                                return;
+                            }
+                            CardElement card = m_CurrentSelected.Collided.GetComponent<CardElement>();
+                            //Card in Top position
+                            if ((card.position & (Solitaire.CardPosition.Top1 | Solitaire.CardPosition.Top2 | Solitaire.CardPosition.Top3 | Solitaire.CardPosition.Top4)) > 0)
+                            {
+                                if (CanStack(m_CurrentSelected.CardValue, card.CardValue, true) && !m_CurrentSelected.IsInStack())
+                                {
+                                    StackToCard(card, true);
+                                    //TODO: check win condition
+                                    return;
+                                }
+                            }
+
+                            //Card in Bottom position
+                            if ((card.position & (Solitaire.CardPosition.Bottom1 | Solitaire.CardPosition.Bottom2 | Solitaire.CardPosition.Bottom3 | Solitaire.CardPosition.Bottom4 | Solitaire.CardPosition.Bottom5 | Solitaire.CardPosition.Bottom6 | Solitaire.CardPosition.Bottom7)) > 0)
+                            {
+                                if (CanStack(m_CurrentSelected.CardValue, card.CardValue))
+                                {
+                                    StackToCard(card, false);
+                                    return;
+                                }
+                                else
+                                {
+                                    m_CurrentSelected.IsSelected = false;
+                                    m_CurrentSelected = card;
+                                    m_CurrentSelected.IsSelected = true;
+                                    return;
+                                }
+                            }
                             break;
                         }
                     case 2:

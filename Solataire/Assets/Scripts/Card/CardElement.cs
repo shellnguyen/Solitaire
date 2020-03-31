@@ -19,8 +19,8 @@ public class CardElement : MonoBehaviour
     private bool m_IsNewPosValid;
     [SerializeField]private bool m_IsSelected;
     private bool m_IsFaceUp;
-    private byte m_CollidedTag;
-    private bool m_IsDragging;
+    [SerializeField]private byte m_CollidedTag;
+    [SerializeField]private bool m_IsDragging;
     public Solitaire.CardPosition position;
 
     public bool IsSelected
@@ -188,8 +188,41 @@ public class CardElement : MonoBehaviour
     //    //m_IsSelected = false;
     //}
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
+        if(!m_IsSelected)
+        {
+            return;
+        }
+
+        Debug.Log("card " + m_CardName + " OnTriggerEnter2D");
+        switch(collision.tag)
+        {
+            case "Card":
+                {
+                    CardElement card = collision.gameObject.GetComponent<CardElement>();
+                    if(!card.IsInStack() && card.IsFaceUp)
+                    {
+                        m_CollidedTag = 1;
+                        m_Collided = collision.gameObject;
+                    }
+                    break;
+                }
+            case "Top":
+                {
+                    goto case "Bottom";
+                }
+            case "Bottom":
+                {
+                    if (collision.gameObject.transform.childCount == 0)
+                    {
+                        m_CollidedTag = collision.tag.Equals("Top") ? (byte)2 : (byte)3;
+                        m_Collided = collision.gameObject;
+                    }
+                    break;
+                }
+        }
+
         /*
         if(!m_IsSelected)
             return
@@ -212,8 +245,16 @@ public class CardElement : MonoBehaviour
         */
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
+        //if(!m_IsSelected)
+        //{
+        //    return;
+        //}
+        //Debug.Log("card " + m_CardName + " OnTriggerExit2D");
+
+        //m_CollidedTag = 0;
+        //m_Collided = null;
         /*
         if(!m_IsSelected)
             return
@@ -221,6 +262,16 @@ public class CardElement : MonoBehaviour
         m_Collided = null
 
         */
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+
     }
 
     public bool IsInStack()
