@@ -292,7 +292,7 @@ public class GameController : MonoBehaviour
             {
                 switch(m_CurrentSelected.CollidedTag)
                 {
-                    case 1:
+                    case 1: //Card
                         {
                             if(!m_CurrentSelected.Collided)
                             {
@@ -328,12 +328,36 @@ public class GameController : MonoBehaviour
                             }
                             break;
                         }
-                    case 2:
+                    case 2: //Top
                         {
+                            if (!m_CurrentSelected)
+                            {
+                                return;
+                            }
+
+                            ushort selectedCardValue = (ushort)Utilities.Instance.ExtractBit(m_CurrentSelected.CardValue, 12, 1);
+
+                            if (selectedCardValue == (ushort)Solitaire.CardValue.Ace)
+                            {
+                                StackToPosition(m_CurrentSelected.Collided, true);
+                                return;
+                            }
                             break;
                         }
-                    case 3:
+                    case 3: //Bottom
                         {
+                            if (!m_CurrentSelected)
+                            {
+                                return;
+                            }
+
+                            ushort selectedCardValue = (ushort)Utilities.Instance.ExtractBit(m_CurrentSelected.CardValue, 12, 1);
+
+                            if (selectedCardValue == (ushort)Solitaire.CardValue.King)
+                            {
+                                StackToPosition(m_CurrentSelected.Collided, false);
+                                return;
+                            }
                             break;
                         }
                 }
