@@ -357,6 +357,8 @@ public class CardElement : MonoBehaviour
         transform.position = position;
         if(m_NextInStack)
         {
+            position.y -= Common.YOFFSET;
+            position.z -= Common.ZOFFSET;
             m_NextInStack.OnCardDrag(position);
         }
     }
