@@ -247,14 +247,19 @@ public class CardElement : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        //if(!m_IsSelected)
-        //{
-        //    return;
-        //}
-        //Debug.Log("card " + m_CardName + " OnTriggerExit2D");
+        if (!m_IsSelected)
+        {
+            return;
+        }
+        Debug.Log("card " + m_CardName + " OnTriggerExit2D");
 
-        //m_CollidedTag = 0;
-        //m_Collided = null;
+        if(m_Collided && m_Collided.GetInstanceID() == collision.gameObject.GetInstanceID())
+        {
+            Debug.Log("move out of m_Collided");
+            m_CollidedTag = 0;
+            m_Collided = null;
+        }
+        
         /*
         if(!m_IsSelected)
             return
@@ -353,7 +358,6 @@ public class CardElement : MonoBehaviour
 
     public void OnCardDrag(Vector3 position)
     {
-        position.z = transform.position.z;
         transform.position = position;
         if(m_NextInStack)
         {
