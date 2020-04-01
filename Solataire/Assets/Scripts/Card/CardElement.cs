@@ -142,52 +142,6 @@ public class CardElement : MonoBehaviour
         position = Solitaire.CardPosition.Deck;
     }
 
-    //private void OnMouseDown()
-    //{
-    //    if(!IsFaceUp && (position & (Solitaire.CardPosition.Top1 | Solitaire.CardPosition.Top2 | Solitaire.CardPosition.Top3 | Solitaire.CardPosition.Top4)) >= 0)
-    //    {
-    //        return;
-    //    }
-    //    Debug.Log("Down Name = " + m_CardName);
-    //    m_PrevPos = this.transform.position;
-    //    //IsSelected = true;
-    //    m_GameController.SetCurrentCard(this);
-    //}
-
-    //private void OnMouseDrag()
-    //{
-    //    if (!IsSelected)
-    //    {
-    //        return;
-    //    }
-
-    //    Debug.Log("Drag Name = " + m_CardName);
-    //    Vector3 mousePos; //= Utilities.Instance.GetWorldPosition2D(Input.mousePosition);
-    //    mousePos.z = -1.5f;
-
-    //    //this.gameObject.transform.position = mousePos;    
-    //}
-
-    //private void OnMouseUp()
-    //{
-    //    if (!m_IsSelected)
-    //    {
-    //        return;
-    //    }
-
-    //    Debug.Log("Up Name = " + m_CardName);
-    //    if (!m_IsNewPosValid)
-    //    {
-    //        this.transform.position = m_PrevPos;
-    //    }
-    //    else
-    //    {
-    //        m_IsNewPosValid = false;
-    //    }
-
-    //    //m_IsSelected = false;
-    //}
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(!m_IsSelected)
@@ -222,27 +176,6 @@ public class CardElement : MonoBehaviour
                     break;
                 }
         }
-
-        /*
-        if(!m_IsSelected)
-            return
-        
-        switch(collision.gameObject.tag)
-            case "Card":
-                if(!card.IsInStack && card.IsFaceUp)
-                    m_CollidedTag = 1
-                break
-                
-            case "Top":
-                    m_CollidedTag = 2
-                break
-
-            case "Bottom":
-                    m_CollidedTag = 3
-                break
-
-        m_Collided = collision.gameObject
-        */
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -259,24 +192,6 @@ public class CardElement : MonoBehaviour
             m_CollidedTag = 0;
             m_Collided = null;
         }
-        
-        /*
-        if(!m_IsSelected)
-            return
-        m_CollidedTag = 0
-        m_Collided = null
-
-        */
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-
     }
 
     public bool IsInStack()
