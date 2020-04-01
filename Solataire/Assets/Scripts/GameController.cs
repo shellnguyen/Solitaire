@@ -85,6 +85,11 @@ public class GameController : MonoBehaviour
     private void Update()
     {
         Vector3 mousePos = Input.mousePosition;
+        if(m_IsWin)
+        {
+            Debug.Log("You WIN !!!");
+        }
+
         //Left mouse clicked
         if(Input.GetMouseButtonDown(0))
         {
@@ -119,6 +124,7 @@ public class GameController : MonoBehaviour
                                 {
                                     StackToCard(card, true);
                                     //TODO: check win condition
+                                    CheckWinCondition();
                                     return;
                                 }
                             }
@@ -306,6 +312,7 @@ public class GameController : MonoBehaviour
                                 {
                                     StackToCard(card, true);
                                     //TODO: check win condition
+                                    CheckWinCondition();
                                     return;
                                 }
                             }
@@ -479,7 +486,7 @@ public class GameController : MonoBehaviour
             //TODO: any better way to check what list the card need to remove/add from/to
             if(isStackToTop)
             {
-                m_BottomCards.Remove(m_CurrentSelected);
+                m_CurrentSelected.RemoveCardFromList(ref m_BottomCards);
             }
         }
 
@@ -493,15 +500,16 @@ public class GameController : MonoBehaviour
         {
             if(m_CurrentSelected.position < Solitaire.CardPosition.Bottom1)
             {
-                m_BottomCards.Add(m_CurrentSelected);
+                m_CurrentSelected.AddCardToList(ref m_BottomCards);
             }
             //iTween.MoveTo(m_CurrentSelected.gameObject, new Vector3(target.transform.position.x, target.transform.position.y - Common.YOFFSET, target.transform.position.z - Common.ZOFFSET), Common.MOVE_TIME);
             Vector3 newPos = new Vector3(target.transform.position.x, target.transform.position.y - Common.YOFFSET, target.transform.position.z - Common.ZOFFSET);
             Utilities.Instance.MoveToWithCallBack(m_CurrentSelected.gameObject, newPos, Common.MOVE_TIME, "OnCardMove");
         }
 
-        m_CurrentSelected.position = target.position;
-        m_CurrentSelected.transform.SetParent(target.transform.parent);
+        m_CurrentSelected.SetCardPosition(target.position);
+        m_CurrentSelected.SetCardParent(target.transform.parent);
+        //m_CurrentSelected.transform.SetParent(target.transform.parent);
         m_CurrentSelected = null;
     }
 
@@ -527,29 +535,31 @@ public class GameController : MonoBehaviour
         {
             if (isStackToTop)
             {
-                m_BottomCards.Remove(m_CurrentSelected);
+                m_CurrentSelected.RemoveCardFromList(ref m_BottomCards);
             }
         }
 
         if(isStackToTop)
         {
             m_TopCards.Add(m_CurrentSelected);
-            m_CurrentSelected.position = (Solitaire.CardPosition)(1 << (cardPos + 9));
+            m_CurrentSelected.SetCardPosition((Solitaire.CardPosition)(1 << (cardPos + 9)));
         }
         else
         {
             if (m_CurrentSelected.position < Solitaire.CardPosition.Bottom1)
             {
-                m_BottomCards.Add(m_CurrentSelected);
+                m_CurrentSelected.AddCardToList(ref m_BottomCards);
             }
-            m_CurrentSelected.position = (Solitaire.CardPosition)(1 << (cardPos + 13));
+            m_CurrentSelected.SetCardPosition((Solitaire.CardPosition)(1 << (cardPos + 13)));
         }
 
         //iTween.MoveTo(m_CurrentSelected.gameObject, new Vector3(positionObj.transform.position.x, positionObj.transform.position.y, positionObj.transform.position.z - Common.ZOFFSET), Common.MOVE_TIME);
         Vector3 newPos = new Vector3(positionObj.transform.position.x, positionObj.transform.position.y, positionObj.transform.position.z - Common.ZOFFSET);
         Utilities.Instance.MoveToWithCallBack(m_CurrentSelected.gameObject, newPos, Common.MOVE_TIME, "OnCardMove");
 
-        m_CurrentSelected.transform.SetParent(positionObj.transform);
+        //m_CurrentSelected.transform.SetParent(positionObj.transform);
+        //TODO: Thing of better solution man. This is hacky as fuck.
+        m_CurrentSelected.SetCardParent(positionObj.transform);
     }
 
     private void GenerateDeck()

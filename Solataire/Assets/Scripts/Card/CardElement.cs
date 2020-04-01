@@ -328,6 +328,24 @@ public class CardElement : MonoBehaviour
         }
     }
 
+    public void RemoveCardFromList(ref List<CardElement> listCard)
+    {
+        listCard.Remove(this);
+        if(m_NextInStack)
+        {
+            m_NextInStack.RemoveCardFromList(ref listCard);
+        }
+    }
+
+    public void AddCardToList(ref List<CardElement> listCard)
+    {
+        listCard.Add(this);
+        if(m_NextInStack)
+        {
+            m_NextInStack.AddCardToList(ref listCard);
+        }
+    }
+
     public void OnCardMove()
     {
         if (m_NextInStack && ((m_NextInStack.position & (Solitaire.CardPosition.Top1 | Solitaire.CardPosition.Top2 | Solitaire.CardPosition.Top3 | Solitaire.CardPosition.Top4)) == 0))
@@ -345,6 +363,24 @@ public class CardElement : MonoBehaviour
     public void SetPrevFaceDown(CardElement card)
     {
         m_PrevFaceDown = card;
+    }
+
+    public void SetCardPosition(Solitaire.CardPosition position)
+    {
+        this.position = position;
+        if(m_NextInStack)
+        {
+            m_NextInStack.SetCardPosition(position);
+        }
+    }
+
+    public void SetCardParent(Transform parent)
+    {
+        this.transform.SetParent(parent);
+        if(m_NextInStack)
+        {
+            m_NextInStack.SetCardParent(parent);
+        }
     }
 
     public void FlipPreDownCard()
