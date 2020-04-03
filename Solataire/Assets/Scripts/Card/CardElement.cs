@@ -164,14 +164,31 @@ public class CardElement : MonoBehaviour
                 }
             case "Top":
                 {
-                    goto case "Bottom";
+                    if (collision.gameObject.transform.childCount == 0)
+                    {
+                        m_CollidedTag = 2;
+                        m_Collided = collision.gameObject;
+                    }
+                    break;
                 }
             case "Bottom":
                 {
                     if (collision.gameObject.transform.childCount == 0)
                     {
-                        m_CollidedTag = collision.tag.Equals("Top") ? (byte)2 : (byte)3;
+                        m_CollidedTag = 3;
                         m_Collided = collision.gameObject;
+                    }
+                    else
+                    {
+                        //TODO: any better way to do this
+                        GameObject lastChild = collision.transform.GetChild(collision.transform.childCount - 1).gameObject;
+                        CardElement card = lastChild.GetComponent<CardElement>();
+
+                        if (!card.IsInStack() && card.IsFaceUp && card.position != this.position)
+                        {
+                            m_CollidedTag = 1;
+                            m_Collided = lastChild;
+                        }
                     }
                     break;
                 }
