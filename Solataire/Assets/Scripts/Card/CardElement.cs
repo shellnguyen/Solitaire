@@ -372,6 +372,19 @@ public class CardElement : MonoBehaviour
         }
     }
 
+    public void EndDragging()
+    {
+        m_PrevPos = Vector3.zero;
+        m_IsDragging = false;
+        m_CollidedTag = 0;
+        m_Collided = null;
+
+        if (m_NextInStack)
+        {
+            m_NextInStack.EndDragging();
+        }
+    }
+
     public CardElement GetLastCardInStack()
     {
         if(!m_NextInStack)

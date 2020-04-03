@@ -468,6 +468,11 @@ public class GameController : MonoBehaviour
     private void StackToCard(CardElement target, bool isStackToTop)
     {
         m_CurrentSelected.IsSelected = false;
+        if(m_CurrentSelected.IsDragging)
+        {
+            m_CurrentSelected.EndDragging();
+        }
+
         m_CurrentSelected.FlipPreDownCard();
         target.SetNextInStack(m_CurrentSelected); //Add current selected to stack of target card
         if ((m_CurrentSelected.position & Solitaire.CardPosition.Draw) > 0)
@@ -519,6 +524,10 @@ public class GameController : MonoBehaviour
         ushort cardPos;
         ushort.TryParse(positionObj.name.Substring(positionObj.name.Length - 1, 1), out cardPos);
         m_CurrentSelected.IsSelected = false;
+        if(m_CurrentSelected.IsDragging)
+        {
+            m_CurrentSelected.EndDragging();
+        }
         m_CurrentSelected.FlipPreDownCard();
         if ((m_CurrentSelected.position & Solitaire.CardPosition.Draw) > 0)
         {
