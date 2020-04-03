@@ -371,4 +371,16 @@ public class CardElement : MonoBehaviour
             m_NextInStack.ResetCardPosition();
         }
     }
+
+    public CardElement GetLastCardInStack()
+    {
+        if(!m_NextInStack)
+        {
+            return this;
+        }
+        else
+        {
+            return m_NextInStack.GetLastCardInStack();
+        }
+    }
 }

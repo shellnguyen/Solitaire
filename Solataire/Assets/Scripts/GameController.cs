@@ -320,18 +320,19 @@ public class GameController : MonoBehaviour
                             //Card in Bottom position
                             if ((card.position & (Solitaire.CardPosition.Bottom1 | Solitaire.CardPosition.Bottom2 | Solitaire.CardPosition.Bottom3 | Solitaire.CardPosition.Bottom4 | Solitaire.CardPosition.Bottom5 | Solitaire.CardPosition.Bottom6 | Solitaire.CardPosition.Bottom7)) > 0)
                             {
-                                if (CanStack(m_CurrentSelected.CardValue, card.CardValue))
+                                CardElement lastCardInStack = card.GetLastCardInStack();
+                                if (CanStack(m_CurrentSelected.CardValue, lastCardInStack.CardValue))
                                 {
-                                    StackToCard(card, false);
+                                    StackToCard(lastCardInStack, false);
                                     return;
                                 }
-                                else
-                                {
-                                    m_CurrentSelected.IsSelected = false;
-                                    m_CurrentSelected = card;
-                                    m_CurrentSelected.IsSelected = true;
-                                    return;
-                                }
+                                //else
+                                //{
+                                //    m_CurrentSelected.IsSelected = false;
+                                //    m_CurrentSelected = card;
+                                //    m_CurrentSelected.IsSelected = true;
+                                //    return;
+                                //}
                             }
                             break;
                         }
