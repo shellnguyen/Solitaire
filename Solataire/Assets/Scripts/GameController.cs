@@ -68,6 +68,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private CardElement m_CurrentSelected;
     [SerializeField] private bool m_IsWin;
     public List<int> ListCards;
+    private float m_PrevClickedTime;
 
     private void Awake()
     {
@@ -77,6 +78,7 @@ public class GameController : MonoBehaviour
         m_TopCards = m_GameData.topCards = new List<CardElement>();
         m_CurrentSelected = null;
         m_IsWin = false;
+        m_PrevClickedTime = 0.0f;
         GenerateDeck();
         StartCoroutine(DealCards());
     }
@@ -114,6 +116,7 @@ public class GameController : MonoBehaviour
 
                                 m_CurrentSelected = card;
                                 m_CurrentSelected.IsSelected = true;
+                                m_PrevClickedTime = Time.time;
                                 break;
                             }
 
@@ -142,6 +145,7 @@ public class GameController : MonoBehaviour
                                     m_CurrentSelected.IsSelected = false;
                                     m_CurrentSelected = card;
                                     m_CurrentSelected.IsSelected = true;
+                                    m_PrevClickedTime = Time.time;
                                     return;
                                 }
                             }
@@ -154,6 +158,8 @@ public class GameController : MonoBehaviour
                                     m_CurrentSelected.IsSelected = false;
                                     m_CurrentSelected = card;
                                     m_CurrentSelected.IsSelected = true;
+                                    m_PrevClickedTime = Time.time;
+                                    return;
                                 }
                             }
 
@@ -262,6 +268,7 @@ public class GameController : MonoBehaviour
                             {
                                 m_CurrentSelected.IsSelected = false;
                                 m_CurrentSelected = null;
+                                m_PrevClickedTime = 0.0f;
                             }
                             break;
                         }
@@ -273,8 +280,9 @@ public class GameController : MonoBehaviour
         if(Input.GetMouseButton(0))
         {
             Debug.Log("GameController MouseButton drag");
-
-            if(m_CurrentSelected)
+            Debug.Log("time spent = " + (Time.time - m_PrevClickedTime));
+            //TODO: more testing to find the magic number :<
+            if(m_CurrentSelected && (Time.time - m_PrevClickedTime) >= 0.5f)
             {
                 Vector3 cardNewPos = Utilities.Instance.GetWorldPosition2D(m_MainCamera, mousePos);
                 cardNewPos.z = -Common.DRAGGING_Z;
@@ -370,6 +378,7 @@ public class GameController : MonoBehaviour
                         }
                 }
 
+                m_PrevClickedTime = 0.0f;
                 m_CurrentSelected.ResetCardPosition();
                 m_CurrentSelected = null;
             }
