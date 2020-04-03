@@ -560,6 +560,8 @@ public class GameController : MonoBehaviour
         //m_CurrentSelected.transform.SetParent(positionObj.transform);
         //TODO: Thing of better solution man. This is hacky as fuck.
         m_CurrentSelected.SetCardParent(positionObj.transform);
+        positionObj.layer = 9;
+        m_CurrentSelected = null;
     }
 
     private void GenerateDeck()
@@ -582,6 +584,7 @@ public class GameController : MonoBehaviour
 
                 GameObject card = Instantiate(m_CardPrefab, m_DeckButton.transform.position + Vector3.forward, Quaternion.identity);
                 card.transform.SetParent(m_DeckButton.transform);
+                card.layer = 9;
 
                 m_DeckCards.Add(card.GetComponent<CardElement>());
                 m_DeckCards[i * 13 + k].SetCardProperties(this, (ushort)(0 | suitValue | cardValue), builder.ToString());
@@ -616,7 +619,9 @@ public class GameController : MonoBehaviour
             iTween.MoveTo(m_BottomCards[i].gameObject, new Vector3(m_BottomList[bottomNum - 1].transform.position.x, m_BottomList[bottomNum - 1].transform.position.y - yOffset, m_BottomList[bottomNum - 1].transform.position.z - 1.0f - zOffset), 0.05f);
             if (cardNum == bottomNum - 1)
             {
+                m_BottomList[bottomNum - 1].layer = 9;
                 m_BottomCards[i].IsFaceUp = true;
+                m_BottomCards[i].gameObject.layer = 8;
             }
             m_BottomCards[i].position = (Solitaire.CardPosition)(1 << (bottomNum + 13)); //TODO: remove hardcode index
             m_BottomCards[i].transform.SetParent(m_BottomList[bottomNum - 1].transform);
@@ -667,6 +672,7 @@ public class GameController : MonoBehaviour
             iTween.MoveTo(card.gameObject, m_DeckButton.transform.position + Vector3.forward, 0.1f);
             card.position = Solitaire.CardPosition.Deck;
             card.IsFaceUp = false;
+            card.gameObject.layer = 9;
         }
 
         yield break;
@@ -687,6 +693,7 @@ public class GameController : MonoBehaviour
         iTween.MoveTo(m_DeckCards[currentDrawCard].gameObject, new Vector3(m_DrawCardHolder.transform.position.x + (currentDrawCard >= 2 ? 1.0f : currentDrawCard * offSet), m_DrawCardHolder.transform.position.y, -(currentDrawCard * offSet)), 0.1f);
         m_DeckCards[currentDrawCard].IsFaceUp = true;
         m_DeckCards[currentDrawCard].position = Solitaire.CardPosition.Draw;
+        m_DeckCards[currentDrawCard].gameObject.layer = 8;
 
         yield break;
     }

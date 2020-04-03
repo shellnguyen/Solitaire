@@ -109,6 +109,19 @@ public class CardElement : MonoBehaviour
         }
     }
 
+    public string CardName
+    {
+        get
+        {
+            return m_CardName;
+        }
+
+        set
+        {
+            m_CardName = value;
+        }
+    }
+
     private void Awake()
     {
         m_Renderer = GetComponent<SpriteRenderer>();
@@ -149,13 +162,14 @@ public class CardElement : MonoBehaviour
             return;
         }
 
-        Debug.Log("card " + m_CardName + " OnTriggerEnter2D");
         switch(collision.tag)
         {
             case "Card":
                 {
+
                     CardElement card = collision.gameObject.GetComponent<CardElement>();
-                    if(!card.IsInStack() && card.IsFaceUp)
+                    Debug.Log("card " + m_CardName + " OnTriggerEnter2D with " + card.CardName);
+                    if (!card.IsInStack() && card.IsFaceUp)
                     {
                         m_CollidedTag = 1;
                         m_Collided = collision.gameObject;
@@ -164,6 +178,7 @@ public class CardElement : MonoBehaviour
                 }
             case "Top":
                 {
+                    Debug.Log("card " + m_CardName + " OnTriggerEnter2D with " + collision.gameObject.name);
                     if (collision.gameObject.transform.childCount == 0)
                     {
                         m_CollidedTag = 2;
@@ -173,6 +188,7 @@ public class CardElement : MonoBehaviour
                 }
             case "Bottom":
                 {
+                    Debug.Log("card " + m_CardName + " OnTriggerEnter2D with " + collision.gameObject.name);
                     if (collision.gameObject.transform.childCount == 0)
                     {
                         m_CollidedTag = 3;
@@ -181,14 +197,14 @@ public class CardElement : MonoBehaviour
                     else
                     {
                         //TODO: any better way to do this
-                        GameObject lastChild = collision.transform.GetChild(collision.transform.childCount - 1).gameObject;
-                        CardElement card = lastChild.GetComponent<CardElement>();
+                        //GameObject lastChild = collision.transform.GetChild(collision.transform.childCount - 1).gameObject;
+                        //CardElement card = lastChild.GetComponent<CardElement>();
 
-                        if (!card.IsInStack() && card.IsFaceUp && card.position != this.position)
-                        {
-                            m_CollidedTag = 1;
-                            m_Collided = lastChild;
-                        }
+                        //if (!card.IsInStack() && card.IsFaceUp && card.position != this.position)
+                        //{
+                        //    m_CollidedTag = 1;
+                        //    m_Collided = lastChild;
+                        //}
                     }
                     break;
                 }
@@ -308,6 +324,11 @@ public class CardElement : MonoBehaviour
 
     public void SetCardParent(Transform parent)
     {
+        if(this.transform.parent.childCount == 1)
+        {
+            this.transform.parent.gameObject.layer = 8;
+        }
+
         this.transform.SetParent(parent);
         if(m_NextInStack)
         {
@@ -319,6 +340,7 @@ public class CardElement : MonoBehaviour
     {
         if(m_PrevFaceDown)
         {
+            m_PrevFaceDown.gameObject.layer = 8;
             m_PrevFaceDown.IsFaceUp = true;
             m_PrevFaceDown = null;
         }

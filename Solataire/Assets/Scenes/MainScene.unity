@@ -196,7 +196,7 @@ PrefabInstance:
     - target: {fileID: 4974211485696007699, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}
       propertyPath: m_Layer
-      value: 19
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a3d1a5f78820a84f86049794476bd64, type: 3}
@@ -463,7 +463,7 @@ PrefabInstance:
     - target: {fileID: 4974211485696007699, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4974211485696007701, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}
@@ -1379,7 +1379,7 @@ PrefabInstance:
     - target: {fileID: 4974211485696007699, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}
       propertyPath: m_Layer
-      value: 17
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a3d1a5f78820a84f86049794476bd64, type: 3}
@@ -2072,7 +2072,7 @@ PrefabInstance:
     - target: {fileID: 4974211485696007699, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}
       propertyPath: m_Layer
-      value: 11
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4974211485696007701, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}
@@ -2162,7 +2162,7 @@ PrefabInstance:
     - target: {fileID: 4974211485696007699, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}
       propertyPath: m_Layer
-      value: 15
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4974211485696007700, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}
@@ -2695,7 +2695,7 @@ PrefabInstance:
     - target: {fileID: 4974211485696007699, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}
       propertyPath: m_Layer
-      value: 18
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a3d1a5f78820a84f86049794476bd64, type: 3}
@@ -2852,7 +2852,7 @@ PrefabInstance:
     - target: {fileID: 4974211485696007699, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}
       propertyPath: m_Layer
-      value: 13
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4974211485696007701, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}
@@ -2942,7 +2942,7 @@ PrefabInstance:
     - target: {fileID: 4974211485696007699, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a3d1a5f78820a84f86049794476bd64, type: 3}
@@ -4581,7 +4581,7 @@ PrefabInstance:
     - target: {fileID: 4974211485696007699, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}
       propertyPath: m_Layer
-      value: 20
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a3d1a5f78820a84f86049794476bd64, type: 3}
@@ -4741,6 +4741,7 @@ MonoBehaviour:
   m_DeckButton: {fileID: 1942099062}
   m_DrawCardHolder: {fileID: 1904655131}
   m_CurrentSelected: {fileID: 0}
+  m_IsWin: 0
   ListCards: 
 --- !u!1 &1904655131
 GameObject:
@@ -5562,7 +5563,7 @@ PrefabInstance:
     - target: {fileID: 4974211485696007699, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4974211485696007701, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}
@@ -5652,7 +5653,7 @@ PrefabInstance:
     - target: {fileID: 4974211485696007699, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}
       propertyPath: m_Layer
-      value: 14
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4974211485696007700, guid: 2a3d1a5f78820a84f86049794476bd64,
         type: 3}
