@@ -10,6 +10,9 @@ public class GameData : ScriptableObject
     public List<CardElement> topCards;
     public sbyte currentDrawCard;
 
-    public int difficult;
+    public string gameMode;
+    public Solitaire.Difficulty difficult;
     public ushort score;
+    public ushort move;
+    public string time;
 }

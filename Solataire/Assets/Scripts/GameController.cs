@@ -4,54 +4,6 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace Solitaire
-{
-    [Flags]
-    public enum CardValue
-    {
-        Ace = 0,
-        Two = 1,
-        Three = 1 << 1,
-        Four = 1 << 2,
-        Five = 1 << 3,
-        Six = 1 << 4,
-        Seven = 1 << 5,
-        Eight = 1 << 6,
-        Nine = 1 << 7,
-        Ten = 1 << 8,
-        Jack = 1 << 9,
-        Queen = 1 << 10,
-        King = 1 << 11
-    }
-
-    [Flags]
-    public enum SuitType
-    {
-        Spades = 1 << 12,
-        Clubs = 1 << 13,
-        Diamonds = 1 << 14,
-        Hearts = 1 << 15
-    }
-
-    [Flags]
-    public enum CardPosition
-    {
-        Deck = 1 << 8,
-        Draw = 1 << 9,
-        Top1 = 1 << 10,
-        Top2 = 1 << 11,
-        Top3 = 1 << 12,
-        Top4 = 1 << 13,
-        Bottom1 = 1 << 14,
-        Bottom2 = 1 << 15,
-        Bottom3 = 1 << 16,
-        Bottom4 = 1 << 17,
-        Bottom5 = 1 << 18,
-        Bottom6 = 1 << 19,
-        Bottom7 = 1 << 20
-    }
-}
-
 public class GameController : MonoBehaviour
 {
     [SerializeField] private Camera m_MainCamera;
@@ -67,12 +19,11 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject m_DrawCardHolder;
     [SerializeField] private CardElement m_CurrentSelected;
     [SerializeField] private bool m_IsWin;
-    public List<int> ListCards;
     private float m_PrevClickedTime;
 
     private void Awake()
     {
-        ListCards = new List<int>();
+        Logger.Instance.Initialize();
         m_DeckCards = m_GameData.deckCards = new List<CardElement>();
         m_BottomCards = m_GameData.bottomCards = new List<CardElement>();
         m_TopCards = m_GameData.topCards = new List<CardElement>();
