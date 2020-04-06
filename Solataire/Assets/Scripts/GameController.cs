@@ -89,13 +89,13 @@ public class GameController : MonoBehaviour
         Vector3 mousePos = Input.mousePosition;
         if(m_IsWin)
         {
-            Debug.Log("You WIN !!!");
+            Logger.Instance.PrintLog(Common.DEBUG_TAG, "You WIN !!!");
         }
 
         //Left mouse clicked
         if(Input.GetMouseButtonDown(0))
         {
-            Debug.Log("GameController MouseButton down");
+            Logger.Instance.PrintLog(Common.DEBUG_TAG, "GameController MouseButton down");
             RaycastHit2D hit = Physics2D.Raycast(m_MainCamera.ScreenToWorldPoint(mousePos), Vector2.zero);
 
             if(hit)
@@ -279,10 +279,10 @@ public class GameController : MonoBehaviour
         //Left mouse held down
         if(Input.GetMouseButton(0))
         {
-            Debug.Log("GameController MouseButton drag");
-            Debug.Log("time spent = " + (Time.time - m_PrevClickedTime));
+            Logger.Instance.PrintLog(Common.DEBUG_TAG, "GameController MouseButton drag");
+            Logger.Instance.PrintLog(Common.DEBUG_TAG, "time spent = " + (Time.time - m_PrevClickedTime));
             //TODO: more testing to find the magic number :<
-            if(m_CurrentSelected && (Time.time - m_PrevClickedTime) >= 0.5f)
+            if(m_CurrentSelected && (Time.time - m_PrevClickedTime) >= Common.MIN_DRAGGING_TIME)
             {
                 Vector3 cardNewPos = Utilities.Instance.GetWorldPosition2D(m_MainCamera, mousePos);
                 cardNewPos.z = -Common.DRAGGING_Z;
@@ -301,7 +301,7 @@ public class GameController : MonoBehaviour
         //Left mouse release
         if (Input.GetMouseButtonUp(0))
         {
-            Debug.Log("GameController MouseButton up");
+            Logger.Instance.PrintLog(Common.DEBUG_TAG, "GameController MouseButton up");
             if(m_CurrentSelected && m_CurrentSelected.IsDragging)
             {
                 switch(m_CurrentSelected.CollidedTag)
@@ -599,7 +599,7 @@ public class GameController : MonoBehaviour
                 builder.Append(Enum.GetName(typeof(Solitaire.SuitType), suitValue));
                 builder.Append("_");
                 builder.Append(Enum.GetName(typeof(Solitaire.CardValue), cardValue));
-                //Debug.Log("cardName = " + builder);
+                //Logger.Instance.PrintLog(Common.DEBUG_TAG, "cardName = " + builder);
 
                 GameObject card = Instantiate(m_CardPrefab, m_DeckButton.transform.position + Vector3.forward, Quaternion.identity);
                 card.transform.SetParent(m_DeckButton.transform);

@@ -27,7 +27,6 @@ public class DeckController : MonoBehaviour
 
     private void OnMouseDown()
     {
-        Debug.Log("DeckController onMouseDown");
         if (!isEmpty)
         {
             m_GameData.currentDrawCard++;

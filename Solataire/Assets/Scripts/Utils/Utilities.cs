@@ -70,12 +70,10 @@ public sealed class Utilities
         if (Physics.Raycast(ray, out hit))
         {
             Debug.DrawRay(ray.origin,ray.direction * 100, Color.cyan, 30.0f);
-            Debug.Log("Hit");
             return hit.transform;
         }
 
         Debug.DrawRay(ray.origin, ray.direction * 100, Color.cyan, 30.0f);
-        Debug.Log("Dit not Hit");
         return null;
     }
     //

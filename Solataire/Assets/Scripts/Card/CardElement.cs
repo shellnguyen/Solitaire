@@ -168,7 +168,7 @@ public class CardElement : MonoBehaviour
                 {
 
                     CardElement card = collision.gameObject.GetComponent<CardElement>();
-                    Debug.Log("card " + m_CardName + " OnTriggerEnter2D with " + card.CardName);
+                    Logger.Instance.PrintLog(Common.DEBUG_TAG, "card " + m_CardName + " OnTriggerEnter2D with " + card.CardName);
                     if (!card.IsInStack() && card.IsFaceUp)
                     {
                         m_CollidedTag = 1;
@@ -178,7 +178,7 @@ public class CardElement : MonoBehaviour
                 }
             case "Top":
                 {
-                    Debug.Log("card " + m_CardName + " OnTriggerEnter2D with " + collision.gameObject.name);
+                    Logger.Instance.PrintLog(Common.DEBUG_TAG, "card " + m_CardName + " OnTriggerEnter2D with " + collision.gameObject.name);
                     if (collision.gameObject.transform.childCount == 0)
                     {
                         m_CollidedTag = 2;
@@ -188,7 +188,7 @@ public class CardElement : MonoBehaviour
                 }
             case "Bottom":
                 {
-                    Debug.Log("card " + m_CardName + " OnTriggerEnter2D with " + collision.gameObject.name);
+                    Logger.Instance.PrintLog(Common.DEBUG_TAG, "card " + m_CardName + " OnTriggerEnter2D with " + collision.gameObject.name);
                     if (collision.gameObject.transform.childCount == 0)
                     {
                         m_CollidedTag = 3;
@@ -217,11 +217,11 @@ public class CardElement : MonoBehaviour
         {
             return;
         }
-        Debug.Log("card " + m_CardName + " OnTriggerExit2D");
+        Logger.Instance.PrintLog(Common.DEBUG_TAG, "card " + m_CardName + " OnTriggerExit2D");
 
         if(m_Collided && m_Collided.GetInstanceID() == collision.gameObject.GetInstanceID())
         {
-            Debug.Log("move out of m_Collided");
+            Logger.Instance.PrintLog(Common.DEBUG_TAG, "move out of m_Collided");
             m_CollidedTag = 0;
             m_Collided = null;
         }
