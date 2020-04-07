@@ -23,6 +23,7 @@ public class EventParam
     {
         m_EventID = -1;
         m_ParamList = new Dictionary<string, object>();
+        
     }
 
     public void Add<T>(string key, T value)

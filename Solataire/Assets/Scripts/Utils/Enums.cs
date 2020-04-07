@@ -62,4 +62,11 @@ namespace Solitaire
         Pyramid,
         TriPeak
     }
+
+    public enum Event
+    {
+        OnDataChanged,
+        OnUndo,
+        OnAutoResolve
+    }
 }
