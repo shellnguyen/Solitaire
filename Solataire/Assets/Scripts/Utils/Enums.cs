@@ -53,4 +53,13 @@ namespace Solitaire
         Normal,
         Hard
     }
+
+    public enum GameMode
+    {
+        Klondike,
+        Spider,
+        FreeCall,
+        Pyramid,
+        TriPeak
+    }
 }
