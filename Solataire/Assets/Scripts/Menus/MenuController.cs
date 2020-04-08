@@ -54,10 +54,12 @@ public class MenuController : EventListener
                     }
                 case "move":
                     {
+                        m_MoveText.text = param.GetString(uiTag);
                         break;
                     }
                 case "time":
                     {
+                        m_TimeText.text = param.GetString(uiTag);
                         break;
                     }
             }

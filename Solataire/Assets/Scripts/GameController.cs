@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Timers;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
@@ -23,6 +24,9 @@ public class GameController : MonoBehaviour
 
     [SerializeField] private EventManager m_EventManager;
 
+    private TimeSpan m_ElapsedTime;
+
+    #region Unity functions
     private void Awake()
     {
         Logger.Instance.Initialize();
@@ -37,9 +41,18 @@ public class GameController : MonoBehaviour
         StartCoroutine(DealCards());
     }
 
+    private void Start()
+    {
+        m_ElapsedTime = new TimeSpan();
+        StartCoroutine(UpdateTime());
+        //m_Timer = new Timer(1000);
+        //m_Timer.Elapsed += OnTimeUpdated;
+        //m_Timer.Start();
+    }
+
     // Update is called once per frame
     private void Update()
-    {
+    {    
         Vector3 mousePos = Input.mousePosition;
         if(m_IsWin)
         {
@@ -396,6 +409,20 @@ public class GameController : MonoBehaviour
         }
     }
 
+    private void OnApplicationQuit()
+    {
+        m_GameData.bottomCards.Clear();
+        m_GameData.deckCards.Clear();
+        m_GameData.topCards.Clear();
+        m_GameData.currentDrawCard = -1;
+        m_GameData.difficult = Solitaire.Difficulty.Easy;
+        m_GameData.move = 0;
+        m_GameData.score = 0;
+        m_GameData.time = String.Empty;
+        m_GameData.gameMode = Solitaire.GameMode.Klondike;
+    }
+    #endregion
+
     private bool CanStack(ushort selected, ushort target, bool isStackTop = false)
     {
         ushort selectedValue = (ushort)Utilities.Instance.ExtractBit(selected, 12, 1);
@@ -484,6 +511,9 @@ public class GameController : MonoBehaviour
         m_CurrentSelected.SetCardParent(target.transform.parent);
         //m_CurrentSelected.transform.SetParent(target.transform.parent);
         m_CurrentSelected = null;
+
+        m_GameData.move++;
+        DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
     }
 
     private void StackToPosition(GameObject positionObj, bool isStackToTop)
@@ -543,6 +573,9 @@ public class GameController : MonoBehaviour
         m_CurrentSelected.SetCardParent(positionObj.transform);
         positionObj.layer = 9;
         m_CurrentSelected = null;
+
+        m_GameData.move++;
+        DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
     }
 
     private void GenerateDeck()
@@ -656,6 +689,9 @@ public class GameController : MonoBehaviour
             card.gameObject.layer = 9;
         }
 
+        m_GameData.move++;
+        DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
+
         yield break;
     }
 
@@ -675,6 +711,9 @@ public class GameController : MonoBehaviour
         m_DeckCards[currentDrawCard].IsFaceUp = true;
         m_DeckCards[currentDrawCard].position = Solitaire.CardPosition.Draw;
         m_DeckCards[currentDrawCard].gameObject.layer = 8;
+
+        m_GameData.move++;
+        DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
 
         yield break;
     }
@@ -752,5 +791,27 @@ public class GameController : MonoBehaviour
         param.Add<string>("uiTag", uiTag);
         param.Add<string>(uiTag, data);
         m_EventManager.RaiseEvent(eventId, param);
+    }
+
+    private IEnumerator UpdateTime()
+    {
+        while(!m_IsWin)
+        {
+            m_ElapsedTime = m_ElapsedTime.Add(TimeSpan.FromSeconds(1));
+            if (m_ElapsedTime.TotalHours > 1)
+            {
+                m_GameData.time = m_ElapsedTime.ToString(@"hh\:mm\:ss");
+            }
+            else
+            {
+                m_GameData.time = m_ElapsedTime.ToString(@"mm\:ss");
+            }
+
+            DispatchEvent(Solitaire.Event.OnDataChanged, "time", m_GameData.time);
+
+            yield return new WaitForSeconds(1.0f);
+        }
+
+        yield break;
     }
 }
