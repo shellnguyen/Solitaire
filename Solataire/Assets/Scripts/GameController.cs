@@ -17,13 +17,16 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject[] m_TopList;
     [SerializeField] private GameObject m_DeckButton;
     [SerializeField] private GameObject m_DrawCardHolder;
-    [SerializeField] private CardElement m_CurrentSelected;
+    [SerializeField] private CardElement m_CurrentSelected;    
     [SerializeField] private bool m_IsWin;
     private float m_PrevClickedTime;
+
+    [SerializeField] private EventManager m_EventManager;
 
     private void Awake()
     {
         Logger.Instance.Initialize();
+        m_GameData.gameMode = Solitaire.GameMode.Klondike;
         m_DeckCards = m_GameData.deckCards = new List<CardElement>();
         m_BottomCards = m_GameData.bottomCards = new List<CardElement>();
         m_TopCards = m_GameData.topCards = new List<CardElement>();
@@ -458,13 +461,17 @@ public class GameController : MonoBehaviour
 
         if(isStackToTop)
         {
+            m_GameData.score += (Common.DEFAULT_SCORE * 2);
+            DispatchEvent(Solitaire.Event.OnDataChanged, "score", m_GameData.score.ToString());
             m_TopCards.Add(m_CurrentSelected);
             iTween.MoveTo(m_CurrentSelected.gameObject, new Vector3 (target.transform.position.x, target.transform.position.y, target.transform.position.z - Common.ZOFFSET), Common.MOVE_TIME);
             CheckWinCondition();
         }
         else
         {
-            if(m_CurrentSelected.position < Solitaire.CardPosition.Bottom1)
+            m_GameData.score += (Common.DEFAULT_SCORE);
+            DispatchEvent(Solitaire.Event.OnDataChanged, "score", m_GameData.score.ToString());
+            if (m_CurrentSelected.position < Solitaire.CardPosition.Bottom1)
             {
                 m_CurrentSelected.AddCardToList(ref m_BottomCards);
             }
@@ -511,11 +518,15 @@ public class GameController : MonoBehaviour
 
         if(isStackToTop)
         {
+            m_GameData.score += (Common.DEFAULT_SCORE * 2);
+            DispatchEvent(Solitaire.Event.OnDataChanged, "score", m_GameData.score.ToString());
             m_TopCards.Add(m_CurrentSelected);
             m_CurrentSelected.SetCardPosition((Solitaire.CardPosition)(1 << (cardPos + 9)));
         }
         else
         {
+            m_GameData.score += (Common.DEFAULT_SCORE);
+            DispatchEvent(Solitaire.Event.OnDataChanged, "score", m_GameData.score.ToString());
             if (m_CurrentSelected.position < Solitaire.CardPosition.Bottom1)
             {
                 m_CurrentSelected.AddCardToList(ref m_BottomCards);
@@ -724,5 +735,22 @@ public class GameController : MonoBehaviour
             list[i] = list[r];
             list[r] = tmp;
         }
+    }
+
+    private EventParam SetupEventParam(int eventId)
+    {
+        EventParam param = new EventParam();
+        param.EventID = eventId;
+        //param.Add<string>("score", m_GameData.score.ToString());
+        return param;
+    }
+
+    private void DispatchEvent(Solitaire.Event eventId, string uiTag, string data)
+    {
+        EventParam param = new EventParam();
+        param.EventID = (int)eventId;
+        param.Add<string>("uiTag", uiTag);
+        param.Add<string>(uiTag, data);
+        m_EventManager.RaiseEvent(eventId, param);
     }
 }

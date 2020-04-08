@@ -1233,6 +1233,7 @@ MonoBehaviour:
   m_DrawCardHolder: {fileID: 1904655131}
   m_CurrentSelected: {fileID: 0}
   m_IsWin: 0
+  m_EventManager: {fileID: 11400000, guid: ad3d8f325ae51a64da4c10cb267ed8c8, type: 2}
 --- !u!1 &1904655131
 GameObject:
   m_ObjectHideFlags: 0

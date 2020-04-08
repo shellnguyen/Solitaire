@@ -1137,7 +1137,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 458890275}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &458890277
 Camera:
   m_ObjectHideFlags: 0
@@ -2976,6 +2976,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1642550705}
   m_CullTransparentMesh: 0
+--- !u!1 &1653756968
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1653756969}
+  - component: {fileID: 1653756970}
+  m_Layer: 0
+  m_Name: MenuManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1653756969
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1653756968}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1653756970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1653756968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb9de241f4208f647b94165103f8d844, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Event: {fileID: 11400000, guid: dde5196c37765f244982965e4ccca3cc, type: 2}
+  m_GameData: {fileID: 11400000, guid: a8e77fdfd7eeb1d4bb056d73c1723930, type: 2}
+  m_GameIcon: {fileID: 1688938215}
+  m_GameText: {fileID: 178621574}
+  m_DifficultyText: {fileID: 571594739}
+  m_ScoreText: {fileID: 962233982}
+  m_TimeText: {fileID: 826515951}
+  m_MoveText: {fileID: 2146524905}
+  m_BtnNew: {fileID: 1676312219}
+  m_BtnOption: {fileID: 2106477024}
+  m_BtnCards: {fileID: 1976544327}
+  m_BtnHint: {fileID: 598467987}
+  m_BtnUndo: {fileID: 1642550709}
+  m_BtnExit: {fileID: 384802848}
 --- !u!1 &1672367877
 GameObject:
   m_ObjectHideFlags: 0

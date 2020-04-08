@@ -5,17 +5,18 @@ using UnityEngine.Events;
 
 public class EventListener : MonoBehaviour
 {
-    protected EventTemplate m_Event;
-    protected UnityEvent<EventParam> m_Handler;
+    [SerializeField]protected EventTemplate m_Event;
+    protected EventHandler m_Handler;
 
     // Start is called before the first frame update
-    private void OnEnable()
+    protected void OnEnable()
     {
         m_Event.Register(this);
+        m_Handler = new EventHandler();
     }
 
     // Update is called once per frame
-    private void OnDisable()
+    protected void OnDisable()
     {
         m_Event.Unregister(this);
     }
