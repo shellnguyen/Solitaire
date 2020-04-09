@@ -798,7 +798,7 @@ public class GameController : MonoBehaviour
         while(!m_IsWin)
         {
             m_ElapsedTime = m_ElapsedTime.Add(TimeSpan.FromSeconds(1));
-            if (m_ElapsedTime.TotalHours > 1)
+            if (m_ElapsedTime.TotalHours >= 1)
             {
                 m_GameData.time = m_ElapsedTime.ToString(@"hh\:mm\:ss");
             }
