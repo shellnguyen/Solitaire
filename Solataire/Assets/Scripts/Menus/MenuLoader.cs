@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class MenuLoader : MonoBehaviour
 {
     // Start is called before the first frame update
-    private void Start()
+    private void OnEnable()
     {
         if(!SceneManager.GetSceneByBuildIndex(2).isLoaded)
         {

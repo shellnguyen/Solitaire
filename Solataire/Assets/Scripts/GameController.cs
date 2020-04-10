@@ -784,12 +784,12 @@ public class GameController : MonoBehaviour
         return param;
     }
 
-    private void DispatchEvent(Solitaire.Event eventId, string uiTag, string data)
+    private void DispatchEvent<T>(Solitaire.Event eventId, string uiTag, T data)
     {
         EventParam param = new EventParam();
         param.EventID = (int)eventId;
         param.Add<string>("uiTag", uiTag);
-        param.Add<string>(uiTag, data);
+        param.Add<T>(uiTag, data);
         m_EventManager.RaiseEvent(eventId, param);
     }
 

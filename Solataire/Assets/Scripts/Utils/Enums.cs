@@ -66,6 +66,7 @@ namespace Solitaire
     public enum Event
     {
         OnDataChanged,
+        OnLoadingUpdated,
         OnUndo,
         OnAutoResolve
     }

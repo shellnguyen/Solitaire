@@ -9,9 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33286225527b3b242aa62e5ee7b23453, type: 3}
-  m_Name: EventManager
+  m_Script: {fileID: 11500000, guid: 1ff0438b8a76b2345b46e887d6036e47, type: 3}
+  m_Name: OnLoadingUpdate
   m_EditorClassIdentifier: 
-  m_EventList:
-  - {fileID: 11400000, guid: dde5196c37765f244982965e4ccca3cc, type: 2}
-  - {fileID: 11400000, guid: 1844063a9024be54f85b48e1957b82a0, type: 2}
+  id: 1
