@@ -3,33 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneLoader : MonoBehaviour
+public class SceneLoader : Singleton<SceneLoader>
 {
     [SerializeField] private EventManager m_EventManager;
-    [SerializeField] private int m_PrevScene = -1;
 
     // Start is called before the first frame update
     private void Start()
     {
-        switch(SceneManager.GetActiveScene().buildIndex)
-        {
-            case 0:
-                {
-                    if(m_PrevScene < 0)
-                    {
-                        StartCoroutine(LoadSceneAsync(1));
-                    }
-                    break;
-                }
-            case 1:
-                {
-                    break;
-                }
-            case 2:
-                {
-                    break;
-                }
-        }
+        StartCoroutine(LoadSceneAsync(1));
     }
 
     // Update is called once per frame
@@ -40,14 +21,20 @@ public class SceneLoader : MonoBehaviour
 
     private IEnumerator LoadSceneAsync(int sceneIndex)
     {
+        //Load LoadingScene first
+        if(SceneManager.GetActiveScene().buildIndex != 0)
+        {
+            SceneManager.LoadScene(0);
+        }
+
+        //Then load what ever scene we need
         var request = SceneManager.LoadSceneAsync(sceneIndex);
-        request.allowSceneActivation = false;
 
         while(!request.isDone)
         {
             DispatchEvent(Solitaire.Event.OnLoadingUpdated, "progress", Mathf.Clamp01(request.progress / 0.9f));
 
-            yield return new WaitForSeconds(0.1f);
+            yield return null;
         }
 
         yield break;
