@@ -29,7 +29,6 @@ public class GameController : MonoBehaviour
     #region Unity functions
     private void Awake()
     {
-        Logger.Instance.Initialize();
         m_GameData.gameMode = Solitaire.GameMode.Klondike;
         m_DeckCards = m_GameData.deckCards = new List<CardElement>();
         m_BottomCards = m_GameData.bottomCards = new List<CardElement>();

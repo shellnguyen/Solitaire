@@ -15,6 +15,7 @@ public class Logger
 
     private Logger()
     {
+        Initialize();
     }
 
     public static Logger Instance

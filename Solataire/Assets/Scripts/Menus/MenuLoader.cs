@@ -9,7 +9,7 @@ public class MenuLoader : MonoBehaviour
     {
         if(!SceneManager.GetSceneByBuildIndex(2).isLoaded)
         {
-            SceneManager.LoadScene(2, LoadSceneMode.Additive);
+            SceneManager.LoadScene(SceneManager.sceneCountInBuildSettings - 1, LoadSceneMode.Additive);
         }
     }
 
