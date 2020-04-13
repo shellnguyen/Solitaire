@@ -3,9 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MenuController : EventListener
+public class MenuController : MonoBehaviour
 {
     [SerializeField] private GameData m_GameData;
 
@@ -25,11 +26,63 @@ public class MenuController : EventListener
     [SerializeField] private Button m_BtnUndo;
     [SerializeField] private Button m_BtnExit;
 
+    [SerializeField] private EventManager m_EventManager;
+
+    //Menu scripts
+    [SerializeField] private MainMenu m_MainMenu;
+    [SerializeField] private InGameMenu m_InGameMenu;
+    [SerializeField] private LoadingMenu m_LoadingMenu;
+    //
+
+    private void OnEnable()
+    {
+        m_EventManager.Register(Solitaire.Event.OnDataChanged, OnDataChanged);
+    }
+
+    private void OnDisable()
+    {
+        m_EventManager.Unregister(Solitaire.Event.OnDataChanged, OnDataChanged);
+    }
+
     // Start is called before the first frame update
     private void Start()
     {
+        switch (SceneManager.GetActiveScene().buildIndex)
+        {
+            case 0: //Loading
+                {
+                    GameObject temp = GameObject.FindGameObjectWithTag("LoadingMenu");
+
+                    if(temp)
+                    {
+                        m_LoadingMenu = temp.GetComponent<LoadingMenu>();
+                    }
+
+                    break;
+                }
+            case 1: //MainMenu
+                {
+                    GameObject temp = GameObject.FindGameObjectWithTag("MainMenu");
+
+                    if (temp)
+                    {
+                        m_MainMenu = temp.GetComponent<MainMenu>();
+                    }
+                    break;
+                }
+            case 2: //Klondike
+                {
+                    GameObject temp = GameObject.FindGameObjectWithTag("InGameMenu");
+
+                    if (temp)
+                    {
+                        m_InGameMenu = temp.GetComponent<InGameMenu>();
+                    }
+                    break;
+                }
+        }
+
         m_GameText.text = Enum.GetName(typeof(Solitaire.GameMode), m_GameData.gameMode);
-        m_Handler.AddListener(OnDataChanged);
     }
 
     // Update is called once per frame

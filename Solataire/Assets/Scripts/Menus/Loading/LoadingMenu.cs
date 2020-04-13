@@ -3,14 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LoadingMenu : EventListener
+public class LoadingMenu : MonoBehaviour
 {
-    [SerializeField] Image m_LoadingCircle;
+    [SerializeField] private EventManager m_EventManager;
+    [SerializeField] private Image m_LoadingCircle;
+
+    private void OnEnable()
+    {
+        m_EventManager.Register(Solitaire.Event.OnLoadingUpdated, OnLoadingUpdate);
+    }
+
+    private void OnDisable()
+    {
+        m_EventManager.Unregister(Solitaire.Event.OnLoadingUpdated, OnLoadingUpdate);
+    }
 
     // Start is called before the first frame update
     private void Start()
     {
-        m_Handler.AddListener(OnLoadingUpdate);
+        //m_Handler.AddListener(OnLoadingUpdate);
     }
 
     // Update is called once per frame

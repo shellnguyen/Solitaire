@@ -5,8 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MenuLoader : MonoBehaviour
 {
-    // Start is called before the first frame update
-    private void OnEnable()
+    private void Awake()
     {
         if(!SceneManager.GetSceneByBuildIndex(2).isLoaded)
         {
@@ -14,7 +13,6 @@ public class MenuLoader : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     private void Update()
     {
         

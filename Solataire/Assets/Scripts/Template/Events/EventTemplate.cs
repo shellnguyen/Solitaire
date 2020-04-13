@@ -1,28 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [CreateAssetMenu(fileName ="EventTemplate", menuName ="Template/Event/EventTemplate")]
 public class EventTemplate : ScriptableObject
 {
     public int id;
-    private List<EventListener> m_Listeners = new List<EventListener>();
+    private EventHandler m_Handler = new EventHandler();
 
-    public void Register(EventListener listener)
+    public void Register(UnityAction<EventParam> listener)
     {
-        m_Listeners.Add(listener);
+        m_Handler.AddListener(listener);
     }
 
-    public void Unregister(EventListener listener)
+    public void Unresigter(UnityAction<EventParam> listener)
     {
-        m_Listeners.Remove(listener);
+        m_Handler.RemoveListener(listener);
     }
 
     public void Raise(EventParam param)
     {
-        foreach(EventListener listener in m_Listeners)
-        {
-            listener.OnRaised(param);
-        }
+        m_Handler.Invoke(param);
     }
 }

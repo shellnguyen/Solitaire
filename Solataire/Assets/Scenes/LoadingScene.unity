@@ -151,7 +151,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EventManager: {fileID: 11400000, guid: ad3d8f325ae51a64da4c10cb267ed8c8, type: 2}
-  m_PrevScene: -1
 --- !u!4 &14371635
 Transform:
   m_ObjectHideFlags: 0
@@ -408,7 +407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e640c91dc18c5f743b53af024018584b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Event: {fileID: 11400000, guid: 1844063a9024be54f85b48e1957b82a0, type: 2}
+  m_EventManager: {fileID: 11400000, guid: ad3d8f325ae51a64da4c10cb267ed8c8, type: 2}
   m_LoadingCircle: {fileID: 1257043750}
 --- !u!1 &1836346559
 GameObject:
