@@ -7,16 +7,26 @@ public class SceneLoader : Singleton<SceneLoader>
 {
     [SerializeField] private EventManager m_EventManager;
 
+    private void OnEnable()
+    {
+        m_EventManager = Resources.FindObjectsOfTypeAll<EventManager>()[0];
+    }
+
     // Start is called before the first frame update
     private void Start()
     {
-        StartCoroutine(LoadSceneAsync(1));
+        
     }
 
     // Update is called once per frame
     private void Update()
     {
         
+    }
+
+    public void LoadScene(int sceneIndex)
+    {
+        StartCoroutine(LoadSceneAsync(sceneIndex));
     }
 
     private IEnumerator LoadSceneAsync(int sceneIndex)

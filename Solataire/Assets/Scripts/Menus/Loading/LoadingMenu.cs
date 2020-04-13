@@ -22,6 +22,7 @@ public class LoadingMenu : MonoBehaviour
     private void Start()
     {
         //m_Handler.AddListener(OnLoadingUpdate);
+        SceneLoader.Instance.LoadScene(1);
     }
 
     // Update is called once per frame
