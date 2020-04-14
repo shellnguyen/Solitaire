@@ -67,6 +67,7 @@ namespace Solitaire
     {
         OnDataChanged,
         OnLoadingUpdated,
+        ShowPopup,
         OnUndo,
         OnAutoResolve
     }

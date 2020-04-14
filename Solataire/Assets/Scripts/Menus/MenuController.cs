@@ -9,18 +9,19 @@ using UnityEngine.UI;
 public class MenuController : MonoBehaviour
 {
     [SerializeField] private EventManager m_EventManager;
+    [SerializeField] private GameObject m_OptionMenuPrefab;
 
     //Menu scripts
     //
 
     private void OnEnable()
     {
-        
+        m_EventManager.Register(Solitaire.Event.ShowPopup, ShowPopup);
     }
 
     private void OnDisable()
     {
-        
+        m_EventManager.Unregister(Solitaire.Event.ShowPopup, ShowPopup);
     }
 
     // Start is called before the first frame update
@@ -32,5 +33,10 @@ public class MenuController : MonoBehaviour
     private void Update()
     {
         
+    }
+
+    private void ShowPopup(EventParam param)
+    {
+
     }
 }
