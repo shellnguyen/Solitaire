@@ -38,12 +38,12 @@ public class ToggleController : MonoBehaviour
         if(m_IsOn)
         {
             m_ToggleBar.color = m_OnColor;
-            m_ToggleBall.rectTransform.localPosition = new Vector3(50.0f, 0.0f, 0.0f);
+            m_ToggleBall.rectTransform.localPosition = new Vector3(m_ToggleBar.rectTransform.rect.width/2, 0.0f, 0.0f);
         }
         else
         {
             m_ToggleBar.color = m_OffColor;
-            m_ToggleBall.rectTransform.localPosition = new Vector3(-50.0f, 0.0f, 0.0f);
+            m_ToggleBall.rectTransform.localPosition = new Vector3(-m_ToggleBar.rectTransform.rect.width/2, 0.0f, 0.0f);
         }
     }
 
