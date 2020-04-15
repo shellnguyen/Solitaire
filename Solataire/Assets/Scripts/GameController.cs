@@ -22,8 +22,6 @@ public class GameController : MonoBehaviour
     [SerializeField] private bool m_IsWin;
     private float m_PrevClickedTime;
 
-    [SerializeField] private EventManager m_EventManager;
-
     private TimeSpan m_ElapsedTime;
 
     #region Unity functions
@@ -488,7 +486,7 @@ public class GameController : MonoBehaviour
         if(isStackToTop)
         {
             m_GameData.score += (Common.DEFAULT_SCORE * 2);
-            DispatchEvent(Solitaire.Event.OnDataChanged, "score", m_GameData.score.ToString());
+            Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "score", m_GameData.score.ToString());
             m_TopCards.Add(m_CurrentSelected);
             iTween.MoveTo(m_CurrentSelected.gameObject, new Vector3 (target.transform.position.x, target.transform.position.y, target.transform.position.z - Common.ZOFFSET), Common.MOVE_TIME);
             CheckWinCondition();
@@ -496,7 +494,7 @@ public class GameController : MonoBehaviour
         else
         {
             m_GameData.score += (Common.DEFAULT_SCORE);
-            DispatchEvent(Solitaire.Event.OnDataChanged, "score", m_GameData.score.ToString());
+            Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "score", m_GameData.score.ToString());
             if (m_CurrentSelected.position < Solitaire.CardPosition.Bottom1)
             {
                 m_CurrentSelected.AddCardToList(ref m_BottomCards);
@@ -512,7 +510,7 @@ public class GameController : MonoBehaviour
         m_CurrentSelected = null;
 
         m_GameData.move++;
-        DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
+        Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
     }
 
     private void StackToPosition(GameObject positionObj, bool isStackToTop)
@@ -548,14 +546,14 @@ public class GameController : MonoBehaviour
         if(isStackToTop)
         {
             m_GameData.score += (Common.DEFAULT_SCORE * 2);
-            DispatchEvent(Solitaire.Event.OnDataChanged, "score", m_GameData.score.ToString());
+            Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "score", m_GameData.score.ToString());
             m_TopCards.Add(m_CurrentSelected);
             m_CurrentSelected.SetCardPosition((Solitaire.CardPosition)(1 << (cardPos + 9)));
         }
         else
         {
             m_GameData.score += (Common.DEFAULT_SCORE);
-            DispatchEvent(Solitaire.Event.OnDataChanged, "score", m_GameData.score.ToString());
+            Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "score", m_GameData.score.ToString());
             if (m_CurrentSelected.position < Solitaire.CardPosition.Bottom1)
             {
                 m_CurrentSelected.AddCardToList(ref m_BottomCards);
@@ -574,7 +572,7 @@ public class GameController : MonoBehaviour
         m_CurrentSelected = null;
 
         m_GameData.move++;
-        DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
+        Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
     }
 
     private void GenerateDeck()
@@ -689,7 +687,7 @@ public class GameController : MonoBehaviour
         }
 
         m_GameData.move++;
-        DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
+        Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
 
         yield break;
     }
@@ -712,7 +710,7 @@ public class GameController : MonoBehaviour
         m_DeckCards[currentDrawCard].gameObject.layer = 8;
 
         m_GameData.move++;
-        DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
+        Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
 
         yield break;
     }
@@ -783,15 +781,6 @@ public class GameController : MonoBehaviour
         return param;
     }
 
-    private void DispatchEvent<T>(Solitaire.Event eventId, string uiTag, T data)
-    {
-        EventParam param = new EventParam();
-        param.EventID = (int)eventId;
-        param.Add<string>("uiTag", uiTag);
-        param.Add<T>(uiTag, data);
-        m_EventManager.RaiseEvent(eventId, param);
-    }
-
     private IEnumerator UpdateTime()
     {
         while(!m_IsWin)
@@ -806,7 +795,7 @@ public class GameController : MonoBehaviour
                 m_GameData.time = m_ElapsedTime.ToString(@"mm\:ss");
             }
 
-            DispatchEvent(Solitaire.Event.OnDataChanged, "time", m_GameData.time);
+            Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "time", m_GameData.time);
 
             yield return new WaitForSeconds(1.0f);
         }

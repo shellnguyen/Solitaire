@@ -16,4 +16,8 @@ public class Common
     public const int DEFAULT_SCORE = 5;
 
     public const string DEBUG_TAG = "ShellDebug";
+
+    //Event UItag
+
+    //
 }

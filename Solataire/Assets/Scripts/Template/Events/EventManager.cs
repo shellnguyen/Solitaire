@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [CreateAssetMenu(fileName ="EventManagerTemplate", menuName ="Template/Events/EventManager")]
-public class EventManager : ScriptableObject
+public class EventManager : ScriptableSingleton<EventManager>
 {
     [SerializeField] private List<EventTemplate> m_EventList;
 

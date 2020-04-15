@@ -5,17 +5,19 @@ using UnityEngine.UI;
 
 public class LoadingMenu : MonoBehaviour
 {
-    [SerializeField] private EventManager m_EventManager;
+    //[SerializeField] private EventManager m_EventManager;
     [SerializeField] private Image m_LoadingCircle;
 
     private void OnEnable()
     {
-        m_EventManager.Register(Solitaire.Event.OnLoadingUpdated, OnLoadingUpdate);
+        //m_EventManager.Register(Solitaire.Event.OnLoadingUpdated, OnLoadingUpdate);
+        EventManager.Instance.Register(Solitaire.Event.OnLoadingUpdated, OnLoadingUpdate);
     }
 
     private void OnDisable()
     {
-        m_EventManager.Unregister(Solitaire.Event.OnLoadingUpdated, OnLoadingUpdate);
+        //m_EventManager.Unregister(Solitaire.Event.OnLoadingUpdated, OnLoadingUpdate);
+        EventManager.Instance.Unregister(Solitaire.Event.OnLoadingUpdated, OnLoadingUpdate);
     }
 
     // Start is called before the first frame update

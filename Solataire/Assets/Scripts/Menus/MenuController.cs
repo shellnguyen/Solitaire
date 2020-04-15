@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour
 {
-    [SerializeField] private EventManager m_EventManager;
     [SerializeField] private GameObject m_OptionMenuPrefab;
 
     //Menu scripts
@@ -16,12 +15,12 @@ public class MenuController : MonoBehaviour
 
     private void OnEnable()
     {
-        m_EventManager.Register(Solitaire.Event.ShowPopup, ShowPopup);
+        EventManager.Instance.Register(Solitaire.Event.ShowPopup, ShowPopup);
     }
 
     private void OnDisable()
     {
-        m_EventManager.Unregister(Solitaire.Event.ShowPopup, ShowPopup);
+        EventManager.Instance.Unregister(Solitaire.Event.ShowPopup, ShowPopup);
     }
 
     // Start is called before the first frame update
@@ -37,6 +36,22 @@ public class MenuController : MonoBehaviour
 
     private void ShowPopup(EventParam param)
     {
-        
+        string tag = param.GetString("tag");
+
+        if(!String.IsNullOrEmpty(tag))
+        {
+            switch(tag)
+            {
+                case "option":
+                    {
+                        Instantiate(m_OptionMenuPrefab, Vector3.zero, Quaternion.identity);
+                        break;
+                    }
+                case "newgame":
+                    {
+                        break;
+                    }
+            }
+        }
     }
 }

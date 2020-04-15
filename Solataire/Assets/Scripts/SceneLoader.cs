@@ -5,11 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : Singleton<SceneLoader>
 {
-    [SerializeField] private EventManager m_EventManager;
-
     private void OnEnable()
     {
-        m_EventManager = Resources.FindObjectsOfTypeAll<EventManager>()[0];
     }
 
     // Start is called before the first frame update
@@ -42,20 +39,11 @@ public class SceneLoader : Singleton<SceneLoader>
 
         while(!request.isDone)
         {
-            DispatchEvent(Solitaire.Event.OnLoadingUpdated, "progress", Mathf.Clamp01(request.progress / 0.9f));
+            Utilities.Instance.DispatchEvent(Solitaire.Event.OnLoadingUpdated, "progress", Mathf.Clamp01(request.progress / 0.9f));
 
             yield return null;
         }
 
         yield break;
-    }
-
-    private void DispatchEvent<T>(Solitaire.Event eventId, string uiTag, T data)
-    {
-        EventParam param = new EventParam();
-        param.EventID = (int)eventId;
-        param.Add<string>("uiTag", uiTag);
-        param.Add<T>(uiTag, data);
-        m_EventManager.RaiseEvent(eventId, param);
     }
 }

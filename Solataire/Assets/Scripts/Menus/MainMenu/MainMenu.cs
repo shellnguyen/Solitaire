@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private EventManager m_EventManager;
-
     [SerializeField] private TextMeshProUGUI m_PlayerName;
     [SerializeField] private TextMeshProUGUI m_LeaderboardName;
     [SerializeField] private TextMeshProUGUI m_LeaderboardRank;
@@ -42,6 +40,20 @@ public class MainMenu : MonoBehaviour
                     break;
                 }
             case 12: //Leaderboard
+                {
+                    break;
+                }
+            case 13: //Option
+                {
+                    Utilities.Instance.DispatchEvent(Solitaire.Event.ShowPopup, "option", "");
+                    break;
+                }
+            case 14: //Exit
+                {
+                    Application.Quit();
+                    break;
+                }
+            case 15: //Login
                 {
                     break;
                 }

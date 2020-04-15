@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-[CreateAssetMenu(fileName ="EventTemplate", menuName ="Template/Event/EventTemplate")]
+[CreateAssetMenu(fileName ="EventTemplate", menuName ="Template/Events/EventTemplate")]
 public class EventTemplate : ScriptableObject
 {
     public int id;

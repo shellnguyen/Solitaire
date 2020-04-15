@@ -103,6 +103,17 @@ public sealed class Utilities
     }
     //
 
+    //Event functions
+    public void DispatchEvent<T>(Solitaire.Event eventId, string key, T data)
+    {
+        EventParam param = new EventParam();
+        param.EventID = (int)eventId;
+        param.Add<string>("tag", key);
+        param.Add<T>(key, data);
+        EventManager.Instance.RaiseEvent(eventId, param);
+    }
+    //
+
     //Draw Rectangle
     //public void DrawRectangle(ref GameObject obj, ref Vector3[] vertices, bool IsWithMesh = false)
     //{

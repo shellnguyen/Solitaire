@@ -25,16 +25,18 @@ public class InGameMenu : MonoBehaviour
     [SerializeField] private Button m_BtnUndo;
     [SerializeField] private Button m_BtnExit;
 
-    [SerializeField] private EventManager m_EventManager;
+    //[SerializeField] private EventManager m_EventManager;
 
     private void OnEnable()
     {
-        m_EventManager.Register(Solitaire.Event.OnDataChanged, OnDataChanged);
+        //m_EventManager.Register(Solitaire.Event.OnDataChanged, OnDataChanged);
+        EventManager.Instance.Register(Solitaire.Event.OnDataChanged, OnDataChanged);
     }
 
     private void OnDisable()
     {
-        m_EventManager.Unregister(Solitaire.Event.OnDataChanged, OnDataChanged);
+        //m_EventManager.Unregister(Solitaire.Event.OnDataChanged, OnDataChanged);
+        EventManager.Instance.Unregister(Solitaire.Event.OnDataChanged, OnDataChanged);
     }
 
     // Start is called before the first frame update
@@ -53,24 +55,24 @@ public class InGameMenu : MonoBehaviour
     {
         Logger.Instance.PrintLog(Common.DEBUG_TAG, "OnDataChanged");
 
-        string uiTag = param.GetString("uiTag");
-        if (!String.IsNullOrEmpty(uiTag))
+        string tag = param.GetString("tag");
+        if (!String.IsNullOrEmpty(tag))
         {
-            switch (uiTag)
+            switch (tag)
             {
                 case "score":
                     {
-                        m_ScoreText.text = param.GetString(uiTag);
+                        m_ScoreText.text = param.GetString(tag);
                         break;
                     }
                 case "move":
                     {
-                        m_MoveText.text = param.GetString(uiTag);
+                        m_MoveText.text = param.GetString(tag);
                         break;
                     }
                 case "time":
                     {
-                        m_TimeText.text = param.GetString(uiTag);
+                        m_TimeText.text = param.GetString(tag);
                         break;
                     }
             }
