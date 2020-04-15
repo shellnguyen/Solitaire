@@ -956,7 +956,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BlackBG: {fileID: 5223971957039244854}
-  m_OptionCanvas: {fileID: 5223971957804430063}
+  m_PopupCanvas: {fileID: 5223971957804430063}
 --- !u!1 &5223971957817756380
 GameObject:
   m_ObjectHideFlags: 0
