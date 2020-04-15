@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class MenuController : MonoBehaviour
 {
     [SerializeField] private GameObject m_OptionMenuPrefab;
+    [SerializeField] private GameObject m_NewGamePopupPrefab;
 
     //Menu scripts
     //
@@ -49,6 +50,7 @@ public class MenuController : MonoBehaviour
                     }
                 case "newgame":
                     {
+                        Instantiate(m_NewGamePopupPrefab, Vector3.zero, Quaternion.identity);
                         break;
                     }
             }

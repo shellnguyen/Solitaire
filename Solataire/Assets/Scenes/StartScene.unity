@@ -1879,6 +1879,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_OptionMenuPrefab: {fileID: 5223971957804430058, guid: 00b704affda041e499ff3d7625788cec,
     type: 3}
+  m_NewGamePopupPrefab: {fileID: 0}
 --- !u!1 &533179111
 GameObject:
   m_ObjectHideFlags: 0
