@@ -1,14 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class OptionPopup : Popup
 {
-    // Start is called before the first frame update
-    private void Start()
-    {
+    [SerializeField] GameOption m_AudioOption;
+    [SerializeField] GameOption m_AdsOption;
 
+    // Start is called before the first frame update
+    private void OnStart()
+    {
+        m_AudioOption.Initialized("audio", GameSetting.Instance.m_HasAudio);
+        m_AdsOption.Initialized("enable_ads", GameSetting.Instance.m_EnableAds);
     }
 
     // Update is called once per frame
@@ -17,8 +19,20 @@ public class OptionPopup : Popup
         
     }
 
-    private void OnSettingChanged()
+    private void OnSettingChanged(EventParam param)
     {
-
+        string tag = param.GetString("tag");
+        switch(tag)
+        {
+            case "audio":
+                {
+                    GameSetting.Instance.m_HasAudio = true;
+                    break;
+                }
+            case "enable_ads":
+                {
+                    break;
+                }
+        }
     }
 }

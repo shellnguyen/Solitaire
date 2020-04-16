@@ -72,4 +72,18 @@ public class EventParam
 
         return -999.9f;
     }
+
+    public bool GetBoolean(string key)
+    {
+        try
+        {
+            return (bool)m_ParamList[key];
+        }
+        catch (Exception ex)
+        {
+            Logger.Instance.PrintExc(Common.DEBUG_TAG, ex.Message);
+        }
+
+        return false;
+    }
 }
