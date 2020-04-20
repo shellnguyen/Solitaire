@@ -18,5 +18,6 @@ public class GameOption : MonoBehaviour
     private void SetData()
     {
         m_Toggle.IsOn = m_IsEnable;
+        m_Toggle.Key = m_OptionKey;
     }
 }

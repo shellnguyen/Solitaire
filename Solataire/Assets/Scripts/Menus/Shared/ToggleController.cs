@@ -11,6 +11,7 @@ public class ToggleController : MonoBehaviour
     [SerializeField] private Color m_OnColor;
     [SerializeField] private Color m_OffColor;
     [SerializeField] private bool m_IsOn;
+    [SerializeField] private string m_Key;
 
     public bool IsOn
     {
@@ -23,6 +24,19 @@ public class ToggleController : MonoBehaviour
         {
             m_IsOn = value;
             OnStateChanged();
+        }
+    }
+
+    public string Key
+    {
+        get
+        {
+            return m_Key;
+        }
+
+        set
+        {
+            m_Key = value;
         }
     }
 
@@ -45,6 +59,8 @@ public class ToggleController : MonoBehaviour
             m_ToggleBar.color = m_OffColor;
             m_ToggleBall.rectTransform.localPosition = new Vector3(-m_ToggleBar.rectTransform.rect.width/2, 0.0f, 0.0f);
         }
+
+        Utilities.Instance.DispatchEvent(Solitaire.Event.OnValueChanged, m_Key, m_IsOn);
     }
 
     private void OnToggleClicked()

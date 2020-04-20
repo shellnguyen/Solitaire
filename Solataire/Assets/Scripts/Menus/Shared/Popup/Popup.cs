@@ -8,7 +8,7 @@ public class Popup : MonoBehaviour
     [SerializeField] protected Button m_BlackBG;
     [SerializeField] protected Canvas m_PopupCanvas;
 
-    protected void OnEnable()
+    protected virtual void OnEnable()
     {
         m_BlackBG.onClick.AddListener(OnClickBackground);
         m_PopupCanvas.worldCamera = Camera.main;
