@@ -1,16 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class NewGamePopup : Popup
 {
+    [SerializeField] private TextMeshProUGUI m_GameNameText;
     [SerializeField] private Button m_BtnPlay;
     [SerializeField] private ToggleGroup m_DifficultyGroup;
+    [SerializeField] private GameData m_GameData;
 
     // Start is called before the first frame update
     private void Start()
     {
+        m_GameData = Resources.FindObjectsOfTypeAll<GameData>().FirstOrDefault();
+
+        m_GameNameText.text = m_GameData.gameMode.ToString();
         m_BtnPlay.onClick.AddListener(StartGame);
     }
 
