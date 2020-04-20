@@ -20,8 +20,8 @@ public class OptionPopup : Popup
     // Start is called before the first frame update
     private void OnStart()
     {
-        m_AudioOption.Initialized("audio", GameSetting.Instance.m_HasAudio);
-        m_AdsOption.Initialized("enable_ads", GameSetting.Instance.m_EnableAds);
+        m_AudioOption.Initialized("audio", GameSetting.Instance.enableAudio);
+        m_AdsOption.Initialized("enable_ads", GameSetting.Instance.enableAds);
     }
 
     // Update is called once per frame
@@ -37,12 +37,12 @@ public class OptionPopup : Popup
         {
             case "audio":
                 {
-                    GameSetting.Instance.m_HasAudio = param.GetBoolean(tag);
+                    GameSetting.Instance.enableAudio = param.GetBoolean(tag);
                     break;
                 }
             case "enable_ads":
                 {
-                    GameSetting.Instance.m_EnableAds = param.GetBoolean(tag);
+                    GameSetting.Instance.enableAds = param.GetBoolean(tag);
                     break;
                 }
         }

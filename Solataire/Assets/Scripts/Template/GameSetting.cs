@@ -6,6 +6,6 @@ using UnityEngine;
 public class GameSetting : ScriptableSingleton<GameSetting>
 {
     public Difficulty difficulty;
-    public bool m_HasAudio;
-    public bool m_EnableAds;
+    public bool enableAudio;
+    public bool enableAds;
 }

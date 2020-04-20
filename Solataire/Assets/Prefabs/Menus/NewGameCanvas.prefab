@@ -108,6 +108,7 @@ GameObject:
   - component: {fileID: 7365157391409936977}
   - component: {fileID: 7365157391409936990}
   - component: {fileID: 7365157391409936979}
+  - component: {fileID: 1364761036}
   m_Layer: 5
   m_Name: Difficulty
   m_TagString: Untagged
@@ -218,6 +219,19 @@ MonoBehaviour:
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
+--- !u!114 &1364761036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7365157391409936988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AllowSwitchOff: 0
 --- !u!1 &7365157391502879021
 GameObject:
   m_ObjectHideFlags: 0
@@ -1174,6 +1188,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8774092087280153363, guid: ea7bdfe7a0b4a394fb6b6b986573545d,
+        type: 3}
+      propertyPath: m_Group
+      value: 
+      objectReference: {fileID: 1364761036}
     - target: {fileID: 8774092088480801808, guid: ea7bdfe7a0b4a394fb6b6b986573545d,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -1389,6 +1408,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8774092087280153363, guid: ea7bdfe7a0b4a394fb6b6b986573545d,
+        type: 3}
+      propertyPath: m_Group
+      value: 
+      objectReference: {fileID: 1364761036}
     - target: {fileID: 8774092088480801808, guid: ea7bdfe7a0b4a394fb6b6b986573545d,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -1604,6 +1628,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8774092087280153363, guid: ea7bdfe7a0b4a394fb6b6b986573545d,
+        type: 3}
+      propertyPath: m_Group
+      value: 
+      objectReference: {fileID: 1364761036}
     - target: {fileID: 8774092088480801808, guid: ea7bdfe7a0b4a394fb6b6b986573545d,
         type: 3}
       propertyPath: m_AnchorMin.y

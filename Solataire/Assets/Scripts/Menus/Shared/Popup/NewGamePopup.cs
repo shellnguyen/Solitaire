@@ -1,14 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NewGamePopup : Popup
 {
-    
+    [SerializeField] private Button m_BtnPlay;
+    [SerializeField] private ToggleGroup m_DifficultyGroup;
+
     // Start is called before the first frame update
     private void Start()
     {
-        
+        m_BtnPlay.onClick.AddListener(StartGame);
     }
 
     // Update is called once per frame
@@ -17,8 +20,34 @@ public class NewGamePopup : Popup
         
     }
 
-    private void OnGameSettingChanged()
+    private void StartGame()
     {
+        foreach(Toggle option in m_DifficultyGroup.ActiveToggles())
+        {
+            if(option.isOn)
+            {
+                switch(option.name)
+                {
+                    case "EasyToggle":
+                        {
+                            GameSetting.Instance.difficulty = new Easy();
+                            break;
+                        }
+                    case "NormalToggle":
+                        {
+                            GameSetting.Instance.difficulty = new Normal();
+                            break;
+                        }
+                    case "HardToggle":
+                        {
+                            GameSetting.Instance.difficulty = new Hard();
+                            break;
+                        }
+                }
+            }
+        }
 
+        Utilities.Instance.DispatchEvent(Solitaire.Event.OnStartGame, "start_game", "");
+        this.gameObject.SetActive(false);
     }
 }
