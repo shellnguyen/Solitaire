@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class NewGamePopup : Popup
@@ -16,6 +17,7 @@ public class NewGamePopup : Popup
     private void Start()
     {
         m_GameData = Resources.FindObjectsOfTypeAll<GameData>().FirstOrDefault();
+        m_GameData.gameMode = (Solitaire.GameMode)SceneManager.GetActiveScene().buildIndex;
 
         m_GameNameText.text = m_GameData.gameMode.ToString();
         m_BtnPlay.onClick.AddListener(StartGame);

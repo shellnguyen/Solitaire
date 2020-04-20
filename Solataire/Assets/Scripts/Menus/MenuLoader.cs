@@ -9,12 +9,12 @@ public class MenuLoader : MonoBehaviour
     {
         if(!SceneManager.GetSceneByBuildIndex(2).isLoaded)
         {
-            SceneManager.LoadScene(SceneManager.sceneCountInBuildSettings - 1, LoadSceneMode.Additive);
+            SceneLoader.Instance.LoadSceneWithCallback(SceneManager.sceneCountInBuildSettings - 1, LoadSceneMode.Additive, OnLoadUICompleted);
         }
     }
 
-    private void Update()
+    private void OnLoadUICompleted(AsyncOperation request)
     {
-        
+        Utilities.Instance.DispatchEvent(Solitaire.Event.ShowPopup, "newgame", "");
     }
 }

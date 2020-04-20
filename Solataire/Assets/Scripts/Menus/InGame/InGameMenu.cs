@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class InGameMenu : MonoBehaviour
 {
+    [SerializeField] private Canvas m_MenuCanvas;
     [SerializeField] private GameData m_GameData;
 
     ////TopBar
@@ -27,6 +28,7 @@ public class InGameMenu : MonoBehaviour
 
     private void OnEnable()
     {
+        m_MenuCanvas.worldCamera = Camera.main;
         //m_EventManager.Register(Solitaire.Event.OnDataChanged, OnDataChanged);
         EventManager.Instance.Register(Solitaire.Event.OnDataChanged, OnDataChanged);
     }

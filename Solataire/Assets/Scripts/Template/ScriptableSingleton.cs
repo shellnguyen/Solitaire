@@ -13,7 +13,7 @@ public abstract class ScriptableSingleton<T> : ScriptableObject where T : Script
             if (_instance == null)
             {
                 var type = typeof(T);
-                var instances = Resources.FindObjectsOfTypeAll<T>();
+                var instances = Resources.LoadAll<T>("GameAssets");
                 _instance = instances.FirstOrDefault();
                 if (_instance == null)
                 {

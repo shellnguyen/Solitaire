@@ -20,40 +20,40 @@ public class GameController : MonoBehaviour
     [SerializeField] private CardElement m_CurrentSelected;    
     [SerializeField] private bool m_IsWin;
     private float m_PrevClickedTime;
+    private bool m_IsGameStart;
 
     private TimeSpan m_ElapsedTime;
 
     #region Unity functions
-    private void Awake()
+    private void OnEnable()
     {
-        m_GameData.gameMode = Solitaire.GameMode.Klondike;
-        m_DeckCards = m_GameData.deckCards = new List<CardElement>();
-        m_BottomCards = m_GameData.bottomCards = new List<CardElement>();
-        m_TopCards = m_GameData.topCards = new List<CardElement>();
-        m_CurrentSelected = null;
-        m_IsWin = false;
-        m_PrevClickedTime = 0.0f;
-        GenerateDeck();
-        StartCoroutine(DealCards());
+        m_IsGameStart = false;
+        EventManager.Instance.Register(Solitaire.Event.OnStartGame, OnStartGame);
     }
 
-    private void Start()
+    private void OnDisable()
     {
-        m_ElapsedTime = new TimeSpan();
-        StartCoroutine(UpdateTime());
-        //m_Timer = new Timer(1000);
-        //m_Timer.Elapsed += OnTimeUpdated;
-        //m_Timer.Start();
+        EventManager.Instance.Unregister(Solitaire.Event.OnStartGame, OnStartGame);
+    }
+
+    private void Awake()
+    {
     }
 
     // Update is called once per frame
     private void Update()
     {    
-        Vector3 mousePos = Input.mousePosition;
-        if(m_IsWin)
+        if(!m_IsGameStart)
+        {
+            return;
+        }
+
+        if (m_IsWin)
         {
             Logger.Instance.PrintLog(Common.DEBUG_TAG, "You WIN !!!");
         }
+
+        Vector3 mousePos = Input.mousePosition;
 
         //Left mouse clicked
         if(Input.GetMouseButtonDown(0))
@@ -418,6 +418,28 @@ public class GameController : MonoBehaviour
         m_GameData.gameMode = Solitaire.GameMode.Klondike;
     }
     #endregion
+
+    private void Initialized()
+    {
+        m_GameData.gameMode = Solitaire.GameMode.Klondike;
+        m_DeckCards = m_GameData.deckCards = new List<CardElement>();
+        m_BottomCards = m_GameData.bottomCards = new List<CardElement>();
+        m_TopCards = m_GameData.topCards = new List<CardElement>();
+        m_CurrentSelected = null;
+        m_IsWin = false;
+        m_PrevClickedTime = 0.0f;
+        GenerateDeck();
+        StartCoroutine(DealCards());
+
+        m_IsGameStart = true;
+        m_ElapsedTime = new TimeSpan();
+        StartCoroutine(UpdateTime());
+    }
+
+    private void OnStartGame(EventParam param)
+    {
+        Initialized();
+    }
 
     private bool CanStack(ushort selected, ushort target, bool isStackTop = false)
     {

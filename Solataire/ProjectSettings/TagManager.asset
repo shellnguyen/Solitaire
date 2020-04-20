@@ -7,6 +7,7 @@ TagManager:
   - Card
   - Bottom
   - Top
+  - UICamera
   layers:
   - Default
   - TransparentFX

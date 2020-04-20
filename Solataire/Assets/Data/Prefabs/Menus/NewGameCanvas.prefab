@@ -657,6 +657,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BlackBG: {fileID: 8650106515003870228}
   m_PopupCanvas: {fileID: 7365157391825386670}
+  m_GameNameText: {fileID: 7365157391502879023}
+  m_BtnPlay: {fileID: 7365157393201527798}
+  m_DifficultyGroup: {fileID: 1364761036}
+  m_GameData: {fileID: 0}
 --- !u!1 &7365157392860934723
 GameObject:
   m_ObjectHideFlags: 0
