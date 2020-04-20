@@ -12,8 +12,18 @@ public abstract class ScriptableSingleton<T> : ScriptableObject where T : Script
         {
             if (_instance == null)
             {
+#if UNITY_EDITOR
+                if (!_instance)
+                {
+                    string[] configsGUIDs = UnityEditor.AssetDatabase.FindAssets("t:" + typeof(T).Name);
+                    if (configsGUIDs.Length > 0)
+                    {
+                        _instance = UnityEditor.AssetDatabase.LoadAssetAtPath<T>(UnityEditor.AssetDatabase.GUIDToAssetPath(configsGUIDs[0]));
+                    }
+                }
+#else
                 var type = typeof(T);
-                var instances = Resources.LoadAll<T>("GameAssets");
+                var instances = Resources.FindObjectsOfTypeAll<T>();
                 _instance = instances.FirstOrDefault();
                 if (_instance == null)
                 {
@@ -27,7 +37,9 @@ public abstract class ScriptableSingleton<T> : ScriptableObject where T : Script
                 {
                     Debug.LogFormat("[ScriptableSingleton] An instance of {0} was found!", type.ToString());
                 }
+#endif
             }
+
             return _instance;
         }
     }

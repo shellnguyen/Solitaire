@@ -17,7 +17,7 @@ public class OptionPopup : Popup
     }
 
     // Start is called before the first frame update
-    private void OnStart()
+    private void Start()
     {
         m_AudioOption.Initialized("audio", GameSetting.Instance.enableAudio);
         m_AdsOption.Initialized("enable_ads", GameSetting.Instance.enableAds);

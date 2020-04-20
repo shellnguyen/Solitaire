@@ -23,7 +23,7 @@ public class ToggleController : MonoBehaviour
         set
         {
             m_IsOn = value;
-            OnStateChanged();
+            StartCoroutine(OnStateChanged());
         }
     }
 
@@ -47,21 +47,39 @@ public class ToggleController : MonoBehaviour
         m_ToggleBar.color = m_OffColor;
     }
 
-    private void OnStateChanged()
+    private IEnumerator OnStateChanged()
     {
-        if(m_IsOn)
+        yield return null;
+
+        if (m_IsOn)
         {
             m_ToggleBar.color = m_OnColor;
-            m_ToggleBall.rectTransform.localPosition = new Vector3(m_ToggleBar.rectTransform.rect.width/2, 0.0f, 0.0f);
+            m_ToggleBall.rectTransform.localPosition = new Vector3(m_ToggleBar.rectTransform.rect.width / 2, 0.0f, 0.0f);
         }
         else
         {
             m_ToggleBar.color = m_OffColor;
-            m_ToggleBall.rectTransform.localPosition = new Vector3(-m_ToggleBar.rectTransform.rect.width/2, 0.0f, 0.0f);
+            m_ToggleBall.rectTransform.localPosition = new Vector3(-m_ToggleBar.rectTransform.rect.width / 2, 0.0f, 0.0f);
         }
 
         Utilities.Instance.DispatchEvent(Solitaire.Event.OnValueChanged, m_Key, m_IsOn);
     }
+
+    //private void OnStateChanged()
+    //{
+    //    if(m_IsOn)
+    //    {
+    //        m_ToggleBar.color = m_OnColor;
+    //        m_ToggleBall.rectTransform.localPosition = new Vector3(m_ToggleBar.rectTransform.rect.width/2, 0.0f, 0.0f);
+    //    }
+    //    else
+    //    {
+    //        m_ToggleBar.color = m_OffColor;
+    //        m_ToggleBall.rectTransform.localPosition = new Vector3(-m_ToggleBar.rectTransform.rect.width/2, 0.0f, 0.0f);
+    //    }
+
+    //    Utilities.Instance.DispatchEvent(Solitaire.Event.OnValueChanged, m_Key, m_IsOn);
+    //}
 
     private void OnToggleClicked()
     {
