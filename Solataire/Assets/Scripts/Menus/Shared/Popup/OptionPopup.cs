@@ -26,11 +26,12 @@ public class OptionPopup : Popup
         {
             case "audio":
                 {
-                    GameSetting.Instance.m_HasAudio = true;
+                    GameSetting.Instance.m_HasAudio = param.GetBoolean(tag);
                     break;
                 }
             case "enable_ads":
                 {
+                    GameSetting.Instance.m_EnableAds = param.GetBoolean(tag);
                     break;
                 }
         }
