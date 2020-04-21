@@ -31,11 +31,13 @@ public class GameController : MonoBehaviour
     {
         m_IsGameStart = false;
         EventManager.Instance.Register(Solitaire.Event.OnStartGame, OnStartGame);
+        EventManager.Instance.Register(Solitaire.Event.OnNewGame, OnNewGame);
     }
 
     private void OnDisable()
     {
         EventManager.Instance.Unregister(Solitaire.Event.OnStartGame, OnStartGame);
+        EventManager.Instance.Unregister(Solitaire.Event.OnNewGame, OnNewGame);
     }
 
     private void Awake()
@@ -46,11 +48,6 @@ public class GameController : MonoBehaviour
     private void Update()
     {    
         if(!m_IsGameStart)
-        {
-            return;
-        }
-
-        if (EventSystem.current.IsPointerOverGameObject())
         {
             return;
         }
@@ -66,9 +63,10 @@ public class GameController : MonoBehaviour
         if(Input.GetMouseButtonDown(0))
         {
             Logger.Instance.PrintLog(Common.DEBUG_TAG, "GameController MouseButton down");
+
             RaycastHit2D hit = Physics2D.Raycast(m_MainCamera.ScreenToWorldPoint(mousePos), Vector2.zero);
 
-            if(hit)
+            if (hit)
             {
                 switch(hit.collider.tag)
                 {
@@ -417,6 +415,13 @@ public class GameController : MonoBehaviour
         Destroy();
     }
     #endregion
+
+    private void OnNewGame(EventParam param)
+    {
+        Destroy();
+
+        Utilities.Instance.DispatchEvent(Solitaire.Event.ShowPopup, "newgame", "");
+    }
 
     private void Destroy()
     {
