@@ -31,6 +31,8 @@ public class InGameMenu : MonoBehaviour
         m_MenuCanvas.worldCamera = Camera.main;
         //m_EventManager.Register(Solitaire.Event.OnDataChanged, OnDataChanged);
         EventManager.Instance.Register(Solitaire.Event.OnDataChanged, OnDataChanged);
+
+        SetupButton();
     }
 
     private void OnDisable()
@@ -49,6 +51,46 @@ public class InGameMenu : MonoBehaviour
     private void Update()
     {
         
+    }
+
+    private void SetupButton()
+    {
+        m_BtnNew.onClick.AddListener(OnNewGameClicked);
+        m_BtnOption.onClick.AddListener(OnOptionClicked);
+        m_BtnCards.onClick.AddListener(OnCardClicked);
+        m_BtnUndo.onClick.AddListener(OnUndoClicked);
+        m_BtnHint.onClick.AddListener(OnHintClicked);
+        m_BtnExit.onClick.AddListener(OnExitClicked);
+    }
+
+    private void OnNewGameClicked()
+    {
+
+    }
+
+    private void OnOptionClicked()
+    {
+        Utilities.Instance.DispatchEvent(Solitaire.Event.ShowPopup, "option", "");
+    }
+
+    private void OnCardClicked()
+    {
+        //todo
+    }
+
+    private void OnUndoClicked()
+    {
+        //todo
+    }
+
+    private void OnHintClicked()
+    {
+        //todo
+    }
+
+    private void OnExitClicked()
+    {
+        SceneLoader.Instance.LoadScene(1);
     }
 
     private void OnDataChanged(EventParam param)
