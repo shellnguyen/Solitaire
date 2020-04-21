@@ -71,6 +71,7 @@ namespace Solitaire
         ShowPopup,
         OnValueChanged,
         OnStartGame,
+        OnNewGame,
         OnUndo,
         OnAutoResolve
     }
