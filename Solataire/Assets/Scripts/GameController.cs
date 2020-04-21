@@ -22,6 +22,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private bool m_IsWin;
     private float m_PrevClickedTime;
     private bool m_IsGameStart;
+    private int m_MoveRemain;
 
     private TimeSpan m_ElapsedTime;
 
@@ -413,6 +414,12 @@ public class GameController : MonoBehaviour
 
     private void OnApplicationQuit()
     {
+        Destroy();
+    }
+    #endregion
+
+    private void Destroy()
+    {
         m_GameData.bottomCards.Clear();
         m_GameData.deckCards.Clear();
         m_GameData.topCards.Clear();
@@ -421,13 +428,11 @@ public class GameController : MonoBehaviour
         m_GameData.move = 0;
         m_GameData.score = 0;
         m_GameData.time = String.Empty;
-        m_GameData.gameMode = Solitaire.GameMode.Klondike;
+        m_GameData.gameMode = Solitaire.GameMode.None;
     }
-    #endregion
 
     private void Initialized()
     {
-        m_GameData.gameMode = Solitaire.GameMode.Klondike;
         m_DeckCards = m_GameData.deckCards = new List<CardElement>();
         m_BottomCards = m_GameData.bottomCards = new List<CardElement>();
         m_TopCards = m_GameData.topCards = new List<CardElement>();
@@ -437,6 +442,7 @@ public class GameController : MonoBehaviour
         GenerateDeck();
         StartCoroutine(DealCards());
 
+        m_MoveRemain = GameSetting.Instance.difficulty.moveAllowed;
         m_IsGameStart = true;
         m_ElapsedTime = new TimeSpan();
         StartCoroutine(UpdateTime());

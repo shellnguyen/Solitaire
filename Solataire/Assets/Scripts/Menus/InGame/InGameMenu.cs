@@ -44,7 +44,7 @@ public class InGameMenu : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        m_GameText.text = Enum.GetName(typeof(Solitaire.GameMode), m_GameData.gameMode);
+        //m_GameText.text = Enum.GetName(typeof(Solitaire.GameMode), m_GameData.gameMode);
     }
 
     // Update is called once per frame
@@ -65,7 +65,7 @@ public class InGameMenu : MonoBehaviour
 
     private void OnNewGameClicked()
     {
-
+        
     }
 
     private void OnOptionClicked()
@@ -115,6 +115,16 @@ public class InGameMenu : MonoBehaviour
                 case "time":
                     {
                         m_TimeText.text = param.GetString(tag);
+                        break;
+                    }
+                case "difficulty":
+                    {
+                        m_DifficultyText.text = param.GetString(tag);
+                        break;
+                    }
+                case "game_mode":
+                    {
+                        m_GameText.text = param.GetString(tag);
                         break;
                     }
             }

@@ -56,7 +56,8 @@ namespace Solitaire
 
     public enum GameMode
     {
-        Klondike = 2,
+        None  = 1,
+        Klondike,
         Spider,
         FreeCall,
         Pyramid,

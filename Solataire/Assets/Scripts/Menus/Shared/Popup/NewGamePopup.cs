@@ -56,6 +56,8 @@ public class NewGamePopup : Popup
             }
         }
 
+        Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "game_mode", m_GameData.gameMode.ToString());
+        Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "difficulty", GameSetting.Instance.difficulty.moveAllowed.ToString());
         Utilities.Instance.DispatchEvent(Solitaire.Event.OnStartGame, "start_game", "");
         this.gameObject.SetActive(false);
     }
