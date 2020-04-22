@@ -51,8 +51,7 @@ public sealed class Utilities
 
     public Vector3 GetWorldPosition2D(Camera cam, Vector3 position)
     {
-        //Ray2D ray = cam.ScreenPointToRay(position);
-        RaycastHit2D hit = Physics2D.Raycast(cam.ScreenToWorldPoint(position), Vector2.zero);
+        RaycastHit2D hit = Physics2D.Raycast(cam.ScreenToWorldPoint(position), Vector2.zero, 15.0f);
         if (hit)
         {
             return hit.point;
