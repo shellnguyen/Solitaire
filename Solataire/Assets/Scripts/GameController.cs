@@ -423,8 +423,31 @@ public class GameController : MonoBehaviour
         Utilities.Instance.DispatchEvent(Solitaire.Event.ShowPopup, "newgame", "");
     }
 
+    private void DestroyCards()
+    {
+        //Remove cards in bottom position
+        foreach(CardElement card in m_BottomCards)
+        {
+            GameObject.Destroy(card.gameObject);
+        }
+
+        //Remove cards in top position
+        foreach(CardElement card in m_TopCards)
+        {
+            GameObject.Destroy(card.gameObject);
+        }
+
+        //Remove cards in deck position
+        foreach(CardElement card in m_DeckCards)
+        {
+            GameObject.Destroy(card.gameObject);
+        }
+
+    }
+
     private void Destroy()
     {
+        DestroyCards();
         m_GameData.bottomCards.Clear();
         m_GameData.deckCards.Clear();
         m_GameData.topCards.Clear();

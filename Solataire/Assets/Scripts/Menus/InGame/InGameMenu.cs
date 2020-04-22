@@ -65,7 +65,11 @@ public class InGameMenu : MonoBehaviour
 
     private void OnNewGameClicked()
     {
-        
+        m_MoveText.text = "0";
+        m_ScoreText.text = "0";
+        m_TimeText.text = "00:00";
+
+        Utilities.Instance.DispatchEvent(Solitaire.Event.OnNewGame, "new_game", "");
     }
 
     private void OnOptionClicked()
