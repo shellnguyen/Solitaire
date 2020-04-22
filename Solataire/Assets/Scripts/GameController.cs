@@ -546,6 +546,7 @@ public class GameController : MonoBehaviour
 
         if(isStackToTop)
         {
+            target.gameObject.layer = 9;
             m_GameData.score += (Common.DEFAULT_SCORE * 2);
             Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "score", m_GameData.score.ToString());
             m_TopCards.Add(m_CurrentSelected);
