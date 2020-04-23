@@ -424,7 +424,7 @@ public class GameController : MonoBehaviour
     {
         Destroy();
 
-        Utilities.Instance.DispatchEvent(Solitaire.Event.ShowPopup, "newgame", "");
+        Utilities.Instance.DispatchEvent(Solitaire.Event.ShowPopup, "new_game", "");
     }
 
     private void DestroyCards()

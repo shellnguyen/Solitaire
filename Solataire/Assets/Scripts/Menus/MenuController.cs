@@ -10,6 +10,7 @@ public class MenuController : MonoBehaviour
 {
     [SerializeField] private GameObject m_OptionMenuPrefab;
     [SerializeField] private GameObject m_NewGamePopupPrefab;
+    [SerializeField] private GameObject m_GameResultPopupPrefab;
 
     //Menu scripts
     //
@@ -48,9 +49,13 @@ public class MenuController : MonoBehaviour
                         Instantiate(m_OptionMenuPrefab, Vector3.zero, Quaternion.identity);
                         break;
                     }
-                case "newgame":
+                case "new_game":
                     {
                         Instantiate(m_NewGamePopupPrefab, Vector3.zero, Quaternion.identity);
+                        break;
+                    }
+                case "game_result":
+                    {
                         break;
                     }
             }

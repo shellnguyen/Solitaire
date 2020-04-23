@@ -15,6 +15,6 @@ public class MenuLoader : MonoBehaviour
 
     private void OnLoadUICompleted(AsyncOperation request)
     {
-        Utilities.Instance.DispatchEvent(Solitaire.Event.ShowPopup, "newgame", "");
+        Utilities.Instance.DispatchEvent(Solitaire.Event.ShowPopup, "new_game", "");
     }
 }

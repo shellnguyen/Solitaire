@@ -3817,6 +3817,7 @@ MonoBehaviour:
     type: 3}
   m_NewGamePopupPrefab: {fileID: 7365157391825386669, guid: c0543e5767fa65746a071b2bad3a85fb,
     type: 3}
+  m_GameResultPopupPrefab: {fileID: 0}
 --- !u!1 &1672367877
 GameObject:
   m_ObjectHideFlags: 0
