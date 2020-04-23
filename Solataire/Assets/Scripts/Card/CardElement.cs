@@ -237,31 +237,37 @@ public class CardElement : MonoBehaviour
         return m_PrevFaceDown ? true : false;
     }
 
-    public void OnSelectedChange()
+    public void OnSelectedChange(bool changeStack = true)
     {
         if (m_IsSelected)
         {
+            Logger.Instance.PrintLog(Common.DEBUG_TAG, "card " + m_CardName + " isSelected");
             m_Renderer.color = Color.yellow;
             m_PrevPos = this.transform.position;
         }
         else
         {
+            Logger.Instance.PrintLog(Common.DEBUG_TAG, "card " + m_CardName + " deSelected");
             m_Renderer.color = Color.white;
             m_PrevPos = Vector3.zero;
         }
 
-        if(m_NextInStack && ((m_NextInStack.position & this.position) > 0))
+        if(changeStack)
         {
-            if(((m_NextInStack.position & (Solitaire.CardPosition.Top1 | Solitaire.CardPosition.Top2 | Solitaire.CardPosition.Top3 | Solitaire.CardPosition.Top4)) == 0))
+            if (m_NextInStack && ((m_NextInStack.position & this.position) > 0))
             {
-                m_NextInStack.IsSelected = m_IsSelected;
-                
+                if (((m_NextInStack.position & (Solitaire.CardPosition.Top1 | Solitaire.CardPosition.Top2 | Solitaire.CardPosition.Top3 | Solitaire.CardPosition.Top4)) == 0))
+                {
+                    m_NextInStack.IsSelected = m_IsSelected;
+
+                }
+            }
+            else
+            {
+                m_NextInStack = null;
             }
         }
-        else
-        {
-            m_NextInStack = null;
-        }
+
     }
 
     public void OnCardFaceChanged()
@@ -367,7 +373,8 @@ public class CardElement : MonoBehaviour
         //Logger.Instance.PrintLog(Common.DEBUG_TAG, "Card " + this.CardName + " reset position");
         this.transform.position = m_PrevPos;
         m_PrevPos = Vector3.zero;
-        IsSelected = false;
+        m_IsSelected = false;
+        OnSelectedChange(false);
         m_IsDragging = false;
         m_CollidedTag = 0;
         m_Collided = null;
