@@ -5,6 +5,13 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+public enum GameResult
+{
+    Still,
+    Win,
+    Lose
+}
+
 public class GameController : MonoBehaviour
 {
     [SerializeField] private Camera m_MainCamera;
@@ -19,7 +26,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject m_DeckButton;
     [SerializeField] private GameObject m_DrawCardHolder;
     [SerializeField] private CardElement m_CurrentSelected;    
-    [SerializeField] private bool m_IsWin;
+    [SerializeField] private GameResult m_GameResult;
     private float m_PrevClickedTime;
     private bool m_IsGameStart;
     private int m_MoveRemain;
@@ -52,9 +59,10 @@ public class GameController : MonoBehaviour
             return;
         }
 
-        if (m_IsWin)
+        if (m_GameResult != GameResult.Still)
         {
-            Logger.Instance.PrintLog(Common.DEBUG_TAG, "You WIN !!!");
+            Logger.Instance.PrintLog(Common.DEBUG_TAG, "Game END !!!");
+            return;
         }
 
         Vector3 mousePos = Input.mousePosition;
@@ -94,8 +102,6 @@ public class GameController : MonoBehaviour
                                 if(CanStack(m_CurrentSelected.CardValue, card.CardValue, true) && !m_CurrentSelected.IsInStack())
                                 {
                                     StackToCard(card, true);
-                                    //TODO: check win condition
-                                    CheckWinCondition();
                                     return;
                                 }
                             }
@@ -287,8 +293,6 @@ public class GameController : MonoBehaviour
                                 if (CanStack(m_CurrentSelected.CardValue, card.CardValue, true) && !m_CurrentSelected.IsInStack())
                                 {
                                     StackToCard(card, true);
-                                    //TODO: check win condition
-                                    CheckWinCondition();
                                     return;
                                 }
                             }
@@ -465,7 +469,7 @@ public class GameController : MonoBehaviour
         m_BottomCards = m_GameData.bottomCards = new List<CardElement>();
         m_TopCards = m_GameData.topCards = new List<CardElement>();
         m_CurrentSelected = null;
-        m_IsWin = false;
+        m_GameResult = GameResult.Still;
         m_PrevClickedTime = 0.0f;
         GenerateDeck();
         StartCoroutine(DealCards());
@@ -551,7 +555,6 @@ public class GameController : MonoBehaviour
             Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "score", m_GameData.score.ToString());
             m_TopCards.Add(m_CurrentSelected);
             iTween.MoveTo(m_CurrentSelected.gameObject, new Vector3 (target.transform.position.x, target.transform.position.y, target.transform.position.z - Common.ZOFFSET), Common.MOVE_TIME);
-            CheckWinCondition();
         }
         else
         {
@@ -571,8 +574,10 @@ public class GameController : MonoBehaviour
         //m_CurrentSelected.transform.SetParent(target.transform.parent);
         m_CurrentSelected = null;
 
+        m_MoveRemain--;
         m_GameData.move++;
         Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
+        CheckGameCondition();
     }
 
     private void StackToPosition(GameObject positionObj, bool isStackToTop)
@@ -633,6 +638,7 @@ public class GameController : MonoBehaviour
         positionObj.layer = 9;
         m_CurrentSelected = null;
 
+        m_MoveRemain--;
         m_GameData.move++;
         Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
     }
@@ -771,17 +777,26 @@ public class GameController : MonoBehaviour
         m_DeckCards[currentDrawCard].position = Solitaire.CardPosition.Draw;
         m_DeckCards[currentDrawCard].gameObject.layer = 8;
 
+        m_MoveRemain--;
         m_GameData.move++;
         Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
+        CheckGameCondition();
 
         yield break;
     }
 
-    private void CheckWinCondition()
+    private void CheckGameCondition()
     {
         if(m_TopCards.Count >= 52)
         {
-            m_IsWin = true;
+            m_GameResult = GameResult.Win;
+        }
+        else
+        {
+            if(m_MoveRemain <= 0)
+            {
+                m_GameResult = GameResult.Lose;
+            }
         }
     }
 
@@ -845,7 +860,7 @@ public class GameController : MonoBehaviour
 
     private IEnumerator UpdateTime()
     {
-        while(!m_IsWin)
+        while(m_GameResult == GameResult.Still)
         {
             m_ElapsedTime = m_ElapsedTime.Add(TimeSpan.FromSeconds(1));
             if (m_ElapsedTime.TotalHours >= 1)
