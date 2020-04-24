@@ -16,7 +16,6 @@ public class CardElement : MonoBehaviour
     [SerializeField]private CardElement m_NextInStack;
     [SerializeField]private GameObject m_Collided;
     private Vector3 m_PrevPos;
-    private bool m_IsNewPosValid;
     [SerializeField]private bool m_IsSelected;
     private bool m_IsFaceUp;
     [SerializeField]private byte m_CollidedTag;
@@ -54,19 +53,6 @@ public class CardElement : MonoBehaviour
         get
         {
             return m_CardValue;
-        }
-    }
-
-    public bool IsNewPosValid
-    {
-        get
-        {
-            return m_IsNewPosValid;
-        }
-
-        set
-        {
-            m_IsNewPosValid = value;
         }
     }
 
@@ -128,7 +114,6 @@ public class CardElement : MonoBehaviour
         m_NextInStack = null;
         m_PrevFaceDown = null;
         m_PrevPos = Vector3.zero;
-        m_IsNewPosValid = false;
         m_IsSelected = false;
         m_IsDragging = false;
         m_CollidedTag = 0;
