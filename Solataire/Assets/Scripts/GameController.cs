@@ -5,13 +5,6 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public enum GameResult
-{
-    Still,
-    Win,
-    Lose
-}
-
 public class GameController : MonoBehaviour
 {
     [SerializeField] private Camera m_MainCamera;
@@ -26,7 +19,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject m_DeckButton;
     [SerializeField] private GameObject m_DrawCardHolder;
     [SerializeField] private CardElement m_CurrentSelected;    
-    [SerializeField] private GameResult m_GameResult;
+    [SerializeField] private Solitaire.GameResult m_GameResult;
     private float m_PrevClickedTime;
     private bool m_IsGameStart;
     private int m_MoveRemain;
@@ -59,7 +52,7 @@ public class GameController : MonoBehaviour
             return;
         }
 
-        if (m_GameResult != GameResult.Still)
+        if (m_GameResult !=  Solitaire.GameResult.Still)
         {
             Logger.Instance.PrintLog(Common.DEBUG_TAG, "Game END !!!");
             return;
@@ -469,7 +462,7 @@ public class GameController : MonoBehaviour
         m_BottomCards = m_GameData.bottomCards = new List<CardElement>();
         m_TopCards = m_GameData.topCards = new List<CardElement>();
         m_CurrentSelected = null;
-        m_GameResult = GameResult.Still;
+        m_GameResult = Solitaire.GameResult.Still;
         m_PrevClickedTime = 0.0f;
         GenerateDeck();
         StartCoroutine(DealCards());
@@ -789,13 +782,15 @@ public class GameController : MonoBehaviour
     {
         if(m_TopCards.Count >= 52)
         {
-            m_GameResult = GameResult.Win;
+            m_GameResult = Solitaire.GameResult.Win;
+            Utilities.Instance.DispatchEvent(Solitaire.Event.OnGameResult, "game_result", (int)m_GameResult);
         }
         else
         {
             if(m_MoveRemain <= 0)
             {
-                m_GameResult = GameResult.Lose;
+                m_GameResult = Solitaire.GameResult.Lose;
+                Utilities.Instance.DispatchEvent(Solitaire.Event.OnGameResult, "game_result", (int)m_GameResult);
             }
         }
     }
@@ -860,7 +855,7 @@ public class GameController : MonoBehaviour
 
     private IEnumerator UpdateTime()
     {
-        while(m_GameResult == GameResult.Still)
+        while(m_GameResult == Solitaire.GameResult.Still)
         {
             m_ElapsedTime = m_ElapsedTime.Add(TimeSpan.FromSeconds(1));
             if (m_ElapsedTime.TotalHours >= 1)

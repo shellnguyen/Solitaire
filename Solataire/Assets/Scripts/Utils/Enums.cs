@@ -64,6 +64,13 @@ namespace Solitaire
         TriPeak
     }
 
+    public enum GameResult
+    {
+        Still,
+        Win,
+        Lose
+    }
+
     public enum Event
     {
         OnDataChanged,

@@ -11,6 +11,7 @@ public class MenuController : MonoBehaviour
     [SerializeField] private GameObject m_OptionMenuPrefab;
     [SerializeField] private GameObject m_NewGamePopupPrefab;
     [SerializeField] private GameObject m_GameResultPopupPrefab;
+    private Dictionary<string, GameObject> m_PopupList;
 
     //Menu scripts
     //
@@ -46,16 +47,39 @@ public class MenuController : MonoBehaviour
             {
                 case "option":
                     {
-                        Instantiate(m_OptionMenuPrefab, Vector3.zero, Quaternion.identity);
+                        if(m_PopupList.ContainsKey(tag))
+                        {
+                            m_PopupList[tag].SetActive(true);
+                        }
+                        else
+                        {
+                            m_PopupList.Add(tag, Instantiate(m_OptionMenuPrefab, Vector3.zero, Quaternion.identity));
+                        }                 
                         break;
                     }
                 case "new_game":
                     {
-                        Instantiate(m_NewGamePopupPrefab, Vector3.zero, Quaternion.identity);
+                        if (m_PopupList.ContainsKey(tag))
+                        {
+                            m_PopupList[tag].SetActive(true);
+                        }
+                        else
+                        {
+                            m_PopupList.Add(tag, Instantiate(m_NewGamePopupPrefab, Vector3.zero, Quaternion.identity));
+                        }
                         break;
                     }
                 case "game_result":
                     {
+                        if (m_PopupList.ContainsKey(tag))
+                        {
+                            m_PopupList[tag].SetActive(true);
+                        }
+                        else
+                        {
+                            m_PopupList.Add(tag, Instantiate(m_NewGamePopupPrefab, Vector3.zero, Quaternion.identity));
+                            //m_PopupList[tag].GetComponent<>
+                        }
                         break;
                     }
             }
