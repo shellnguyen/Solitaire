@@ -16,6 +16,11 @@ public class MenuController : MonoBehaviour
     //Menu scripts
     //
 
+    private void Awake()
+    {
+        m_PopupList = new Dictionary<string, GameObject>();
+    }
+
     private void OnEnable()
     {
         EventManager.Instance.Register(Solitaire.Event.ShowPopup, ShowPopup);
@@ -29,6 +34,7 @@ public class MenuController : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        
     }
 
     // Update is called once per frame
