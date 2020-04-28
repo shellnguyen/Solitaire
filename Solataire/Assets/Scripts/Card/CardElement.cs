@@ -249,6 +249,10 @@ public class CardElement : MonoBehaviour
             }
             else
             {
+                if(m_IsSelected)
+                {
+                    Utilities.Instance.DispatchEvent(Solitaire.Event.PlayAudio, "play_one", 0);
+                }
                 m_NextInStack = null;
             }
         }
