@@ -784,6 +784,7 @@ public class GameController : MonoBehaviour
         {
             m_GameResult = Solitaire.GameResult.Win;
             Utilities.Instance.DispatchEvent(Solitaire.Event.OnGameResult, "game_result", (int)m_GameResult);
+            Utilities.Instance.DispatchEvent(Solitaire.Event.PlayEffect, "firework", "");
         }
         else
         {
