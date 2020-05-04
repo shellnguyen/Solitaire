@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edb6f4e1f3e659d40853670097dd09e7, type: 3}
+  m_Name: ResourcesManager
+  m_EditorClassIdentifier: 
+  AudioList:
+  - {fileID: 8300000, guid: 53103dabc0c34d9468f87637d6b9ba9b, type: 3}
+  CardSprite:
+  - {fileID: 21300000, guid: 4ddf0429a9a684c4ca2f0b756be55b64, type: 3}
+  - {fileID: 21300000, guid: a1b65559fd6105745bc6b402f1fd26f5, type: 3}
+  - {fileID: 21300000, guid: e339c66cffd1a1b408d1984d9dc3aaac, type: 3}
+  - {fileID: 21300000, guid: d4261a9969944ef488c7de4e0a4c0e8e, type: 3}
+  - {fileID: 21300000, guid: 9d5f58a8af9ee8047b2843d5d370d17c, type: 3}
