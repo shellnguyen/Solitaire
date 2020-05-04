@@ -119,8 +119,11 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 0.1
-  preloadedAssets: []
+  bundleVersion: 1.0
+  preloadedAssets:
+  - {fileID: 11400000, guid: ad3d8f325ae51a64da4c10cb267ed8c8, type: 2}
+  - {fileID: 11400000, guid: 8251cf14cf42396438f94e17ebad8c25, type: 2}
+  - {fileID: 11400000, guid: b37cd1f69d8e4e749880b375f5707c13, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -560,7 +563,7 @@ PlayerSettings:
     Android: 1
     Standalone: 1
   il2cppCompilerConfiguration:
-    Standalone: 0
+    Standalone: 1
   managedStrippingLevel: {}
   incrementalIl2cppBuild: {}
   allowUnsafeCode: 0
