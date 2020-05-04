@@ -83,7 +83,7 @@ public class MenuController : MonoBehaviour
                         }
                         else
                         {
-                            m_PopupList.Add(tag, Instantiate(m_NewGamePopupPrefab, Vector3.zero, Quaternion.identity));
+                            m_PopupList.Add(tag, Instantiate(m_GameResultPopupPrefab, Vector3.zero, Quaternion.identity));
                             //m_PopupList[tag].GetComponent<>
                         }
                         break;

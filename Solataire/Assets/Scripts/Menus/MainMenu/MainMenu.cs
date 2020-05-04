@@ -59,10 +59,6 @@ public class MainMenu : MonoBehaviour
                 {
                     break;
                 }
-            case 10: //Option
-                {
-                    break;
-                }
             case 11: //Challenger
                 {
                     break;
