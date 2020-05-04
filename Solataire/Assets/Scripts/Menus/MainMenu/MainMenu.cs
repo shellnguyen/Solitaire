@@ -6,15 +6,43 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI m_PlayerName;
-    [SerializeField] private TextMeshProUGUI m_LeaderboardName;
-    [SerializeField] private TextMeshProUGUI m_LeaderboardRank;
+    //Text
+    [SerializeField] private TextMeshProUGUI m_GreetingText;
+    [SerializeField] private TextMeshProUGUI m_PlayerNameText;
 
+    //Button
+    [SerializeField] private Button m_BtnKlondike;
+    [SerializeField] private Button m_BtnSpider;
+    [SerializeField] private Button m_BtnPyramic;
+    [SerializeField] private Button m_BtnFreeCall;
+    [SerializeField] private Button m_BtnTriPeak;
 
-    // Start is called before the first frame update
-    private void Start()
+    [SerializeField] private Button m_BtnLogin;
+    [SerializeField] private Button m_BtnSetting;
+    [SerializeField] private Button m_BtnChallenge;
+    [SerializeField] private Button m_BtnLeaderboard;
+
+    //Main menu Ratio
+    [SerializeField] private AspectRatioFitter m_AspectFitter;
+
+    //Ads
+    [SerializeField] private GameObject m_AdsPanel;
+
+    private void Awake()
     {
-        
+        m_AspectFitter.aspectRatio = (float)Screen.width / (float)Screen.height;
+        m_AdsPanel.SetActive(GameSetting.Instance.enableAds);
+
+        m_BtnKlondike.onClick.AddListener(delegate { OnButtonPressed((int)Solitaire.GameMode.Klondike); });
+        m_BtnSpider.onClick.AddListener(delegate { OnButtonPressed((int)Solitaire.GameMode.Spider); });
+        m_BtnPyramic.onClick.AddListener(delegate { OnButtonPressed((int)Solitaire.GameMode.Pyramid); });
+        m_BtnTriPeak.onClick.AddListener(delegate { OnButtonPressed((int)Solitaire.GameMode.TriPeak); });
+        m_BtnFreeCall.onClick.AddListener(delegate { OnButtonPressed((int)Solitaire.GameMode.FreeCall); });
+
+        m_BtnLogin.onClick.AddListener(delegate { OnButtonPressed(14); });
+        m_BtnSetting.onClick.AddListener(delegate { OnButtonPressed(13); });
+        m_BtnLeaderboard.onClick.AddListener(delegate { OnButtonPressed(12); });
+        m_BtnChallenge.onClick.AddListener(delegate { OnButtonPressed(11); });
     }
 
     // Update is called once per frame
@@ -48,12 +76,7 @@ public class MainMenu : MonoBehaviour
                     Utilities.Instance.DispatchEvent(Solitaire.Event.ShowPopup, "option", "");
                     break;
                 }
-            case 14: //Exit
-                {
-                    Application.Quit();
-                    break;
-                }
-            case 15: //Login
+            case 14: //Login
                 {
                     break;
                 }
