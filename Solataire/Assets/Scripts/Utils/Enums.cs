@@ -81,7 +81,6 @@ namespace Solitaire
         OnNewGame,
         PlayEffect,
         PlayAudio,
-        OnUndo,
-        OnAutoResolve
+        OnSettingChanged
     }
 }

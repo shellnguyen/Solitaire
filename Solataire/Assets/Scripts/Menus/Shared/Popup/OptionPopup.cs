@@ -8,12 +8,12 @@ public class OptionPopup : Popup
     protected override void OnEnable()
     {
         base.OnEnable();
-        EventManager.Instance.Register(Solitaire.Event.OnValueChanged, OnSettingChanged);
+        EventManager.Instance.Register(Solitaire.Event.OnValueChanged, OnSettingValueChanged);
     }
 
     private void OnDisable()
     {
-        EventManager.Instance.Unregister(Solitaire.Event.OnValueChanged, OnSettingChanged);
+        EventManager.Instance.Unregister(Solitaire.Event.OnValueChanged, OnSettingValueChanged);
     }
 
     // Start is called before the first frame update
@@ -29,7 +29,7 @@ public class OptionPopup : Popup
         
     }
 
-    private void OnSettingChanged(EventParam param)
+    private void OnSettingValueChanged(EventParam param)
     {
         string tag = param.GetString("tag");
         switch(tag)
@@ -45,5 +45,7 @@ public class OptionPopup : Popup
                     break;
                 }
         }
+
+        Utilities.Instance.DispatchEvent(Solitaire.Event.OnSettingChanged, "setting_changed", 0);
     }
 }
