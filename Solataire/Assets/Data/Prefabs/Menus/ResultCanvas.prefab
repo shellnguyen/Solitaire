@@ -254,6 +254,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BlackBG: {fileID: 3309620695837875501}
   m_PopupCanvas: {fileID: 3309620694362483850}
+  m_IsClosable: 0
   m_ResultText: {fileID: 3309620695657513287}
   m_BtnPlayAgain: {fileID: 3309620694306922752}
   m_BtnQuit: {fileID: 3309620696050796337}

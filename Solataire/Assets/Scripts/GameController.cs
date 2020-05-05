@@ -747,6 +747,7 @@ public class GameController : MonoBehaviour
             card.gameObject.layer = 9;
         }
 
+        m_MoveRemain--;
         m_GameData.move++;
         Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
 
@@ -783,7 +784,7 @@ public class GameController : MonoBehaviour
         if(m_TopCards.Count >= 52)
         {
             m_GameResult = Solitaire.GameResult.Win;
-            Utilities.Instance.DispatchEvent(Solitaire.Event.OnGameResult, "game_result", (int)m_GameResult);
+            Utilities.Instance.DispatchEvent(Solitaire.Event.ShowPopup, "game_result", (int)m_GameResult);
             Utilities.Instance.DispatchEvent(Solitaire.Event.PlayEffect, "firework", "");
         }
         else
@@ -791,7 +792,7 @@ public class GameController : MonoBehaviour
             if(m_MoveRemain <= 0)
             {
                 m_GameResult = Solitaire.GameResult.Lose;
-                Utilities.Instance.DispatchEvent(Solitaire.Event.OnGameResult, "game_result", (int)m_GameResult);
+                Utilities.Instance.DispatchEvent(Solitaire.Event.ShowPopup, "game_result", (int)m_GameResult);
             }
         }
     }

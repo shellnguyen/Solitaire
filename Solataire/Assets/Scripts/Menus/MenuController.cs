@@ -77,6 +77,7 @@ public class MenuController : MonoBehaviour
                     }
                 case "game_result":
                     {
+                        int result = param.GetInt(tag);
                         if (m_PopupList.ContainsKey(tag))
                         {
                             m_PopupList[tag].SetActive(true);
@@ -84,8 +85,8 @@ public class MenuController : MonoBehaviour
                         else
                         {
                             m_PopupList.Add(tag, Instantiate(m_GameResultPopupPrefab, Vector3.zero, Quaternion.identity));
-                            //m_PopupList[tag].GetComponent<>
                         }
+                        m_PopupList[tag].GetComponent<ResultPopup>().IsWin = result == 1 ? true : false ;
                         break;
                     }
             }
