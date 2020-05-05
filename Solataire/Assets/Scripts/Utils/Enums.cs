@@ -79,7 +79,6 @@ namespace Solitaire
         OnValueChanged,
         OnStartGame,
         OnNewGame,
-        OnGameResult,
         PlayEffect,
         PlayAudio,
         OnUndo,
