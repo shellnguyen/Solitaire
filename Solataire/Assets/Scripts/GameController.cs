@@ -25,6 +25,7 @@ public class GameController : MonoBehaviour
     private int m_MoveRemain;
 
     private TimeSpan m_ElapsedTime;
+    [SerializeField] private MovesManager m_MovesManager;
 
     #region Unity functions
     private void OnEnable()
@@ -32,12 +33,14 @@ public class GameController : MonoBehaviour
         m_IsGameStart = false;
         EventManager.Instance.Register(Solitaire.Event.OnStartGame, OnStartGame);
         EventManager.Instance.Register(Solitaire.Event.OnNewGame, OnNewGame);
+        EventManager.Instance.Register(Solitaire.Event.UndoMove, OnUndoMove);
     }
 
     private void OnDisable()
     {
         EventManager.Instance.Unregister(Solitaire.Event.OnStartGame, OnStartGame);
         EventManager.Instance.Unregister(Solitaire.Event.OnNewGame, OnNewGame);
+        EventManager.Instance.Unregister(Solitaire.Event.UndoMove, OnUndoMove);
     }
 
     private void Awake()
@@ -454,10 +457,12 @@ public class GameController : MonoBehaviour
         m_GameData.score = 0;
         m_GameData.time = String.Empty;
         m_GameData.gameMode = Solitaire.GameMode.None;
+        m_MovesManager = new MovesManager();
     }
 
     private void Initialized()
     {
+        m_MovesManager = new MovesManager();
         m_DeckCards = m_GameData.deckCards = new List<CardElement>();
         m_BottomCards = m_GameData.bottomCards = new List<CardElement>();
         m_TopCards = m_GameData.topCards = new List<CardElement>();
@@ -512,6 +517,7 @@ public class GameController : MonoBehaviour
 
     private void StackToCard(CardElement target, bool isStackToTop)
     {
+        m_MovesManager.AddMove(new Move(m_CurrentSelected, m_GameData));
         m_CurrentSelected.IsSelected = false;
         if(m_CurrentSelected.IsDragging)
         {
@@ -519,7 +525,8 @@ public class GameController : MonoBehaviour
         }
 
         m_CurrentSelected.FlipPreDownCard();
-        target.SetNextInStack(m_CurrentSelected); //Add current selected to stack of target card
+        target.NextInStack = m_CurrentSelected; //Add current selected to stack of target card
+        m_CurrentSelected.PrevInStack = target;
         if ((m_CurrentSelected.position & Solitaire.CardPosition.Draw) > 0)
         {
             if(m_GameData.currentDrawCard > 2 && m_DeckCards.Count > 2)
@@ -575,6 +582,7 @@ public class GameController : MonoBehaviour
 
     private void StackToPosition(GameObject positionObj, bool isStackToTop)
     {
+        m_MovesManager.AddMove(new Move(m_CurrentSelected, m_GameData));
         ushort cardPos;
         ushort.TryParse(positionObj.name.Substring(positionObj.name.Length - 1, 1), out cardPos);
         m_CurrentSelected.IsSelected = false;
@@ -701,7 +709,8 @@ public class GameController : MonoBehaviour
             //Set Previous face down card so we know which card to flip when this card move to other stack
             if(i > 1 && !m_BottomCards[i - 1].IsFaceUp)
             {
-                m_BottomCards[i].SetPrevFaceDown(m_BottomCards[i - 1]);
+                //m_BottomCards[i].SetPrevFaceDown(m_BottomCards[i - 1]);
+                m_BottomCards[i].PrevInStack = m_BottomCards[i - 1];
             }
 
             cardNum++;
@@ -710,21 +719,6 @@ public class GameController : MonoBehaviour
         }
 
         m_DeckCards.RemoveRange(0, 28);
-    }
-
-    private void OnClickCard(CardElement card)
-    {
-
-    }
-
-    private void OnClickButtom(CardElement card)
-    {
-
-    }
-
-    private void OnClickTop(CardElement card)
-    {
-
     }
 
     public void DrawCardFromDeck()
@@ -774,7 +768,6 @@ public class GameController : MonoBehaviour
         m_MoveRemain--;
         m_GameData.move++;
         Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
-        CheckGameCondition();
 
         yield break;
     }
@@ -845,6 +838,15 @@ public class GameController : MonoBehaviour
             list[i] = list[r];
             list[r] = tmp;
         }
+    }
+
+    private void OnUndoMove(EventParam param)
+    {
+        this.m_CurrentSelected = null;
+        m_MoveRemain++;
+        m_MovesManager.Undo(ref m_GameData);
+        Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "score", m_GameData.score.ToString());
+        Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
     }
 
     private EventParam SetupEventParam(int eventId)

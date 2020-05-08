@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
+[System.Serializable]
 public class MovesManager
 {
     private Stack<Move> m_Moves;
@@ -16,10 +15,13 @@ public class MovesManager
         m_Moves.Push(move);
     }
 
-    public void Undo(GameData data)
+    public void Undo(ref GameData data)
     {
-        m_Moves.Pop();
-        m_Moves.Peek().Execute(data);
+        if(CanUndo())
+        {
+            m_Moves.Pop();
+            m_Moves.Peek().Execute(ref data);
+        }
     }
 
     public bool CanUndo()

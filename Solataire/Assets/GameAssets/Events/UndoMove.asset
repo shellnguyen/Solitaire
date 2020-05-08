@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ff0438b8a76b2345b46e887d6036e47, type: 3}
-  m_Name: OnSettingChanged
+  m_Name: UndoMove
   m_EditorClassIdentifier: 
-  id: 8
+  id: 9

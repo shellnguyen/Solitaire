@@ -85,6 +85,7 @@ public class InGameMenu : MonoBehaviour
     private void OnUndoClicked()
     {
         //todo
+        Utilities.Instance.DispatchEvent(Solitaire.Event.UndoMove, "undo_move", 0);
     }
 
     private void OnHintClicked()

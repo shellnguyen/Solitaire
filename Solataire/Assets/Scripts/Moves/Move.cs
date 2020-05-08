@@ -1,23 +1,31 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class Move
 {
-    private List<CardElement> m_DeckCards;
-    private List<CardElement> m_BottomCards;
-    private List<CardElement> m_TopCards;
+    //private List<CardElement> m_DeckCards;
+    //private List<CardElement> m_BottomCards;
+    //private List<CardElement> m_TopCards;
+    private CardElement m_Card;
+    private Transform m_PrevParent;
+    private Vector3 m_PrevPosition;
+    private Solitaire.CardPosition m_PrevCardPos;
+    private CardElement m_PrevNextInStack;
+    
 
     private sbyte m_CurrentDrawCard;
     private ushort m_Score;
     private ushort m_MoveNumber;
 
     //New move hold the current GameData state
-    public Move(GameData data)
+    public Move(CardElement card, GameData data)
     {
-        m_DeckCards = data.deckCards;
-        m_BottomCards = data.bottomCards;
-        m_TopCards = data.topCards;
+        m_Card = card;
+        m_PrevCardPos = card.position;
+        m_PrevPosition = card.transform.position;
+        m_PrevParent = card.transform.parent;
+        m_PrevNextInStack = card.PrevInStack;
 
         m_CurrentDrawCard = data.currentDrawCard;
         m_Score = data.score;
@@ -25,11 +33,8 @@ public class Move
     }
 
     //Set GameData state to same as Move
-    public void Execute(GameData data)
+    public void Execute(ref GameData data)
     {
-        data.deckCards = m_DeckCards;
-        data.bottomCards = m_BottomCards;
-        data.topCards = m_TopCards;
 
         data.currentDrawCard = m_CurrentDrawCard;
         data.score = m_Score;
