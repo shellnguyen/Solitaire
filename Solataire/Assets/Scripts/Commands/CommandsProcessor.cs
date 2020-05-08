@@ -25,4 +25,14 @@ public class CommandsProcessor
     {
         m_Commands.Pop().Undo(data);
     }
+
+    public bool CanUndo()
+    {
+        if(m_Commands.Count > 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }
