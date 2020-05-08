@@ -23,7 +23,6 @@ public class CardElement : MonoBehaviour
 
     private Vector3 m_PrevPos;
 
-    private CardState m_PrevState;
     public Solitaire.CardPosition position;
 
     public bool IsSelected

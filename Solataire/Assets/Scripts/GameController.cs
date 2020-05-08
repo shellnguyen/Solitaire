@@ -25,7 +25,7 @@ public class GameController : MonoBehaviour
     private int m_MoveRemain;
 
     private TimeSpan m_ElapsedTime;
-    [SerializeField] private MovesManager m_MovesManager;
+    [SerializeField] private CommandsProcessor m_CommandsProcessor;
 
     #region Unity functions
     private void OnEnable()
@@ -457,12 +457,12 @@ public class GameController : MonoBehaviour
         m_GameData.score = 0;
         m_GameData.time = String.Empty;
         m_GameData.gameMode = Solitaire.GameMode.None;
-        m_MovesManager = new MovesManager();
+        m_CommandsProcessor = new CommandsProcessor();
     }
 
     private void Initialized()
     {
-        m_MovesManager = new MovesManager();
+        m_CommandsProcessor = new CommandsProcessor();
         m_DeckCards = m_GameData.deckCards = new List<CardElement>();
         m_BottomCards = m_GameData.bottomCards = new List<CardElement>();
         m_TopCards = m_GameData.topCards = new List<CardElement>();
@@ -517,7 +517,6 @@ public class GameController : MonoBehaviour
 
     private void StackToCard(CardElement target, bool isStackToTop)
     {
-        m_MovesManager.AddMove(new Move(m_CurrentSelected, m_GameData));
         m_CurrentSelected.IsSelected = false;
         if(m_CurrentSelected.IsDragging)
         {
@@ -572,17 +571,18 @@ public class GameController : MonoBehaviour
         m_CurrentSelected.SetCardPosition(target.position);
         m_CurrentSelected.SetCardParent(target.transform.parent);
         //m_CurrentSelected.transform.SetParent(target.transform.parent);
-        m_CurrentSelected = null;
 
         m_MoveRemain--;
         m_GameData.move++;
         Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
+
+        m_CommandsProcessor.AddCommand(new MoveCommand(m_CurrentSelected, m_GameData));
+        m_CurrentSelected = null;
         CheckGameCondition();
     }
 
     private void StackToPosition(GameObject positionObj, bool isStackToTop)
     {
-        m_MovesManager.AddMove(new Move(m_CurrentSelected, m_GameData));
         ushort cardPos;
         ushort.TryParse(positionObj.name.Substring(positionObj.name.Length - 1, 1), out cardPos);
         m_CurrentSelected.IsSelected = false;
@@ -637,10 +637,12 @@ public class GameController : MonoBehaviour
         //TODO: Thing of better solution man. This is hacky as fuck.
         m_CurrentSelected.SetCardParent(positionObj.transform);
         positionObj.layer = 9;
-        m_CurrentSelected = null;
 
         m_MoveRemain--;
         m_GameData.move++;
+
+        m_CommandsProcessor.AddCommand(new MoveCommand(m_CurrentSelected, m_GameData));
+        m_CurrentSelected = null;
         Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
     }
 
@@ -844,7 +846,7 @@ public class GameController : MonoBehaviour
     {
         this.m_CurrentSelected = null;
         m_MoveRemain++;
-        m_MovesManager.Undo(ref m_GameData);
+        m_CommandsProcessor.UndoCommand(m_GameData);
         Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "score", m_GameData.score.ToString());
         Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
     }
