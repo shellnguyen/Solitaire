@@ -517,6 +517,7 @@ public class GameController : MonoBehaviour
 
     private void StackToCard(CardElement target, bool isStackToTop)
     {
+        m_CommandsProcessor.AddCommand(new MoveCommand(m_CurrentSelected, m_GameData));
         m_CurrentSelected.IsSelected = false;
         if(m_CurrentSelected.IsDragging)
         {
@@ -575,14 +576,13 @@ public class GameController : MonoBehaviour
         m_MoveRemain--;
         m_GameData.move++;
         Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
-
-        m_CommandsProcessor.AddCommand(new MoveCommand(m_CurrentSelected, m_GameData));
         m_CurrentSelected = null;
         CheckGameCondition();
     }
 
     private void StackToPosition(GameObject positionObj, bool isStackToTop)
     {
+        m_CommandsProcessor.AddCommand(new MoveCommand(m_CurrentSelected, m_GameData));
         ushort cardPos;
         ushort.TryParse(positionObj.name.Substring(positionObj.name.Length - 1, 1), out cardPos);
         m_CurrentSelected.IsSelected = false;
@@ -641,7 +641,6 @@ public class GameController : MonoBehaviour
         m_MoveRemain--;
         m_GameData.move++;
 
-        m_CommandsProcessor.AddCommand(new MoveCommand(m_CurrentSelected, m_GameData));
         m_CurrentSelected = null;
         Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
     }
