@@ -24,7 +24,7 @@ public class MoveCommand : ICommand
         m_PrevPosition = card.transform.position;
         m_PrevParent = card.transform.parent;
         m_PrevInStack = card.PrevInStack;
-        if(!m_PrevInStack.IsFaceUp)
+        if(m_PrevInStack && !m_PrevInStack.IsFaceUp)
         {
             m_IsPrevFaceDown = true;
         }
@@ -48,7 +48,7 @@ public class MoveCommand : ICommand
         // Previously from Bottom
         if ((m_PrevCardPos & (Solitaire.CardPosition.Bottom1 | Solitaire.CardPosition.Bottom2 | Solitaire.CardPosition.Bottom3 | Solitaire.CardPosition.Bottom4 | Solitaire.CardPosition.Bottom5 | Solitaire.CardPosition.Bottom6 | Solitaire.CardPosition.Bottom7)) != 0)
         {
-            // Now from Top
+            // Now on Top
             if ((m_Card.position & (Solitaire.CardPosition.Bottom1 | Solitaire.CardPosition.Bottom2 | Solitaire.CardPosition.Bottom3 | Solitaire.CardPosition.Bottom4 | Solitaire.CardPosition.Bottom5 | Solitaire.CardPosition.Bottom6 | Solitaire.CardPosition.Bottom7)) == 0)
             {
                 data.topCards.Remove(m_Card);
@@ -68,12 +68,33 @@ public class MoveCommand : ICommand
             }
             m_Card.SetCardPosition(m_PrevCardPos);
             m_Card.SetCardParent(m_PrevParent);
-
-            //m_Card
         }
         else //Previously from Draw
         {
+            float offSet = 0.5f;
+            // Now on Top
+            if ((m_Card.position & (Solitaire.CardPosition.Bottom1 | Solitaire.CardPosition.Bottom2 | Solitaire.CardPosition.Bottom3 | Solitaire.CardPosition.Bottom4 | Solitaire.CardPosition.Bottom5 | Solitaire.CardPosition.Bottom6 | Solitaire.CardPosition.Bottom7)) == 0)
+            {
+                data.topCards.Remove(m_Card);
+            }
+            else
+            {
+                data.bottomCards.Remove(m_Card);
+            }
 
+            data.deckCards.Add(m_Card);
+            data.currentDrawCard = m_CurrentDrawCard;
+            m_Card.PrevInStack = null;
+            m_Card.NextInStack = null;
+            if (data.currentDrawCard > 2)
+            {
+                for (int i = data.currentDrawCard - 2; i < data.currentDrawCard; ++i)
+                {
+                    iTween.MoveTo(data.deckCards[i].gameObject, new Vector3(data.deckCards[i].transform.position.x - offSet, data.deckCards[i].transform.position.y, -(i * offSet)), 0.0f);
+                }
+            }
+            //iTween.MoveTo(m_DeckCards[currentDrawCard].gameObject, new Vector3(m_DrawCardHolder.transform.position.x + (currentDrawCard >= 2 ? 1.0f : currentDrawCard * offSet), m_DrawCardHolder.transform.position.y, -(currentDrawCard * offSet)), 0.1f);
+            iTween.MoveTo(m_Card.gameObject, m_PrevPosition, Common.MOVE_TIME);
         }
 
         data.score = m_Score;
