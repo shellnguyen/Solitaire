@@ -9,6 +9,7 @@ public class MoveCommand : ICommand
     private Vector3 m_PrevPosition;
     private Solitaire.CardPosition m_PrevCardPos;
     private CardElement m_PrevInStack;
+    private bool m_IsPrevFaceDown;
 
 
     private sbyte m_CurrentDrawCard;
@@ -23,6 +24,14 @@ public class MoveCommand : ICommand
         m_PrevPosition = card.transform.position;
         m_PrevParent = card.transform.parent;
         m_PrevInStack = card.PrevInStack;
+        if(!m_PrevInStack.IsFaceUp)
+        {
+            m_IsPrevFaceDown = true;
+        }
+        else
+        {
+            m_IsPrevFaceDown = false;
+        }
 
         m_CurrentDrawCard = data.currentDrawCard;
         m_Score = data.score;
@@ -52,6 +61,11 @@ public class MoveCommand : ICommand
             }
 
             m_Card.PrevInStack = m_PrevInStack;
+            if(m_IsPrevFaceDown)
+            {
+                m_Card.PrevInStack.gameObject.layer = 9;
+                m_Card.PrevInStack.IsFaceUp = false;
+            }
             m_Card.SetCardPosition(m_PrevCardPos);
             m_Card.SetCardParent(m_PrevParent);
 
