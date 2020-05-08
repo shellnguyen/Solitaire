@@ -843,11 +843,14 @@ public class GameController : MonoBehaviour
 
     private void OnUndoMove(EventParam param)
     {
-        this.m_CurrentSelected = null;
-        m_MoveRemain++;
-        m_CommandsProcessor.UndoCommand(m_GameData);
-        Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "score", m_GameData.score.ToString());
-        Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
+        if(m_CommandsProcessor.CanUndo())
+        {
+            this.m_CurrentSelected = null;
+            m_MoveRemain++;
+            m_CommandsProcessor.UndoCommand(m_GameData);
+            Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "score", m_GameData.score.ToString());
+            Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
+        }
     }
 
     private EventParam SetupEventParam(int eventId)
