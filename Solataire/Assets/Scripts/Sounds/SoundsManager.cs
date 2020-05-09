@@ -9,11 +9,13 @@ public class SoundsManager : MonoBehaviour
     private void OnEnable()
     {
         EventManager.Instance.Register(Solitaire.Event.PlayAudio, OnPlayAudio);
+        EventManager.Instance.Register(Solitaire.Event.OnSettingChanged, SetAudioVolume);
     }
 
     private void OnDisable()
     {
         EventManager.Instance.Unregister(Solitaire.Event.PlayAudio, OnPlayAudio);
+        EventManager.Instance.Unregister(Solitaire.Event.OnSettingChanged, SetAudioVolume);
     }
 
     // Start is called before the first frame update
@@ -54,5 +56,10 @@ public class SoundsManager : MonoBehaviour
     private void StopAudio()
     {
         m_MainSource.Stop();
+    }
+
+    private void SetAudioVolume(EventParam param)
+    {
+        m_MainSource.volume = GameSetting.Instance.enableAudio ? 1.0f : 0.0f;
     }
 }
