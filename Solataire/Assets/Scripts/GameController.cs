@@ -734,6 +734,7 @@ public class GameController : MonoBehaviour
 
     private IEnumerator PutBackCard()
     {
+        m_CommandsProcessor.AddCommand(new PutBackCommand(m_DrawCardHolder.transform.position, m_GameData));
         foreach (CardElement card in m_DeckCards)
         {
             iTween.MoveTo(card.gameObject, m_DeckButton.transform.position + Vector3.forward, 0.1f);

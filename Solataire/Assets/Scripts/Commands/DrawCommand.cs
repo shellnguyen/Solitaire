@@ -39,6 +39,7 @@ public class DrawCommand : ICommand
         data.currentDrawCard--;
         data.move = m_PrevMoveNumber;
         Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "move", data.move.ToString());
+        Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "undo_draw", false);
 
         /*
         if(currentDrawCard > 2)
