@@ -24,6 +24,10 @@ public class InGameMenu : MonoBehaviour
     [SerializeField] private Button m_BtnUndo;
     [SerializeField] private Button m_BtnExit;
 
+    [SerializeField] private RawImage m_UndoIcon;
+    [SerializeField] private TextMeshProUGUI m_UndoText;
+    [SerializeField] private Color m_UndoColor;
+
     //[SerializeField] private EventManager m_EventManager;
 
     private void OnEnable()
@@ -31,6 +35,7 @@ public class InGameMenu : MonoBehaviour
         m_MenuCanvas.worldCamera = Camera.main;
         //m_EventManager.Register(Solitaire.Event.OnDataChanged, OnDataChanged);
         EventManager.Instance.Register(Solitaire.Event.OnDataChanged, OnDataChanged);
+        EventManager.Instance.Register(Solitaire.Event.ChangeUIStatue, OnBtnUndoChanged);
 
         SetupButton();
     }
@@ -39,11 +44,13 @@ public class InGameMenu : MonoBehaviour
     {
         //m_EventManager.Unregister(Solitaire.Event.OnDataChanged, OnDataChanged);
         EventManager.Instance.Unregister(Solitaire.Event.OnDataChanged, OnDataChanged);
+        EventManager.Instance.Unregister(Solitaire.Event.ChangeUIStatue, OnBtnUndoChanged);
     }
 
     // Start is called before the first frame update
     private void Start()
     {
+        m_UndoColor = Color.white;
         //m_GameText.text = Enum.GetName(typeof(Solitaire.GameMode), m_GameData.gameMode);
     }
 
@@ -133,6 +140,28 @@ public class InGameMenu : MonoBehaviour
                         break;
                     }
             }
+        }
+    }
+
+    private void OnBtnUndoChanged(EventParam param)
+    {
+        string tag = param.GetString("tag");
+        if(tag.Equals("undo"))
+        {
+            m_BtnUndo.interactable = param.GetBoolean(tag);
+            
+            if(m_BtnUndo.IsInteractable())
+            {
+                m_UndoColor.a = 1.0f;
+            }
+            else
+            {
+                m_UndoColor.a = 0.5f;
+            }
+
+            m_UndoIcon.color = m_UndoColor;
+            m_UndoText.color = m_UndoColor;
+
         }
     }
 }

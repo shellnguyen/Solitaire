@@ -845,12 +845,9 @@ public class GameController : MonoBehaviour
 
     private void OnUndoMove(EventParam param)
     {
-        if(m_CommandsProcessor.CanUndo())
-        {
-            this.m_CurrentSelected = null;
-            m_MoveRemain++;
-            m_CommandsProcessor.UndoCommand(m_GameData);
-        }
+        this.m_CurrentSelected = null;
+        m_MoveRemain++;
+        m_CommandsProcessor.UndoCommand(m_GameData);
     }
 
     private EventParam SetupEventParam(int eventId)

@@ -13,6 +13,10 @@ public class CommandsProcessor
 
     public void AddCommand(ICommand command)
     {
+        if(m_Commands.Count == 0)
+        {
+            Utilities.Instance.DispatchEvent(Solitaire.Event.ChangeUIStatue, "undo", true);
+        }
         m_Commands.Push(command);
     }
 
@@ -24,6 +28,11 @@ public class CommandsProcessor
     public void UndoCommand(GameData data)
     {
         m_Commands.Pop().Undo(data);
+
+        if(m_Commands.Count <= 0)
+        {
+            Utilities.Instance.DispatchEvent(Solitaire.Event.ChangeUIStatue, "undo", false);
+        }
     }
 
     public bool CanUndo()

@@ -82,6 +82,7 @@ namespace Solitaire
         PlayEffect,
         PlayAudio,
         OnSettingChanged,
-        UndoMove
+        UndoMove,
+        ChangeUIStatue
     }
 }
