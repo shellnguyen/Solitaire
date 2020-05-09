@@ -751,6 +751,7 @@ public class GameController : MonoBehaviour
 
     private IEnumerator DrawCard()
     {
+        m_CommandsProcessor.AddCommand(new DrawCommand(m_DeckButton.transform.position, m_GameData));
         float offSet = 0.5f;
 
         sbyte currentDrawCard = m_GameData.currentDrawCard;
@@ -848,8 +849,6 @@ public class GameController : MonoBehaviour
             this.m_CurrentSelected = null;
             m_MoveRemain++;
             m_CommandsProcessor.UndoCommand(m_GameData);
-            Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "score", m_GameData.score.ToString());
-            Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "move", m_GameData.move.ToString());
         }
     }
 

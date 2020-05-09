@@ -99,6 +99,8 @@ public class MoveCommand : ICommand
 
         data.score = m_Score;
         data.move = m_MoveNumber;
+        Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "score", data.score.ToString());
+        Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "move", data.move.ToString());
 
         //
         /*
