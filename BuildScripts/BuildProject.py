@@ -15,7 +15,7 @@ def Build():
 	
 	print(pathToExe)
 	
-	output = subprocess.check_output([pathToExe, "-quit", "-batchmode", "-logFile", "-executeMethod", "Builder." + platform + config])
+	output = subprocess.check_output([pathToExe, "-quit", "-batchmode", "-logFile", "-", "-executeMethod", "Builder." + platform + config])
 	
 	print(output)
 		
