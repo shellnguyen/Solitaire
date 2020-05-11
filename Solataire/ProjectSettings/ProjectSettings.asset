@@ -649,7 +649,8 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLWasmStreaming: 0
   scriptingDefineSymbols:
-    1: DEBUG_BUILD
+    1: DEBUG_BUILD;RELEASE_BUILD
+    7: DEBUG_BUILD;RELEASE_BUILD
   platformArchitecture: {}
   scriptingBackend:
     Android: 1
