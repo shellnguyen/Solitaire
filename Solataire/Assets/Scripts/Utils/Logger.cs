@@ -31,35 +31,35 @@ public class Logger
 
     public void Initialize()
     {
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEV_BUILD
         m_Logger = Debug.unityLogger;
 #endif
     }
 
     public void PrintLog(string tag, string message)
     {
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEV_BUILD
         Log(LogType.Log, tag, message);
 #endif
     }
 
     public void PrintError(string tag, string message)
     {
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEV_BUILD
         Log(LogType.Error, tag, message);
 #endif
     }
 
     public void PrintExc(string tag, string message)
     {
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEV_BUILD
         Log(LogType.Exception, tag, message);
 #endif
     }
 
     private void Log(LogType type, string tag, string message)
     {
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEV_BUILD
         m_Logger.Log(type, tag, message);
 #endif
     }
