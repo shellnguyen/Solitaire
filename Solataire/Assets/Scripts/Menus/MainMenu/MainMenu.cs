@@ -28,6 +28,16 @@ public class MainMenu : MonoBehaviour
     //Ads
     [SerializeField] private GameObject m_AdsPanel;
 
+    private void OnEnable()
+    {
+        EventManager.Instance.Register(Solitaire.Event.PostAdsInitialized, TriggerAds);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.Unregister(Solitaire.Event.PostAdsInitialized, TriggerAds);
+    }
+
     private void Awake()
     {
         m_AspectFitter.aspectRatio = (float)Screen.width / (float)Screen.height;
@@ -45,10 +55,19 @@ public class MainMenu : MonoBehaviour
         m_BtnChallenge.onClick.AddListener(delegate { OnButtonPressed(11); });
     }
 
+    private void Start()
+    {
+    }
+
     // Update is called once per frame
     private void Update()
     {
         
+    }
+
+    private void TriggerAds(EventParam param)
+    {
+        AdsController.Instance.ShowBanner();
     }
 
     public void OnButtonPressed(int buttonId)

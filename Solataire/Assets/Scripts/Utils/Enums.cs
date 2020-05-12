@@ -83,6 +83,7 @@ namespace Solitaire
         PlayAudio,
         OnSettingChanged,
         UndoMove,
-        ChangeUIStatue
+        ChangeUIStatue,
+        PostAdsInitialized
     }
 }

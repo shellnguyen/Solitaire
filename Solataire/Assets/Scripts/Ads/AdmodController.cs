@@ -2,14 +2,27 @@
 using GoogleMobileAds.Api;
 using System;
 
-public class AdmodController
+public class AbmobController
 {
     private AdsController m_Controller;
     private BannerView m_BannerView;
+    private bool m_IsInitialized;
 
-    public AdmodController(AdsController adsController)
+    private string m_BannerUnitId;
+
+    public bool IsInitialized
     {
+        get
+        {
+            return m_IsInitialized;
+        }
+    }
+
+    public AbmobController(AdsController adsController, string bannerUnitId)
+    {
+        m_IsInitialized = false;
         m_Controller = adsController;
+        m_BannerUnitId = bannerUnitId;
     }
 
     public void Initialize()
@@ -17,18 +30,20 @@ public class AdmodController
         MobileAds.Initialize(OnAdsInitialzation);
     }
 
+    public void ShowBanner()
+    {
+        m_BannerView.Show();
+    }
+
     private void OnAdsInitialzation(InitializationStatus status)
     {
-        
+        RequestBanner();
+        m_Controller.OnAdInit();
     }
 
     private void RequestBanner()
     {
-#if UNITY_EDITOR || DEV_BUILD
-        m_BannerView = new BannerView(MasterData.Instance.Admod_AdUnit_Banner_Test_Id, AdSize.Banner, AdPosition.Bottom);
-#else
-        m_BannerView = new BannerView(MasterData.Instance.Admod_AdUnit_Banner_Id, AdSize.Banner, AdPosition.Bottom);
-#endif
+        m_BannerView = new BannerView(m_BannerUnitId, AdSize.Banner, AdPosition.Bottom);
 
         // Called when an ad request has successfully loaded.
         this.m_BannerView.OnAdLoaded += this.HandleOnAdLoaded;
@@ -46,32 +61,38 @@ public class AdmodController
 
         // Load the banner with the request.
         this.m_BannerView.LoadAd(request);
-        this.m_BannerView.Show();
+        //this.m_BannerView.Show();
+        m_IsInitialized = true;
     }
 
     public void HandleOnAdLoaded(object sender, EventArgs args)
     {
         MonoBehaviour.print("HandleAdLoaded event received");
+        m_Controller.OnAdLoaded();
     }
 
     public void HandleOnAdFailedToLoad(object sender, AdFailedToLoadEventArgs args)
     {
         MonoBehaviour.print("HandleFailedToReceiveAd event received with message: "
                             + args.Message);
+        m_Controller.OnAdFailedToLoad();
     }
 
     public void HandleOnAdOpened(object sender, EventArgs args)
     {
         MonoBehaviour.print("HandleAdOpened event received");
+        m_Controller.OnAdOpened();
     }
 
     public void HandleOnAdClosed(object sender, EventArgs args)
     {
         MonoBehaviour.print("HandleAdClosed event received");
+        m_Controller.OnAdClosed();
     }
 
     public void HandleOnAdLeavingApplication(object sender, EventArgs args)
     {
         MonoBehaviour.print("HandleAdLeavingApplication event received");
+        //m_Controller.OnAdClosed();
     }
 }

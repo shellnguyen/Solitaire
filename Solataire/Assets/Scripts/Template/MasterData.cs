@@ -6,9 +6,9 @@ using UnityEngine;
 public class MasterData : ScriptableSingleton<MasterData>
 {
     //Admod
-    public string Admod_AppId;
-    public string Admod_AdUnit_Banner_Id;
-    public string Admod_AdUnit_Banner_Test_Id;
+    public readonly string Admob_AppId;
+    public readonly string Admob_AdUnit_Banner_Id;
+    public readonly string Admob_AdUnit_Banner_Test_Id;
     //
 
     //UnityAds
