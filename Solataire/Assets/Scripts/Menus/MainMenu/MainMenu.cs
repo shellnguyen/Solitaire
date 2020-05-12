@@ -30,12 +30,12 @@ public class MainMenu : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.Instance.Register(Solitaire.Event.PostAdsInitialized, TriggerAds);
+        //EventManager.Instance.Register(Solitaire.Event.PostAdsInitialized, TriggerAds);
     }
 
     private void OnDisable()
     {
-        EventManager.Instance.Unregister(Solitaire.Event.PostAdsInitialized, TriggerAds);
+        //EventManager.Instance.Unregister(Solitaire.Event.PostAdsInitialized, TriggerAds);
     }
 
     private void Awake()
@@ -53,6 +53,8 @@ public class MainMenu : MonoBehaviour
         m_BtnSetting.onClick.AddListener(delegate { OnButtonPressed(13); });
         m_BtnLeaderboard.onClick.AddListener(delegate { OnButtonPressed(12); });
         m_BtnChallenge.onClick.AddListener(delegate { OnButtonPressed(11); });
+
+        AdsController.Instance.Initialized();
     }
 
     private void Start()
@@ -65,10 +67,10 @@ public class MainMenu : MonoBehaviour
         
     }
 
-    private void TriggerAds(EventParam param)
-    {
-        AdsController.Instance.ShowBanner();
-    }
+    //private void TriggerAds(EventParam param)
+    //{
+    //    AdsController.Instance.ShowBanner();
+    //}
 
     public void OnButtonPressed(int buttonId)
     {
@@ -97,6 +99,7 @@ public class MainMenu : MonoBehaviour
                 }
             default: //GameButton
                 {
+                    AdsController.Instance.HideBanner();
                     SceneLoader.Instance.LoadScene(buttonId);
                     break;
                 }

@@ -6,12 +6,14 @@ using UnityEngine.Advertisements;
 
 public class UnityAdsController : IAdNetworkController, IUnityAdsListener
 {
+    private AdsController m_Controller;
     private readonly string m_GameId;
     private readonly string m_VideoPlacement;
     private bool m_TestMode;
 
-    public UnityAdsController(string gameId, bool testMode, string videoId)
+    public UnityAdsController(AdsController controller, string gameId, bool testMode, string videoId)
     {
+        m_Controller = controller;
         m_GameId = gameId;
         m_TestMode = testMode;
         m_VideoPlacement = videoId;
@@ -27,7 +29,7 @@ public class UnityAdsController : IAdNetworkController, IUnityAdsListener
     public void OnUnityAdsDidError(string message)
     {
         Logger.Instance.PrintLog(Common.DEBUG_TAG, "UnitAds Video Error !!! Message = " + message);
-        AdsController.Instance.OnAdFailedToLoad();
+       m_Controller.OnAdFailedToLoad();
     }
 
     public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)
@@ -35,17 +37,17 @@ public class UnityAdsController : IAdNetworkController, IUnityAdsListener
         Logger.Instance.PrintLog(Common.DEBUG_TAG, "UnitAds Video Finished !!!");
         if(showResult == ShowResult.Skipped)
         {
-            AdsController.Instance.OnAdClosed();
+           m_Controller.OnAdClosed();
         }
         else
         {
             if(showResult == ShowResult.Finished)
             {
-                AdsController.Instance.OnAdFinished();
+               m_Controller.OnAdFinished();
             }
             else
             {
-                AdsController.Instance.OnAdFailedToShow();
+               m_Controller.OnAdFailedToShow();
             }
         }
     }
@@ -53,7 +55,7 @@ public class UnityAdsController : IAdNetworkController, IUnityAdsListener
     public void OnUnityAdsDidStart(string placementId)
     {
         Logger.Instance.PrintLog(Common.DEBUG_TAG, "UnitAds Video Started !!!");
-        AdsController.Instance.OnAdStarted();
+        m_Controller.OnAdStarted();
     }
 
     public void OnUnityAdsReady(string placementId)
@@ -82,5 +84,13 @@ public class UnityAdsController : IAdNetworkController, IUnityAdsListener
     public void ShowInterstitial()
     {
         //
+    }
+
+    public void HideBanner()
+    {
+        if(m_Controller.IsBannerShow)
+        {
+            
+        }
     }
 }

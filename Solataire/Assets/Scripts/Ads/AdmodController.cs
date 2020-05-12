@@ -5,6 +5,7 @@ using Solitaire;
 
 public class AbmobController : IAdNetworkController
 {
+    private AdsController m_Controller;
     private BannerView m_BannerView;
     private bool m_IsInitialized;
 
@@ -18,8 +19,9 @@ public class AbmobController : IAdNetworkController
         }
     }
 
-    public AbmobController(string bannerUnitId)
+    public AbmobController(AdsController controller, string bannerUnitId)
     {
+        m_Controller = controller;
         m_IsInitialized = false;
         m_BannerUnitId = bannerUnitId;
     }
@@ -27,25 +29,6 @@ public class AbmobController : IAdNetworkController
     public void Initialize()
     {
         MobileAds.Initialize(OnAdsInitialzation);
-    }
-
-    public void ShowAds(AdsType type, BannerPosition position = BannerPosition.None)
-    {
-        switch(type)
-        {
-            case AdsType.Banner:
-                {
-                    break;
-                }
-            case AdsType.Incentivized:
-                {
-                    break;
-                }
-            case AdsType.Interstitial:
-                {
-                    break;
-                }
-        }
     }
 
     public void ShowBanner(BannerPosition position = BannerPosition.Bottom)
@@ -95,6 +78,14 @@ public class AbmobController : IAdNetworkController
     {
     }
 
+    public void HideBanner()
+    {
+        if(m_Controller.IsBannerShow)
+        {
+            m_BannerView.Hide();
+        }
+    }
+
     private void RequestBanner()
     {
         m_BannerView = new BannerView(m_BannerUnitId, AdSize.Banner, AdPosition.Bottom);
@@ -123,32 +114,32 @@ public class AbmobController : IAdNetworkController
     {
         m_IsInitialized = true;
         RequestBanner();
-        AdsController.Instance.OnAdInit(NetworkType.Admob);
+       m_Controller.OnAdInit(NetworkType.Admob);
     }
 
     public void HandleOnAdLoaded(object sender, EventArgs args)
     {
         MonoBehaviour.print("HandleAdLoaded event received");
-        AdsController.Instance.OnAdLoaded(NetworkType.Admob);
+       m_Controller.OnAdLoaded(NetworkType.Admob);
     }
 
     public void HandleOnAdFailedToLoad(object sender, AdFailedToLoadEventArgs args)
     {
         MonoBehaviour.print("HandleFailedToReceiveAd event received with message: "
                             + args.Message);
-        AdsController.Instance.OnAdFailedToLoad();
+       m_Controller.OnAdFailedToLoad();
     }
 
     public void HandleOnAdOpened(object sender, EventArgs args)
     {
         MonoBehaviour.print("HandleAdOpened event received");
-        AdsController.Instance.OnAdOpened();
+       m_Controller.OnAdOpened();
     }
 
     public void HandleOnAdClosed(object sender, EventArgs args)
     {
         MonoBehaviour.print("HandleAdClosed event received");
-        AdsController.Instance.OnAdClosed();
+       m_Controller.OnAdClosed();
     }
 
     public void HandleOnAdLeavingApplication(object sender, EventArgs args)

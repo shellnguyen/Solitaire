@@ -8,4 +8,5 @@ public interface IAdNetworkController
     void ShowBanner(Solitaire.BannerPosition position = Solitaire.BannerPosition.Bottom);
     void ShowInterstitial();
     void ShowIncentivized();
+    void HideBanner();
 }

@@ -26,18 +26,15 @@ public class AdsController : Singleton<AdsController>
         }
     }
 
-    private void Awake()
+    public void Initialized()
     {
+        Logger.Instance.PrintLog(Common.DEBUG_TAG, "AdsController Initialized");
+
         m_IsBannerShow = false;
         m_IsVideoShowing = false;
-    }
-
-    private void Start()
-    {
-        Logger.Instance.PrintLog(Common.DEBUG_TAG, "AdsController OnStart");
 #if UNITY_EDITOR || DEV_BUILD
-        m_AdmobController = new AbmobController(MasterData.Instance.Admob_AdUnit_Banner_Test_Id);
-        m_UnityAdsController = new UnityAdsController(MasterData.Instance.UnityAds_GameId, true, MasterData.Instance.UnityAds_Interstitial_Id);
+        m_AdmobController = new AbmobController(this, MasterData.Instance.Admob_AdUnit_Banner_Test_Id);
+        m_UnityAdsController = new UnityAdsController(this, MasterData.Instance.UnityAds_GameId, true, MasterData.Instance.UnityAds_Interstitial_Id);
 #else
         m_AdmobController = new AbmobController(this, MasterData.Instance.Admob_AdUnit_Banner_Id);
         m_UnityAdsController = new UnityAdsController(MasterData.Instance.UnityAds_GameId, false, MasterData.Instance.UnityAds_Banner_Id, MasterData.Instance.UnityAds_Interstitial_Id);
@@ -45,12 +42,6 @@ public class AdsController : Singleton<AdsController>
 
         m_AdmobController.Initialize();
         m_UnityAdsController.Initialize();
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-        
     }
 
     public void ShowBanner()
@@ -65,6 +56,12 @@ public class AdsController : Singleton<AdsController>
         m_UnityAdsController.ShowIncentivized();
     }
 
+    public void HideBanner()
+    {
+        m_AdmobController.HideBanner();
+        m_IsBannerShow = false;
+    }
+
     public void OnAdInit(Solitaire.NetworkType type)
     {
         Logger.Instance.PrintLog(Common.DEBUG_TAG, "AdsController OnAdInit " + type.ToString());
@@ -72,9 +69,9 @@ public class AdsController : Singleton<AdsController>
 
     public void OnAdLoaded(Solitaire.NetworkType type)
     {
-        if ((type == Solitaire.NetworkType.Admob) && (SceneManager.GetActiveScene().buildIndex == 1))
+        if ((type == Solitaire.NetworkType.Admob))
         {
-            UnityMainThreadDispatcher.Instance().Enqueue(DispatchEvent(type, Solitaire.AdsType.Banner));
+            UnityMainThreadDispatcher.Instance().Enqueue(ShowBannerWhenReady());
         }
     }
     
@@ -107,10 +104,12 @@ public class AdsController : Singleton<AdsController>
         m_IsVideoShowing = false;
     }
 
-    private IEnumerator DispatchEvent(Solitaire.NetworkType network, Solitaire.AdsType adsType)
+    private IEnumerator ShowBannerWhenReady()
     {
-        if(!m_IsBannerShow)
-        Utilities.Instance.DispatchEvent(Solitaire.Event.PostAdsInitialized, network.ToString(), 1);
+        if(!m_IsBannerShow && SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            ShowBanner();
+        }
         yield return null;
     }
 }
