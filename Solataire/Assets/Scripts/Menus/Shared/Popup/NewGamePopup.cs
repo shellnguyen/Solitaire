@@ -55,10 +55,22 @@ public class NewGamePopup : Popup
                 }
             }
         }
+    }
+
+    IEnumerator ShowVideoAds()
+    {
+        AdsController.Instance.ShowFullScreen();
+
+        while(AdsController.Instance.IsVideoShowing)
+        {
+            yield return new WaitForSeconds(2.5f);
+        }
 
         Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "game_mode", m_GameData.gameMode.ToString());
         Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "difficulty", GameSetting.Instance.difficulty.ToString());
         Utilities.Instance.DispatchEvent(Solitaire.Event.OnStartGame, "start_game", "");
         this.gameObject.SetActive(false);
+
+        yield break;
     }
 }

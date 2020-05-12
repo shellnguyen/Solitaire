@@ -15,4 +15,5 @@ MonoBehaviour:
   Admob_AppId: ca-app-pub-7613363228347825~8769044170
   Admob_AdUnit_Banner_Id: ca-app-pub-7613363228347825/2012064132
   Admob_AdUnit_Banner_Test_Id: ca-app-pub-3940256099942544/6300978111
-  UnityAds_AppId: 
+  UnityAds_GameId: 3600027
+  UnityAds_Interstitial_Id: Interstitial_Level_Complete
