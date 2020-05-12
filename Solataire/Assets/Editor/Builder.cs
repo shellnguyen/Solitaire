@@ -23,7 +23,7 @@ public class Builder
         }
 
         // Append.
-        PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, (defines + ";" + flag));
+        PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, (flag));
         Debug.LogWarning("<b>" + flag + "</b> added to <i>Scripting Define Symbols</i> for selected build target (" + EditorUserBuildSettings.activeBuildTarget.ToString() + ").");
     }
 
@@ -61,6 +61,7 @@ public class Builder
         options.target = BuildTarget.Android;
         options.locationPathName = "../build/AndroidDev_" + PlayerSettings.bundleVersion + "/" + PlayerSettings.productName;
         options.options = BuildOptions.CompressWithLz4HC | BuildOptions.Development | BuildOptions.AllowDebugging;
+		EditorUserBuildSettings.buildAppBundle = false;
 
         BuildReport report = BuildPipeline.BuildPlayer(options);
         BuildSummary summary = report.summary;
