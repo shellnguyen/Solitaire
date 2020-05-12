@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0f26578aa8a9e14d9bf1601dd213d23, type: 3}
   m_Name: AndroidMasterData
   m_EditorClassIdentifier: 
-  Admod_AppId: ca-app-pub-7613363228347825~8769044170
-  Admod_AdUnit_Banner_Id: ca-app-pub-7613363228347825/2012064132
-  Admod_AdUnit_Banner_Test_Id: ca-app-pub-3940256099942544/6300978111
+  Admob_AppId: ca-app-pub-7613363228347825~8769044170
+  Admob_AdUnit_Banner_Id: ca-app-pub-7613363228347825/2012064132
+  Admob_AdUnit_Banner_Test_Id: ca-app-pub-3940256099942544/6300978111
   UnityAds_AppId: 
