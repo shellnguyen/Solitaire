@@ -88,9 +88,5 @@ public class UnityAdsController : IAdNetworkController, IUnityAdsListener
 
     public void HideBanner()
     {
-        if(m_Controller.IsBannerShow)
-        {
-            
-        }
     }
 }

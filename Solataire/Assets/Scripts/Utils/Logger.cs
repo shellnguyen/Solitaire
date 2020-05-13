@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Diagnostics;
 using UnityEngine;
 
 public class Logger
@@ -29,38 +28,33 @@ public class Logger
 
     private static ILogger m_Logger;
 
+    [Conditional("DEV_BUILD"), Conditional("UNITY_EDITOR")]
     public void Initialize()
     {
-#if UNITY_EDITOR || DEV_BUILD
-        m_Logger = Debug.unityLogger;
-#endif
+        m_Logger = UnityEngine.Debug.unityLogger;
     }
 
+    [Conditional("DEV_BUILD"), Conditional("UNITY_EDITOR")]
     public void PrintLog(string tag, string message)
     {
-#if UNITY_EDITOR || DEV_BUILD
         Log(LogType.Log, tag, message);
-#endif
     }
 
+    [Conditional("DEV_BUILD"), Conditional("UNITY_EDITOR")]
     public void PrintError(string tag, string message)
     {
-#if UNITY_EDITOR || DEV_BUILD
         Log(LogType.Error, tag, message);
-#endif
     }
 
+    [Conditional("DEV_BUILD"), Conditional("UNITY_EDITOR")]
     public void PrintExc(string tag, string message)
     {
-#if UNITY_EDITOR || DEV_BUILD
         Log(LogType.Exception, tag, message);
-#endif
     }
 
+    [Conditional("DEV_BUILD"), Conditional("UNITY_EDITOR")]
     private void Log(LogType type, string tag, string message)
     {
-#if UNITY_EDITOR || DEV_BUILD
         m_Logger.Log(type, tag, message);
-#endif
     }
 }

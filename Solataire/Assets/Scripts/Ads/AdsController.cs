@@ -62,11 +62,13 @@ public class AdsController : Singleton<AdsController>
         m_IsBannerShow = false;
     }
 
+    //Callback when Init
     public void OnAdInit(Solitaire.NetworkType type)
     {
         Logger.Instance.PrintLog(Common.DEBUG_TAG, "AdsController OnAdInit " + type.ToString());
     }
 
+    //Callback when successfully loaded ads
     public void OnAdLoaded(Solitaire.NetworkType type)
     {
         if ((type == Solitaire.NetworkType.Admob))
@@ -75,30 +77,36 @@ public class AdsController : Singleton<AdsController>
         }
     }
     
+    //Callback when failed to loaded ads
     public void OnAdFailedToLoad()
     {
 
     }
 
+    //Callback when successfully triggered ads
     public void OnAdStarted()
     {
         m_IsVideoShowing = true;
     }
 
+    //Callback when finished ads
     public void OnAdFinished()
     {
         m_IsVideoShowing = false;
     }
 
+    //Callback when clicked/open external link in ads
     public void OnAdOpened()
     {
     }
 
+    //Callback when closed ads before finishing
     public void OnAdClosed()
     {
         m_IsVideoShowing = false;
     }
 
+    //Callback when failed to triggered ads
     public void OnAdFailedToShow()
     {
         m_IsVideoShowing = false;
