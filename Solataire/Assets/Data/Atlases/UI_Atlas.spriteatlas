@@ -43,11 +43,12 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: c22bd344eb1d106439b30c342de58f57, type: 3}
-    totalSpriteSurfaceArea: 50000
+    totalSpriteSurfaceArea: 55000
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 6f0bcd01cf9775b48898b429759d7b47, type: 3}
+  - {fileID: 21300000, guid: a40181520da6d04449ea5f97d7736830, type: 3}
   - {fileID: 21300000, guid: 58385f62b52f86940a6a3834ae52ee3a, type: 3}
   - {fileID: 21300000, guid: 3725daa253818ff4aa3eab3bbf830a18, type: 3}
   - {fileID: 21300000, guid: f0f0fbc3b95503f43ac362c106b6e6a3, type: 3}
@@ -64,11 +65,13 @@ SpriteAtlas:
   - {fileID: 21300000, guid: e57147eb5a4e90e40aa5cff82f4cf911, type: 3}
   - {fileID: 21300000, guid: 721b768c8717ee54d9c7369d19e867e3, type: 3}
   - {fileID: 21300000, guid: 7920991d321ade844be33c2a797fdd10, type: 3}
+  - {fileID: 21300000, guid: e6cae46d243dad1478040cb74d376e97, type: 3}
   - {fileID: 21300000, guid: 5c34603ecaec6d347b388f9963d65812, type: 3}
   - {fileID: 21300000, guid: e1a5be7f46e9fb840a5c1ed7e5d6fb30, type: 3}
   - {fileID: 21300000, guid: 715448bf1b6e4924faef991b688dfa7a, type: 3}
   m_PackedSpriteNamesToIndex:
   - menuList
+  - backward
   - share2
   - audioOff
   - leaderboardsComplex
@@ -85,6 +88,7 @@ SpriteAtlas:
   - home
   - trophy
   - target
+  - forward
   - exitLeft
   - massiveMultiplayer
   - question
