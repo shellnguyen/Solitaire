@@ -66,6 +66,11 @@ public class GameController : MonoBehaviour
         //Left mouse clicked
         if(Input.GetMouseButtonDown(0))
         {
+            if(EventSystem.current.IsPointerOverGameObject())
+            {
+                return;
+            }
+
             Logger.Instance.PrintLog(Common.DEBUG_TAG, "GameController MouseButton down");
 
             RaycastHit2D hit = Physics2D.Raycast(m_MainCamera.ScreenToWorldPoint(mousePos), Vector2.zero);

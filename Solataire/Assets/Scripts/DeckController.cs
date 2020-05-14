@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class DeckController : MonoBehaviour
 {
@@ -37,6 +38,11 @@ public class DeckController : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if(EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         if (!m_IsEmpty)
         {
             m_GameData.currentDrawCard++;
