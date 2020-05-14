@@ -63,14 +63,17 @@ public class NewGamePopup : Popup
 
     IEnumerator ShowVideoAds()
     {
-        if(!m_IsFirstGame)
+        if(GameSetting.Instance.enableAds)
         {
-            AdsController.Instance.ShowFullScreen();
-        }
+            if (!m_IsFirstGame)
+            {
+                AdsController.Instance.ShowFullScreen();
+            }
 
-        while(AdsController.Instance.IsVideoShowing)
-        {
-            yield return new WaitForSeconds(2.5f);
+            while (AdsController.Instance.IsVideoShowing)
+            {
+                yield return new WaitForSeconds(2.5f);
+            }
         }
 
         Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "game_mode", m_GameData.gameMode.ToString());

@@ -114,7 +114,7 @@ public class AdsController : Singleton<AdsController>
 
     private IEnumerator ShowBannerWhenReady()
     {
-        if(!m_IsBannerShow && SceneManager.GetActiveScene().buildIndex == 1)
+        if(!m_IsBannerShow && (SceneManager.GetActiveScene().buildIndex == 1) && GameSetting.Instance.enableAds)
         {
             ShowBanner();
         }
