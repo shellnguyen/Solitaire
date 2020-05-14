@@ -98,6 +98,8 @@ public class InGameMenu : MonoBehaviour
     private void OnHintClicked()
     {
         //todo
+        //Temporally make this button to How to Play
+        Utilities.Instance.DispatchEvent(Solitaire.Event.ShowPopup, "how_to_play", 0);
     }
 
     private void OnExitClicked()

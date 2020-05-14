@@ -857,7 +857,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 318875097}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 454496219}
@@ -882,7 +882,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1223,7 +1223,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55
 --- !u!114 &454496217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1317,6 +1317,7 @@ MonoBehaviour:
   m_BtnExit: {fileID: 384802848}
   m_UndoIcon: {fileID: 750726796}
   m_UndoText: {fileID: 1672367880}
+  m_UndoColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &560873676
 GameObject:
   m_ObjectHideFlags: 0
@@ -2341,7 +2342,7 @@ GameObject:
   - component: {fileID: 916018352}
   - component: {fileID: 916018351}
   m_Layer: 0
-  m_Name: EventSystem
+  m_Name: UIEventSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4094,6 +4095,8 @@ MonoBehaviour:
   m_NewGamePopupPrefab: {fileID: 7365157391825386669, guid: c0543e5767fa65746a071b2bad3a85fb,
     type: 3}
   m_GameResultPopupPrefab: {fileID: 3309620694362483863, guid: 0235114c4186e7749be41a9a77fa477e,
+    type: 3}
+  m_HowToPlayPopupPrefab: {fileID: 8467139387926676979, guid: 423155606ee05f744bb4d312e1af8e1f,
     type: 3}
 --- !u!1 &1672367877
 GameObject:

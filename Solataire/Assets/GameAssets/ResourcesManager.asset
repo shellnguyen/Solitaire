@@ -20,3 +20,11 @@ MonoBehaviour:
   - {fileID: 21300000, guid: e339c66cffd1a1b408d1984d9dc3aaac, type: 3}
   - {fileID: 21300000, guid: d4261a9969944ef488c7de4e0a4c0e8e, type: 3}
   - {fileID: 21300000, guid: 9d5f58a8af9ee8047b2843d5d370d17c, type: 3}
+  HintTexts:
+  - The goal is to create a stack of cards from low to high in each of the four foundation
+    piles in the upper-right corner. Each pile can contain only one suit.
+  - Aces are low and kings are high. The four foundation piles must begin with aces
+    and end with kings.
+  - You can move cards from one column to another. Cards in columns must be placed
+    in descending order and must alternate between red and black.
+  - Tap the deck in upper-left corner to draw more cards.
