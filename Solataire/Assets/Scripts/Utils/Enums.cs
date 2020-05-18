@@ -108,6 +108,8 @@ namespace Solitaire
         OnSettingChanged,
         UndoMove,
         ChangeUIStatue,
-        PostAdsInitialized
+        PostAdsInitialized,
+        SaveData,
+        LoadData
     }
 }
