@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -55,7 +53,7 @@ public class MainMenu : MonoBehaviour
         m_BtnChallenge.onClick.AddListener(delegate { OnButtonPressed(11); });
 
         Utilities.Instance.DispatchEvent(Solitaire.Event.LoadData, "load_data", 0);
-        AdsController.Instance.Initialized();
+        //AdsController.Instance.Initialized();
     }
 
     private void Start()

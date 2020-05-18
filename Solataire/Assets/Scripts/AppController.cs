@@ -1,10 +1,6 @@
 ﻿using System.IO;
-using System.Collections;
-using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
-using UnityEngine;
 using System.Runtime.Serialization;
-using System;
 
 public class AppController : Singleton<AppController>
 {
@@ -41,6 +37,7 @@ public class AppController : Singleton<AppController>
     private void OnLoadSetting(EventParam param)
     {
         LoadSetting();
+        AdsController.Instance.Initialized();
     }
 
     private bool SaveSetting()
