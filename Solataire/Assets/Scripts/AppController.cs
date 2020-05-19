@@ -7,14 +7,14 @@ public class AppController : Singleton<AppController>
 
     private void OnEnable()
     {
-        EventManager.Instance.Register(Solitaire.Event.SaveData, OnSaveSetting);
-        EventManager.Instance.Register(Solitaire.Event.LoadData, OnLoadSetting);
+        //EventManager.Instance.Register(Solitaire.Event.SaveData, OnSaveSetting);
+        //EventManager.Instance.Register(Solitaire.Event.LoadData, OnLoadSetting);
     }
 
     private void OnDisable()
     {
-        EventManager.Instance.Unregister(Solitaire.Event.SaveData, OnSaveSetting);
-        EventManager.Instance.Unregister(Solitaire.Event.LoadData, OnLoadSetting);
+        //EventManager.Instance.Unregister(Solitaire.Event.SaveData, OnSaveSetting);
+        //EventManager.Instance.Unregister(Solitaire.Event.LoadData, OnLoadSetting);
     }
 
     // Start is called before the first frame update
@@ -29,18 +29,21 @@ public class AppController : Singleton<AppController>
         
     }
 
-    private void OnSaveSetting(EventParam param)
+    public void SaveSetting()
     {
-        SaveSetting();
+        CheckSaveSetting();
     }
 
-    private void OnLoadSetting(EventParam param)
+    public void LoadSetting()
     {
-        LoadSetting();
-        AdsController.Instance.Initialized();
+        CheckLoadSetting();
+        if(GameSetting.Instance.enableAds)
+        {
+            AdsController.Instance.Initialized();
+        }  
     }
 
-    private bool SaveSetting()
+    private bool CheckSaveSetting()
     {
         FileStream fs = new FileStream(Common.SAVE_PATH, FileMode.Create);
 
@@ -51,6 +54,7 @@ public class AppController : Singleton<AppController>
             SettingData data = new SettingData();
             data.enableAds = GameSetting.Instance.enableAds;
             data.enableAudio = GameSetting.Instance.enableAudio;
+            data.currentCardSkin = GameSetting.Instance.currentCardSkin;
             formatter.Serialize(fs, data);
         }
         catch (SerializationException e)
@@ -66,7 +70,7 @@ public class AppController : Singleton<AppController>
         return true;
     }
 
-    private bool LoadSetting()
+    private bool CheckLoadSetting()
     {
         if(File.Exists(Common.SAVE_PATH))
         {
@@ -79,6 +83,7 @@ public class AppController : Singleton<AppController>
 
                 GameSetting.Instance.enableAds = data.enableAds;
                 GameSetting.Instance.enableAudio = data.enableAudio;
+                GameSetting.Instance.currentCardSkin = data.currentCardSkin;
             }
             catch (SerializationException e)
             {
