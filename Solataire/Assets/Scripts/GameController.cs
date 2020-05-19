@@ -34,6 +34,7 @@ public class GameController : MonoBehaviour
         EventManager.Instance.Register(Solitaire.Event.OnStartGame, OnStartGame);
         EventManager.Instance.Register(Solitaire.Event.OnNewGame, OnNewGame);
         EventManager.Instance.Register(Solitaire.Event.UndoMove, OnUndoMove);
+        EventManager.Instance.Register(Solitaire.Event.OnSkinChanged, OnSkinChanged);
     }
 
     private void OnDisable()
@@ -41,6 +42,7 @@ public class GameController : MonoBehaviour
         EventManager.Instance.Unregister(Solitaire.Event.OnStartGame, OnStartGame);
         EventManager.Instance.Unregister(Solitaire.Event.OnNewGame, OnNewGame);
         EventManager.Instance.Unregister(Solitaire.Event.UndoMove, OnUndoMove);
+        EventManager.Instance.Register(Solitaire.Event.OnSkinChanged, OnSkinChanged);
     }
 
     private void Awake()
@@ -652,6 +654,7 @@ public class GameController : MonoBehaviour
 
     private void GenerateDeck()
     {
+        Sprite currentCardSkin = ResourcesManager.Instance.CardSprite[GameSetting.Instance.currentCardSkin]; 
         StringBuilder builder = new StringBuilder();
         ushort suitOffset = 12;
         ushort cardOffset = 1;
@@ -673,7 +676,7 @@ public class GameController : MonoBehaviour
                 card.layer = 9;
 
                 m_DeckCards.Add(card.GetComponent<CardElement>());
-                m_DeckCards[i * 13 + k].SetCardProperties(this, (ushort)(0 | suitValue | cardValue), builder.ToString());
+                m_DeckCards[i * 13 + k].SetCardProperties(this, (ushort)(0 | suitValue | cardValue), builder.ToString(), currentCardSkin);
 
                 builder.Clear();
             }
@@ -880,6 +883,39 @@ public class GameController : MonoBehaviour
             Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "time", m_GameData.time);
 
             yield return new WaitForSeconds(1.0f);
+        }
+
+        yield break;
+    }
+
+    private void OnSkinChanged(EventParam param)
+    {
+        string tag = param.GetString("tag");
+        int skinIndex = param.GetInt(tag);
+        GameSetting.Instance.currentCardSkin = skinIndex;
+
+        StartCoroutine(ChangeCardSkin(skinIndex));
+        AppController.Instance.SaveSetting();
+        //Utilities.Instance.DispatchEvent(Solitaire.Event.SaveData, "save_data", 0);
+    }
+
+    private IEnumerator ChangeCardSkin(int index)
+    {
+        Sprite cardSkin = ResourcesManager.Instance.CardSprite[index];
+
+        foreach (CardElement card in m_BottomCards)
+        {
+            card.SetCardBack(cardSkin);
+        }
+
+        foreach (CardElement card in m_DeckCards)
+        {
+            card.SetCardBack(cardSkin);
+        }
+
+        foreach (CardElement card in m_TopCards)
+        {
+            card.SetCardBack(cardSkin);
         }
 
         yield break;

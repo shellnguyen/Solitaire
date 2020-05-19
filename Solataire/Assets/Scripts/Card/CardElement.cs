@@ -160,13 +160,15 @@ public class CardElement : MonoBehaviour
     {
     }
 
-    public void SetCardProperties(GameController controller, ushort cardValue, string cardName)
+    public void SetCardProperties(GameController controller, ushort cardValue, string cardName, Sprite backSkin)
     {
         m_GameController = controller;
         m_CardName = cardName;
         m_CardValue = cardValue;
 
         m_Front = m_SpriteAtlas.GetSprite(m_CardName);
+        m_Back = backSkin;
+        m_Renderer.sprite = m_Back;
         position = Solitaire.CardPosition.Deck;
     }
 
@@ -421,6 +423,15 @@ public class CardElement : MonoBehaviour
         else
         {
             return m_NextInStack.GetLastCardInStack();
+        }
+    }
+
+    public void SetCardBack(Sprite skin)
+    {
+        m_Back = skin;
+        if(!m_IsFaceUp)
+        {
+            m_Renderer.sprite = m_Back;
         }
     }
 }

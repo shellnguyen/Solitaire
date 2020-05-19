@@ -17,6 +17,9 @@ public class CardSkinPopup : Popup
 
     [SerializeField] private Button m_BtnApply;
     [SerializeField] private Button m_BtnCancel;
+    //
+
+    [SerializeField] private int m_CurrentIndex; 
 
     // Start is called before the first frame update
     private void Start()
@@ -46,7 +49,8 @@ public class CardSkinPopup : Popup
 
     private void OnApplySkin()
     {
-
+        Utilities.Instance.DispatchEvent(Solitaire.Event.OnSkinChanged, "card_skin", m_CurrentIndex);
+        this.gameObject.SetActive(false);
     }
 
     private void OnCancel()
@@ -61,6 +65,7 @@ public class CardSkinPopup : Popup
         m_LeftCard.sprite = texCard;
         m_RightCard.sprite = texCard;
 
+        m_CurrentIndex = index;
         m_ConfirmPopup.SetActive(true);
     }
 }

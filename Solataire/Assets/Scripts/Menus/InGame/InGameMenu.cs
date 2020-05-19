@@ -87,6 +87,7 @@ public class InGameMenu : MonoBehaviour
     private void OnCardClicked()
     {
         //todo
+        Utilities.Instance.DispatchEvent(Solitaire.Event.ShowPopup, "card_skin", 0);
     }
 
     private void OnUndoClicked()

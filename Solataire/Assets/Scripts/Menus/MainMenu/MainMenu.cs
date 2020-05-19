@@ -52,8 +52,9 @@ public class MainMenu : MonoBehaviour
         m_BtnLeaderboard.onClick.AddListener(delegate { OnButtonPressed(12); });
         m_BtnChallenge.onClick.AddListener(delegate { OnButtonPressed(11); });
 
-        Utilities.Instance.DispatchEvent(Solitaire.Event.LoadData, "load_data", 0);
+        //Utilities.Instance.DispatchEvent(Solitaire.Event.LoadData, "load_data", 0);
         //AdsController.Instance.Initialized();
+        AppController.Instance.LoadSetting();
     }
 
     private void Start()
@@ -98,7 +99,10 @@ public class MainMenu : MonoBehaviour
                 }
             default: //GameButton
                 {
-                    AdsController.Instance.HideBanner();
+                    if(GameSetting.Instance.enableAds)
+                    {
+                        AdsController.Instance.HideBanner();
+                    }
                     SceneLoader.Instance.LoadScene(buttonId);
                     break;
                 }

@@ -4098,6 +4098,8 @@ MonoBehaviour:
     type: 3}
   m_HowToPlayPopupPrefab: {fileID: 8467139387926676979, guid: 423155606ee05f744bb4d312e1af8e1f,
     type: 3}
+  m_CardSkinPopupPrefab: {fileID: 8008117941877425758, guid: f40ed0bba65f7674b9ec6c62d995927f,
+    type: 3}
 --- !u!1 &1672367877
 GameObject:
   m_ObjectHideFlags: 0

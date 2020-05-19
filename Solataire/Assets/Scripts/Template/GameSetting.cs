@@ -6,4 +6,5 @@ public class GameSetting : ScriptableSingleton<GameSetting>
     public Difficulty difficulty;
     public bool enableAudio;
     public bool enableAds;
+    public int currentCardSkin;
 }

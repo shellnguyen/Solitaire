@@ -110,6 +110,7 @@ namespace Solitaire
         ChangeUIStatue,
         PostAdsInitialized,
         SaveData,
-        LoadData
+        LoadData,
+        OnSkinChanged
     }
 }
