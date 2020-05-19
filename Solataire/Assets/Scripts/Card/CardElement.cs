@@ -323,6 +323,7 @@ public class CardElement : MonoBehaviour
 
     public void OnCardMove()
     {
+        Utilities.Instance.DispatchEvent(Solitaire.Event.PlayAudio, "play_one", 2);
         if (m_NextInStack && ((m_NextInStack.position & (Solitaire.CardPosition.Top1 | Solitaire.CardPosition.Top2 | Solitaire.CardPosition.Top3 | Solitaire.CardPosition.Top4)) == 0))
         {
             m_NextInStack.transform.position = new Vector3(transform.position.x, transform.position.y - Common.YOFFSET, transform.position.z - Common.ZOFFSET);

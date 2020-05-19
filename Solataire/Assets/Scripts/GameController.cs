@@ -561,6 +561,7 @@ public class GameController : MonoBehaviour
             m_GameData.score += (Common.DEFAULT_SCORE * 2);
             Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "score", m_GameData.score.ToString());
             m_TopCards.Add(m_CurrentSelected);
+            Utilities.Instance.DispatchEvent(Solitaire.Event.PlayAudio, "play_one", 2);
             iTween.MoveTo(m_CurrentSelected.gameObject, new Vector3 (target.transform.position.x, target.transform.position.y, target.transform.position.z - Common.ZOFFSET), Common.MOVE_TIME);
         }
         else
@@ -705,6 +706,7 @@ public class GameController : MonoBehaviour
 
             m_BottomCards.Add(m_DeckCards[i]);
 
+            Utilities.Instance.DispatchEvent(Solitaire.Event.PlayAudio, "play_one", 2);
             iTween.MoveTo(m_BottomCards[i].gameObject, new Vector3(m_BottomList[bottomNum - 1].transform.position.x, m_BottomList[bottomNum - 1].transform.position.y - yOffset, m_BottomList[bottomNum - 1].transform.position.z - 1.0f - zOffset), 0.05f);
             if (cardNum == bottomNum - 1)
             {
@@ -745,6 +747,7 @@ public class GameController : MonoBehaviour
         m_CommandsProcessor.AddCommand(new PutBackCommand(m_DrawCardHolder.transform.position, m_GameData));
         foreach (CardElement card in m_DeckCards)
         {
+            Utilities.Instance.DispatchEvent(Solitaire.Event.PlayAudio, "play_one", 1);
             iTween.MoveTo(card.gameObject, m_DeckButton.transform.position + Vector3.forward, 0.1f);
             card.position = Solitaire.CardPosition.Deck;
             card.IsFaceUp = false;
@@ -771,6 +774,7 @@ public class GameController : MonoBehaviour
                 iTween.MoveTo(m_DeckCards[i].gameObject, new Vector3(m_DeckCards[i].transform.position.x - offSet, m_DeckCards[i].transform.position.y, -(i * offSet)), 0.0f);
             }
         }
+        Utilities.Instance.DispatchEvent(Solitaire.Event.PlayAudio, "play_one", 2);
         iTween.MoveTo(m_DeckCards[currentDrawCard].gameObject, new Vector3(m_DrawCardHolder.transform.position.x + (currentDrawCard >= 2 ? 1.0f : currentDrawCard * offSet), m_DrawCardHolder.transform.position.y, -(currentDrawCard * offSet)), 0.1f);
         m_DeckCards[currentDrawCard].IsFaceUp = true;
         m_DeckCards[currentDrawCard].position = Solitaire.CardPosition.Draw;
