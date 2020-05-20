@@ -50,6 +50,7 @@ public class CardSkinPopup : Popup
     private void OnApplySkin()
     {
         Utilities.Instance.DispatchEvent(Solitaire.Event.OnSkinChanged, "card_skin", m_CurrentIndex);
+        this.m_ConfirmPopup.SetActive(false);
         this.gameObject.SetActive(false);
     }
 
