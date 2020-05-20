@@ -27,6 +27,7 @@ public class Builder
         Debug.LogWarning("<b>" + flag + "</b> added to <i>Scripting Define Symbols</i> for selected build target (" + EditorUserBuildSettings.activeBuildTarget.ToString() + ").");
     }
 
+    [MenuItem("CustomBuild/AndroidRelease")]
     public static void AndroidRelease()
     {
         AddFlag(RELEASE_FLAG);
@@ -52,6 +53,7 @@ public class Builder
         }
     }
 
+    [MenuItem("CustomBuild/AndroidDevelopment")]
     public static void AndroidDev()
     {
         AddFlag(DEV_FLAG);
@@ -77,6 +79,7 @@ public class Builder
         }
     }
 
+    [MenuItem("CustomBuild/WebDevelopment")]
     public static void WebGLDev()
     {
         AddFlag(DEV_FLAG);
@@ -101,6 +104,7 @@ public class Builder
         }
     }
 
+    [MenuItem("CustomBuild/WebRelease")]
     public static void WebGLRelease()
     {
         AddFlag(RELEASE_FLAG);
@@ -125,6 +129,7 @@ public class Builder
         }
     }
 
+    [MenuItem("CustomBuild/iOSRelease")]
     public static void IosRelease()
     {
         AddFlag(RELEASE_FLAG);
@@ -150,6 +155,7 @@ public class Builder
         }
     }
 
+    [MenuItem("CustomBuild/iOSDevelopment")]
     public static void IosDev()
     {
         AddFlag(DEV_FLAG);
@@ -175,6 +181,7 @@ public class Builder
         }
     }
 
+    [MenuItem("CustomBuild/WindowsRelease")]
     public static void WindowsRelease()
     {
         AddFlag(RELEASE_FLAG);
@@ -199,6 +206,7 @@ public class Builder
         }
     }
 
+    [MenuItem("CustomBuild/WindowsDevelopment")]
     public static void WindowsDev()
     {
         AddFlag(DEV_FLAG);

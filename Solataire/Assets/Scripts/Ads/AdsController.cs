@@ -37,7 +37,7 @@ public class AdsController : Singleton<AdsController>
         m_UnityAdsController = new UnityAdsController(this, MasterData.Instance.UnityAds_GameId, true, MasterData.Instance.UnityAds_Interstitial_Id);
 #else
         m_AdmobController = new AbmobController(this, MasterData.Instance.Admob_AdUnit_Banner_Id);
-        m_UnityAdsController = new UnityAdsController(MasterData.Instance.UnityAds_GameId, false, MasterData.Instance.UnityAds_Banner_Id, MasterData.Instance.UnityAds_Interstitial_Id);
+        m_UnityAdsController = new UnityAdsController(this, MasterData.Instance.UnityAds_GameId, false, MasterData.Instance.UnityAds_Interstitial_Id);
 #endif
 
         m_AdmobController.Initialize();
