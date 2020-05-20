@@ -47,7 +47,7 @@ public class OptionPopup : Popup
         }
 
         Utilities.Instance.DispatchEvent(Solitaire.Event.OnSettingChanged, "setting_changed", 0);
-        AppController.Instance.LoadSetting();
+        AppController.Instance.SaveSetting();
         //Utilities.Instance.DispatchEvent(Solitaire.Event.SaveData, "save_data", 0);
     }
 }
