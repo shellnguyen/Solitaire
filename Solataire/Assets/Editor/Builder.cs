@@ -35,7 +35,7 @@ public class Builder
         BuildPlayerOptions options = new BuildPlayerOptions();
         options.scenes = scenes;
         options.target = BuildTarget.Android;
-        options.locationPathName = "../build/AndroidRelease_" + PlayerSettings.bundleVersion + "/"  + PlayerSettings.productName;
+        options.locationPathName = "builds/AndroidRelease_" + PlayerSettings.bundleVersion + "/"  + PlayerSettings.productName + ".aab";
         options.options = BuildOptions.CompressWithLz4HC;
         EditorUserBuildSettings.buildAppBundle = true;
 
@@ -61,7 +61,7 @@ public class Builder
         BuildPlayerOptions options = new BuildPlayerOptions();
         options.scenes = scenes;
         options.target = BuildTarget.Android;
-        options.locationPathName = "../build/AndroidDev_" + PlayerSettings.bundleVersion + "/" + PlayerSettings.productName;
+        options.locationPathName = "builds/AndroidDev_" + PlayerSettings.bundleVersion + "/" + PlayerSettings.productName + ".apk";
         options.options = BuildOptions.CompressWithLz4HC | BuildOptions.Development | BuildOptions.AllowDebugging;
 		EditorUserBuildSettings.buildAppBundle = false;
 
@@ -87,7 +87,7 @@ public class Builder
         BuildPlayerOptions options = new BuildPlayerOptions();
         options.scenes = scenes;
         options.target = BuildTarget.WebGL;
-        options.locationPathName = "../build/WebGLDev/" + PlayerSettings.productName;
+        options.locationPathName = "builds/WebGLDev/" + PlayerSettings.productName;
         options.options = BuildOptions.Development;
 
         BuildReport report = BuildPipeline.BuildPlayer(options);
@@ -112,7 +112,7 @@ public class Builder
         BuildPlayerOptions options = new BuildPlayerOptions();
         options.scenes = scenes;
         options.target = BuildTarget.WebGL;
-        options.locationPathName = "../build/WebGLRelease/" + PlayerSettings.productName;
+        options.locationPathName = "builds/WebGLRelease/" + PlayerSettings.productName;
         options.options = BuildOptions.None;
 
         BuildReport report = BuildPipeline.BuildPlayer(options);
@@ -137,7 +137,7 @@ public class Builder
         BuildPlayerOptions options = new BuildPlayerOptions();
         options.scenes = scenes;
         options.target = BuildTarget.Android;
-        options.locationPathName = "../build/iOSRelease_" + PlayerSettings.bundleVersion + "/" + PlayerSettings.productName;
+        options.locationPathName = "builds/iOSRelease_" + PlayerSettings.bundleVersion + "/" + PlayerSettings.productName;
         options.options = BuildOptions.CompressWithLz4HC;
         EditorUserBuildSettings.iOSBuildConfigType = iOSBuildType.Release;
 
@@ -163,7 +163,7 @@ public class Builder
         BuildPlayerOptions options = new BuildPlayerOptions();
         options.scenes = scenes;
         options.target = BuildTarget.iOS;
-        options.locationPathName = "../build/iOSDev_" + PlayerSettings.bundleVersion + "/" + PlayerSettings.productName;
+        options.locationPathName = "builds/iOSDev_" + PlayerSettings.bundleVersion + "/" + PlayerSettings.productName;
         options.options = BuildOptions.Development | BuildOptions.AllowDebugging;
         EditorUserBuildSettings.iOSBuildConfigType = iOSBuildType.Debug;
 
@@ -189,7 +189,7 @@ public class Builder
         BuildPlayerOptions options = new BuildPlayerOptions();
         options.scenes = scenes;
         options.target = BuildTarget.StandaloneWindows64;
-        options.locationPathName = "../build/WindowsRelease/" + PlayerSettings.productName;
+        options.locationPathName = "builds/WindowsRelease/" + PlayerSettings.productName + ".exe";
         options.options = BuildOptions.CompressWithLz4HC;
 
         BuildReport report = BuildPipeline.BuildPlayer(options);
@@ -214,7 +214,7 @@ public class Builder
         BuildPlayerOptions options = new BuildPlayerOptions();
         options.scenes = scenes;
         options.target = BuildTarget.StandaloneWindows64;
-        options.locationPathName = "../build/WindowsDev/" + PlayerSettings.productName;
+        options.locationPathName = "builds/WindowsDev/" + PlayerSettings.productName + ".exe";
         options.options = BuildOptions.Development | BuildOptions.AllowDebugging;
 
         BuildReport report = BuildPipeline.BuildPlayer(options);
