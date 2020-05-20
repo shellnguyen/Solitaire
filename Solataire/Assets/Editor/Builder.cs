@@ -53,6 +53,32 @@ public class Builder
         }
     }
 
+    [MenuItem("CustomBuild/AndroidReleaseAPK")]
+    public static void AndroidReleaseAPK()
+    {
+        AddFlag(RELEASE_FLAG);
+
+        BuildPlayerOptions options = new BuildPlayerOptions();
+        options.scenes = scenes;
+        options.target = BuildTarget.Android;
+        options.locationPathName = "builds/AndroidReleaseAPK_" + PlayerSettings.bundleVersion + "/" + PlayerSettings.productName + ".apk";
+        options.options = BuildOptions.CompressWithLz4HC;
+        EditorUserBuildSettings.buildAppBundle = false;
+
+        BuildReport report = BuildPipeline.BuildPlayer(options);
+        BuildSummary summary = report.summary;
+
+        if (summary.result == BuildResult.Succeeded)
+        {
+            Debug.Log("Build AndroidReleaseAPK succeeded: " + summary.totalSize + " bytes");
+        }
+
+        if (summary.result == BuildResult.Failed)
+        {
+            Debug.Log("Build AndroidReleaseAPK failed");
+        }
+    }
+
     [MenuItem("CustomBuild/AndroidDevelopment")]
     public static void AndroidDev()
     {
