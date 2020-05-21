@@ -29,6 +29,7 @@ public class DeckController : MonoBehaviour
         m_Renderer = GetComponent<SpriteRenderer>();
         m_GameData.currentDrawCard = -1;
         m_IsEmpty = false;
+        m_Back = ResourcesManager.Instance.CardSprite[GameSetting.Instance.currentCardSkin];
     }
 
     // Update is called once per frame
@@ -78,6 +79,16 @@ public class DeckController : MonoBehaviour
             m_IsEmpty = false;
             m_Renderer.sprite = m_Back;
             return;
+        }
+    }
+
+    public void SetCardBack(Sprite cardBack)
+    {
+        m_Back = cardBack;
+
+        if(!m_IsEmpty)
+        {
+            m_Renderer.sprite = m_Back;
         }
     }
 }

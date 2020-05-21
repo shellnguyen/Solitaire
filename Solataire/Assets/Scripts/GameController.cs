@@ -922,6 +922,9 @@ public class GameController : MonoBehaviour
             card.SetCardBack(cardSkin);
         }
 
+        DeckController btnDecks = m_DeckButton.GetComponent<DeckController>();
+        btnDecks.SetCardBack(cardSkin);
+
         yield break;
     }
 }
