@@ -1404,6 +1404,7 @@ MonoBehaviour:
   m_BtnNew: {fileID: 1676312219}
   m_BtnOption: {fileID: 2106477024}
   m_BtnCards: {fileID: 1976544327}
+  m_BtnHowToPlay: {fileID: 1895257628}
   m_BtnHint: {fileID: 598467987}
   m_BtnUndo: {fileID: 1642550709}
   m_BtnExit: {fileID: 384802848}
