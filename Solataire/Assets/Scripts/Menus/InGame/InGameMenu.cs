@@ -106,7 +106,7 @@ public class InGameMenu : MonoBehaviour
     private void OnHintClicked()
     {
         //todo
-        
+        Utilities.Instance.DispatchEvent(Solitaire.Event.ShowHint, "show_hint", 0);
     }
 
     private void OnExitClicked()

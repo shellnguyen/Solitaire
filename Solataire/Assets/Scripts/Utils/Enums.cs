@@ -111,6 +111,7 @@ namespace Solitaire
         PostAdsInitialized,
         SaveData,
         LoadData,
-        OnSkinChanged
+        OnSkinChanged,
+        ShowHint
     }
 }

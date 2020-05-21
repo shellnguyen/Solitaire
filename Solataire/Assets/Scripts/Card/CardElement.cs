@@ -435,4 +435,10 @@ public class CardElement : MonoBehaviour
             m_Renderer.sprite = m_Back;
         }
     }
+
+    //Use for Hint feature. Destroy the clone card after move
+    public void DestroyAfterMove()
+    {
+        Destroy(gameObject);
+    }
 }

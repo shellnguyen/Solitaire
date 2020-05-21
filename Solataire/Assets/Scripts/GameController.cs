@@ -35,6 +35,7 @@ public class GameController : MonoBehaviour
         EventManager.Instance.Register(Solitaire.Event.OnNewGame, OnNewGame);
         EventManager.Instance.Register(Solitaire.Event.UndoMove, OnUndoMove);
         EventManager.Instance.Register(Solitaire.Event.OnSkinChanged, OnSkinChanged);
+        EventManager.Instance.Register(Solitaire.Event.ShowHint, OnShowHint);
     }
 
     private void OnDisable()
@@ -42,7 +43,8 @@ public class GameController : MonoBehaviour
         EventManager.Instance.Unregister(Solitaire.Event.OnStartGame, OnStartGame);
         EventManager.Instance.Unregister(Solitaire.Event.OnNewGame, OnNewGame);
         EventManager.Instance.Unregister(Solitaire.Event.UndoMove, OnUndoMove);
-        EventManager.Instance.Register(Solitaire.Event.OnSkinChanged, OnSkinChanged);
+        EventManager.Instance.Unregister(Solitaire.Event.OnSkinChanged, OnSkinChanged);
+        EventManager.Instance.Unregister(Solitaire.Event.ShowHint, OnShowHint);
     }
 
     private void Awake()
@@ -926,5 +928,106 @@ public class GameController : MonoBehaviour
         btnDecks.SetCardBack(cardSkin);
 
         yield break;
+    }
+
+    private void OnShowHint(EventParam param)
+    {
+        CalculateHint();
+    }
+
+    private void CalculateHint()
+    {
+        CardElement[] lastCardsInTop = GetAllLastCardsInStack(m_TopCards, true);
+        CardElement[] lastCardInBottom = GetAllLastCardsInStack(m_BottomCards, false);
+
+        CheckHintForDrawCards(lastCardsInTop, lastCardInBottom);
+    }
+
+    private void CheckHintForDrawCards(CardElement[] lastCardsInTop, CardElement[] lastCardInBottom)
+    {
+        CardElement currentDrawCard = m_DeckCards[m_GameData.currentDrawCard];
+
+        foreach (CardElement card in lastCardsInTop)
+        {
+            if (card == null)
+            {
+                ushort cardValue = (ushort)Utilities.Instance.ExtractBit(currentDrawCard.CardValue, 12, 1);
+
+                if (cardValue == (ushort)Solitaire.CardValue.Ace)
+                {
+                    foreach (GameObject topPos in m_TopList)
+                    {
+                        if (topPos.transform.childCount == 0)
+                        {
+                            ShowHint(currentDrawCard, topPos);
+                            return;
+                        }
+                    }
+                }
+                break;
+            }
+
+            if (CanStack(currentDrawCard.CardValue, card.CardValue, true))
+            {
+                ShowHint(currentDrawCard, card.gameObject);
+                return;
+            }
+        }
+
+        foreach (CardElement card in lastCardInBottom)
+        {
+            if (card == null)
+            {
+                ushort cardValue = (ushort)Utilities.Instance.ExtractBit(currentDrawCard.CardValue, 12, 1);
+
+                if (cardValue == (ushort)Solitaire.CardValue.King)
+                {
+                    foreach (GameObject bottomPos in m_BottomList)
+                    {
+                        if (bottomPos.transform.childCount == 0)
+                        {
+                            ShowHint(currentDrawCard, bottomPos);
+                            return;
+                        }
+                    }
+                }
+                break;
+            }
+
+            if (CanStack(currentDrawCard.CardValue, card.CardValue))
+            {
+                ShowHint(currentDrawCard, card.gameObject);
+                return;
+            }
+        }
+    }
+
+    private void CheckHintForBottomCards(CardElement[] lastCardsInTop, CardElement[] lastCardInBottom)
+    {
+
+    }
+
+    private CardElement[] GetAllLastCardsInStack(List<CardElement> listCards, bool isTop)
+    {
+        CardElement[] list = isTop ? new CardElement[4] : new CardElement[7];
+
+        int index = 0;
+        foreach(CardElement element in listCards)
+        {
+            if(element.IsFaceUp && !element.NextInStack)
+            {
+                list[index] = element;
+                index++;
+            }
+        }
+
+        return list;
+    }
+
+    private void ShowHint(CardElement target, GameObject destination)
+    {
+        CardElement cloneCard = Instantiate(target, target.transform.position, Quaternion.identity);
+        cloneCard.IsSelected = true;
+        Utilities.Instance.MoveToWithCallBack(cloneCard.gameObject, destination.transform.position, 1.0f, "DestroyAfterMove");
     }
 }
