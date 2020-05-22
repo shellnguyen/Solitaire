@@ -940,11 +940,22 @@ public class GameController : MonoBehaviour
         CardElement[] lastCardsInTop = GetAllLastCardsInStack(m_TopCards, true);
         CardElement[] lastCardInBottom = GetAllLastCardsInStack(m_BottomCards, false);
 
-        CheckHintForDrawCards(lastCardsInTop, lastCardInBottom);
+        if(CheckHintForDrawCards(lastCardsInTop, lastCardInBottom))
+        {
+            return;
+        }
+        else
+        {
+            CheckHintForBottomCards(lastCardsInTop, lastCardInBottom);
+        }
     }
 
-    private void CheckHintForDrawCards(CardElement[] lastCardsInTop, CardElement[] lastCardInBottom)
+    private bool CheckHintForDrawCards(CardElement[] lastCardsInTop, CardElement[] lastCardInBottom)
     {
+        if(m_GameData.currentDrawCard == -1)
+        {
+            return false;
+        }
         CardElement currentDrawCard = m_DeckCards[m_GameData.currentDrawCard];
 
         foreach (CardElement card in lastCardsInTop)
@@ -960,7 +971,7 @@ public class GameController : MonoBehaviour
                         if (topPos.transform.childCount == 0)
                         {
                             ShowHint(currentDrawCard, topPos);
-                            return;
+                            return true;
                         }
                     }
                 }
@@ -970,7 +981,7 @@ public class GameController : MonoBehaviour
             if (CanStack(currentDrawCard.CardValue, card.CardValue, true))
             {
                 ShowHint(currentDrawCard, card.gameObject);
-                return;
+                return true;
             }
         }
 
@@ -987,7 +998,7 @@ public class GameController : MonoBehaviour
                         if (bottomPos.transform.childCount == 0)
                         {
                             ShowHint(currentDrawCard, bottomPos);
-                            return;
+                            return true;
                         }
                     }
                 }
@@ -997,14 +1008,118 @@ public class GameController : MonoBehaviour
             if (CanStack(currentDrawCard.CardValue, card.CardValue))
             {
                 ShowHint(currentDrawCard, card.gameObject);
-                return;
+                return true;
             }
         }
+
+        return false;
     }
 
-    private void CheckHintForBottomCards(CardElement[] lastCardsInTop, CardElement[] lastCardInBottom)
+    private bool CheckHintForBottomCards(CardElement[] lastCardsInTop, CardElement[] lastCardInBottom)
     {
+        CardElement currentCard = lastCardInBottom[0];
+        if (currentCard == null)
+        {
+            return false;
+        }
 
+
+        for (int i = 1; i < lastCardInBottom.Length; ++i)
+        {
+            //Check lastCardInBottom[i - 1] with lastCardInTop
+            foreach (CardElement card in lastCardsInTop)
+            {
+                if (card == null)
+                {
+                    ushort cardValue = (ushort)Utilities.Instance.ExtractBit(currentCard.CardValue, 12, 1);
+
+                    if (cardValue == (ushort)Solitaire.CardValue.Ace)
+                    {
+                        foreach (GameObject topPos in m_TopList)
+                        {
+                            if (topPos.transform.childCount == 0)
+                            {
+                                ShowHint(currentCard, topPos);
+                                return true;
+                            }
+                        }
+                    }
+                    break;
+                }
+
+                if (CanStack(currentCard.CardValue, card.CardValue, true))
+                {
+                    ShowHint(currentCard, card.gameObject);
+                    return true;
+                }
+            }
+
+            //Check lastCardInBottom[i - 1] with other bottom columns
+            for (int j = 0; j < lastCardInBottom.Length; ++j)
+            {
+                if(currentCard.position != lastCardInBottom[j].position)
+                {
+                    CardElement targetCardToCheck = lastCardInBottom[j];
+                    if(targetCardToCheck == null)
+                    {
+                        ushort cardValue = (ushort)Utilities.Instance.ExtractBit(currentCard.CardValue, 12, 1);
+
+                        if (cardValue == (ushort)Solitaire.CardValue.King)
+                        {
+                            foreach (GameObject bottomPos in m_BottomList)
+                            {
+                                if (bottomPos.transform.childCount == 0)
+                                {
+                                    ShowHint(currentCard, bottomPos);
+                                    return true;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                    CardElement cardCanMove = GetBottomCardToMove(currentCard, targetCardToCheck);
+                    if(cardCanMove != null)
+                    {
+                        if(cardCanMove.NextInStack)
+                        {
+                            ShowHintForStack(cardCanMove, targetCardToCheck.gameObject);
+                        }
+                        else
+                        {
+                            ShowHint(cardCanMove, targetCardToCheck.gameObject);
+                        }
+                        return true;
+                    }
+                }
+            }
+            currentCard = lastCardInBottom[i];
+
+            if(currentCard == null)
+            {
+                break;
+            }
+        }
+
+        return false;
+    }
+
+    private CardElement GetBottomCardToMove(CardElement card, CardElement target)
+    {
+        if(card && card.IsFaceUp)
+        {
+            if (CanStack(card.CardValue, target.CardValue))
+            {
+                return card;
+            }
+            else
+            {
+                return GetBottomCardToMove(card.PrevInStack, target);
+            }
+        }
+        else
+        {
+            return null;
+        }
     }
 
     private CardElement[] GetAllLastCardsInStack(List<CardElement> listCards, bool isTop)
@@ -1029,5 +1144,10 @@ public class GameController : MonoBehaviour
         CardElement cloneCard = Instantiate(target, target.transform.position, Quaternion.identity);
         cloneCard.IsSelected = true;
         Utilities.Instance.MoveToWithCallBack(cloneCard.gameObject, destination.transform.position, 1.0f, "DestroyAfterMove");
+    }
+
+    private void ShowHintForStack(CardElement target, GameObject destination)
+    {
+
     }
 }
