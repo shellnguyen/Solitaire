@@ -1055,6 +1055,7 @@ public class GameController : MonoBehaviour
             }
 
             //Check lastCardInBottom[i - 1] with other bottom columns
+            //TODO: optimize
             for (int j = 0; j < lastCardInBottom.Length; ++j)
             {
                 if(currentCard.position != lastCardInBottom[j].position)
@@ -1148,6 +1149,19 @@ public class GameController : MonoBehaviour
 
     private void ShowHintForStack(CardElement target, GameObject destination)
     {
+        CardElement nextInStack = null;
+        CardElement cloneCard = null;
 
+        nextInStack = target;
+        Vector3 dest = destination.transform.position;
+        while(nextInStack)
+        {
+            cloneCard = Instantiate(nextInStack, nextInStack.transform.position, Quaternion.identity);
+            cloneCard.IsSelected = true;
+            Utilities.Instance.MoveToWithCallBack(cloneCard.gameObject, dest, 1.0f, "DestroyAfterMove");
+            nextInStack = nextInStack.NextInStack;
+            dest.y -= Common.YOFFSET;
+            dest.z -= Common.ZOFFSET;
+        }
     }
 }
