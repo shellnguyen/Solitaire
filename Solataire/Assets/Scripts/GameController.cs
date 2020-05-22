@@ -1142,7 +1142,9 @@ public class GameController : MonoBehaviour
 
     private void ShowHint(CardElement target, GameObject destination)
     {
-        CardElement cloneCard = Instantiate(target, target.transform.position, Quaternion.identity);
+        Vector3 clonePos = target.transform.position;
+        clonePos.z = -10.0f - Common.ZOFFSET;
+        CardElement cloneCard = Instantiate(target, clonePos, Quaternion.identity);
         cloneCard.IsSelected = true;
         Utilities.Instance.MoveToWithCallBack(cloneCard.gameObject, destination.transform.position, 1.0f, "DestroyAfterMove");
     }
@@ -1154,12 +1156,22 @@ public class GameController : MonoBehaviour
 
         nextInStack = target;
         Vector3 dest = destination.transform.position;
-        while(nextInStack)
+        Vector3 clonePos = target.transform.position;
+        clonePos.z = -10.0f - Common.ZOFFSET;
+        while (nextInStack)
         {
-            cloneCard = Instantiate(nextInStack, nextInStack.transform.position, Quaternion.identity);
+            cloneCard = Instantiate(nextInStack, clonePos, Quaternion.identity);
             cloneCard.IsSelected = true;
             Utilities.Instance.MoveToWithCallBack(cloneCard.gameObject, dest, 1.0f, "DestroyAfterMove");
+
             nextInStack = nextInStack.NextInStack;
+            if(!nextInStack)
+            {
+                break;
+            }
+            clonePos.x = nextInStack.transform.position.x;
+            clonePos.y = nextInStack.transform.position.y;
+            clonePos.z -= Common.ZOFFSET;
             dest.y -= Common.YOFFSET;
             dest.z -= Common.ZOFFSET;
         }
