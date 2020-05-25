@@ -53,6 +53,7 @@ public class MoveCommand : ICommand
             {
                 data.topCards.Remove(m_Card);
                 data.bottomCards.Add(m_Card);
+                Utilities.Instance.DispatchEvent(Solitaire.Event.PlayAudio, "play_one", 2);
                 iTween.MoveTo(m_Card.gameObject, m_PrevPosition, Common.MOVE_TIME);
             }
             else

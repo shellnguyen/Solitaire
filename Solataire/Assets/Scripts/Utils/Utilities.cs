@@ -68,11 +68,11 @@ public sealed class Utilities
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
-            Debug.DrawRay(ray.origin,ray.direction * 100, Color.cyan, 30.0f);
+            //Debug.DrawRay(ray.origin,ray.direction * 100, Color.cyan, 30.0f);
             return hit.transform;
         }
 
-        Debug.DrawRay(ray.origin, ray.direction * 100, Color.cyan, 30.0f);
+        //Debug.DrawRay(ray.origin, ray.direction * 100, Color.cyan, 30.0f);
         return null;
     }
     //

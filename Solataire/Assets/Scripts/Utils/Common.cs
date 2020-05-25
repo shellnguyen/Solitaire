@@ -20,4 +20,7 @@ public class Common
     //Event UItag
 
     //
+
+    //Path
+    public static readonly string SAVE_PATH = Application.persistentDataPath + "/player.sav";
 }

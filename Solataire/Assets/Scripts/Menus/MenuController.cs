@@ -11,6 +11,8 @@ public class MenuController : MonoBehaviour
     [SerializeField] private GameObject m_OptionMenuPrefab;
     [SerializeField] private GameObject m_NewGamePopupPrefab;
     [SerializeField] private GameObject m_GameResultPopupPrefab;
+    [SerializeField] private GameObject m_HowToPlayPopupPrefab;
+    [SerializeField] private GameObject m_CardSkinPopupPrefab;
     private Dictionary<string, GameObject> m_PopupList;
 
     //Menu scripts
@@ -87,6 +89,31 @@ public class MenuController : MonoBehaviour
                             m_PopupList.Add(tag, Instantiate(m_GameResultPopupPrefab, Vector3.zero, Quaternion.identity));
                         }
                         m_PopupList[tag].GetComponent<ResultPopup>().IsWin = result == 1 ? true : false ;
+                        break;
+                    }
+                case "how_to_play":
+                    {
+                        if (m_PopupList.ContainsKey(tag))
+                        {
+                            m_PopupList[tag].SetActive(true);
+                        }
+                        else
+                        {
+                            m_PopupList.Add(tag, Instantiate(m_HowToPlayPopupPrefab, Vector3.zero, Quaternion.identity));
+                            m_PopupList[tag].GetComponent<HowToPlayPopup>().SetData();
+                        }
+                        break;
+                    }
+                case "card_skin":
+                    {
+                        if (m_PopupList.ContainsKey(tag))
+                        {
+                            m_PopupList[tag].SetActive(true);
+                        }
+                        else
+                        {
+                            m_PopupList.Add(tag, Instantiate(m_CardSkinPopupPrefab, Vector3.zero, Quaternion.identity));
+                        }
                         break;
                     }
             }

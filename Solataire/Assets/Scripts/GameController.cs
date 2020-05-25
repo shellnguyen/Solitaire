@@ -34,6 +34,8 @@ public class GameController : MonoBehaviour
         EventManager.Instance.Register(Solitaire.Event.OnStartGame, OnStartGame);
         EventManager.Instance.Register(Solitaire.Event.OnNewGame, OnNewGame);
         EventManager.Instance.Register(Solitaire.Event.UndoMove, OnUndoMove);
+        EventManager.Instance.Register(Solitaire.Event.OnSkinChanged, OnSkinChanged);
+        EventManager.Instance.Register(Solitaire.Event.ShowHint, OnShowHint);
     }
 
     private void OnDisable()
@@ -41,6 +43,8 @@ public class GameController : MonoBehaviour
         EventManager.Instance.Unregister(Solitaire.Event.OnStartGame, OnStartGame);
         EventManager.Instance.Unregister(Solitaire.Event.OnNewGame, OnNewGame);
         EventManager.Instance.Unregister(Solitaire.Event.UndoMove, OnUndoMove);
+        EventManager.Instance.Unregister(Solitaire.Event.OnSkinChanged, OnSkinChanged);
+        EventManager.Instance.Unregister(Solitaire.Event.ShowHint, OnShowHint);
     }
 
     private void Awake()
@@ -66,6 +70,11 @@ public class GameController : MonoBehaviour
         //Left mouse clicked
         if(Input.GetMouseButtonDown(0))
         {
+            if(EventSystem.current.IsPointerOverGameObject())
+            {
+                return;
+            }
+
             Logger.Instance.PrintLog(Common.DEBUG_TAG, "GameController MouseButton down");
 
             RaycastHit2D hit = Physics2D.Raycast(m_MainCamera.ScreenToWorldPoint(mousePos), Vector2.zero);
@@ -554,6 +563,7 @@ public class GameController : MonoBehaviour
             m_GameData.score += (Common.DEFAULT_SCORE * 2);
             Utilities.Instance.DispatchEvent(Solitaire.Event.OnDataChanged, "score", m_GameData.score.ToString());
             m_TopCards.Add(m_CurrentSelected);
+            Utilities.Instance.DispatchEvent(Solitaire.Event.PlayAudio, "play_one", 2);
             iTween.MoveTo(m_CurrentSelected.gameObject, new Vector3 (target.transform.position.x, target.transform.position.y, target.transform.position.z - Common.ZOFFSET), Common.MOVE_TIME);
         }
         else
@@ -647,6 +657,7 @@ public class GameController : MonoBehaviour
 
     private void GenerateDeck()
     {
+        Sprite currentCardSkin = ResourcesManager.Instance.CardSprite[GameSetting.Instance.currentCardSkin]; 
         StringBuilder builder = new StringBuilder();
         ushort suitOffset = 12;
         ushort cardOffset = 1;
@@ -668,7 +679,7 @@ public class GameController : MonoBehaviour
                 card.layer = 9;
 
                 m_DeckCards.Add(card.GetComponent<CardElement>());
-                m_DeckCards[i * 13 + k].SetCardProperties(this, (ushort)(0 | suitValue | cardValue), builder.ToString());
+                m_DeckCards[i * 13 + k].SetCardProperties(this, (ushort)(0 | suitValue | cardValue), builder.ToString(), currentCardSkin);
 
                 builder.Clear();
             }
@@ -697,6 +708,7 @@ public class GameController : MonoBehaviour
 
             m_BottomCards.Add(m_DeckCards[i]);
 
+            Utilities.Instance.DispatchEvent(Solitaire.Event.PlayAudio, "play_one", 2);
             iTween.MoveTo(m_BottomCards[i].gameObject, new Vector3(m_BottomList[bottomNum - 1].transform.position.x, m_BottomList[bottomNum - 1].transform.position.y - yOffset, m_BottomList[bottomNum - 1].transform.position.z - 1.0f - zOffset), 0.05f);
             if (cardNum == bottomNum - 1)
             {
@@ -737,6 +749,7 @@ public class GameController : MonoBehaviour
         m_CommandsProcessor.AddCommand(new PutBackCommand(m_DrawCardHolder.transform.position, m_GameData));
         foreach (CardElement card in m_DeckCards)
         {
+            Utilities.Instance.DispatchEvent(Solitaire.Event.PlayAudio, "play_one", 1);
             iTween.MoveTo(card.gameObject, m_DeckButton.transform.position + Vector3.forward, 0.1f);
             card.position = Solitaire.CardPosition.Deck;
             card.IsFaceUp = false;
@@ -763,6 +776,7 @@ public class GameController : MonoBehaviour
                 iTween.MoveTo(m_DeckCards[i].gameObject, new Vector3(m_DeckCards[i].transform.position.x - offSet, m_DeckCards[i].transform.position.y, -(i * offSet)), 0.0f);
             }
         }
+        Utilities.Instance.DispatchEvent(Solitaire.Event.PlayAudio, "play_one", 2);
         iTween.MoveTo(m_DeckCards[currentDrawCard].gameObject, new Vector3(m_DrawCardHolder.transform.position.x + (currentDrawCard >= 2 ? 1.0f : currentDrawCard * offSet), m_DrawCardHolder.transform.position.y, -(currentDrawCard * offSet)), 0.1f);
         m_DeckCards[currentDrawCard].IsFaceUp = true;
         m_DeckCards[currentDrawCard].position = Solitaire.CardPosition.Draw;
@@ -878,5 +892,288 @@ public class GameController : MonoBehaviour
         }
 
         yield break;
+    }
+
+    private void OnSkinChanged(EventParam param)
+    {
+        string tag = param.GetString("tag");
+        int skinIndex = param.GetInt(tag);
+        GameSetting.Instance.currentCardSkin = skinIndex;
+
+        StartCoroutine(ChangeCardSkin(skinIndex));
+        AppController.Instance.SaveSetting();
+        //Utilities.Instance.DispatchEvent(Solitaire.Event.SaveData, "save_data", 0);
+    }
+
+    private IEnumerator ChangeCardSkin(int index)
+    {
+        Sprite cardSkin = ResourcesManager.Instance.CardSprite[index];
+
+        foreach (CardElement card in m_BottomCards)
+        {
+            card.SetCardBack(cardSkin);
+        }
+
+        foreach (CardElement card in m_DeckCards)
+        {
+            card.SetCardBack(cardSkin);
+        }
+
+        foreach (CardElement card in m_TopCards)
+        {
+            card.SetCardBack(cardSkin);
+        }
+
+        DeckController btnDecks = m_DeckButton.GetComponent<DeckController>();
+        btnDecks.SetCardBack(cardSkin);
+
+        yield break;
+    }
+
+    private void OnShowHint(EventParam param)
+    {
+        CalculateHint();
+    }
+
+    private void CalculateHint()
+    {
+        CardElement[] lastCardsInTop = GetAllLastCardsInStack(m_TopCards, true);
+        CardElement[] lastCardInBottom = GetAllLastCardsInStack(m_BottomCards, false);
+
+        if(CheckHintForDrawCards(lastCardsInTop, lastCardInBottom))
+        {
+            return;
+        }
+        else
+        {
+            CheckHintForBottomCards(lastCardsInTop, lastCardInBottom);
+        }
+    }
+
+    private bool CheckHintForDrawCards(CardElement[] lastCardsInTop, CardElement[] lastCardInBottom)
+    {
+        if(m_GameData.currentDrawCard == -1)
+        {
+            return false;
+        }
+        CardElement currentDrawCard = m_DeckCards[m_GameData.currentDrawCard];
+
+        foreach (CardElement card in lastCardsInTop)
+        {
+            if (card == null)
+            {
+                ushort cardValue = (ushort)Utilities.Instance.ExtractBit(currentDrawCard.CardValue, 12, 1);
+
+                if (cardValue == (ushort)Solitaire.CardValue.Ace)
+                {
+                    foreach (GameObject topPos in m_TopList)
+                    {
+                        if (topPos.transform.childCount == 0)
+                        {
+                            ShowHint(currentDrawCard, topPos);
+                            return true;
+                        }
+                    }
+                }
+                break;
+            }
+
+            if (CanStack(currentDrawCard.CardValue, card.CardValue, true))
+            {
+                ShowHint(currentDrawCard, card.gameObject);
+                return true;
+            }
+        }
+
+        foreach (CardElement card in lastCardInBottom)
+        {
+            if (card == null)
+            {
+                ushort cardValue = (ushort)Utilities.Instance.ExtractBit(currentDrawCard.CardValue, 12, 1);
+
+                if (cardValue == (ushort)Solitaire.CardValue.King)
+                {
+                    foreach (GameObject bottomPos in m_BottomList)
+                    {
+                        if (bottomPos.transform.childCount == 0)
+                        {
+                            ShowHint(currentDrawCard, bottomPos);
+                            return true;
+                        }
+                    }
+                }
+                break;
+            }
+
+            if (CanStack(currentDrawCard.CardValue, card.CardValue))
+            {
+                ShowHint(currentDrawCard, card.gameObject);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool CheckHintForBottomCards(CardElement[] lastCardsInTop, CardElement[] lastCardInBottom)
+    {
+        CardElement currentCard = lastCardInBottom[0];
+        if (currentCard == null)
+        {
+            return false;
+        }
+
+
+        for (int i = 1; i < lastCardInBottom.Length; ++i)
+        {
+            //Check lastCardInBottom[i - 1] with lastCardInTop
+            foreach (CardElement card in lastCardsInTop)
+            {
+                if (card == null)
+                {
+                    ushort cardValue = (ushort)Utilities.Instance.ExtractBit(currentCard.CardValue, 12, 1);
+
+                    if (cardValue == (ushort)Solitaire.CardValue.Ace)
+                    {
+                        foreach (GameObject topPos in m_TopList)
+                        {
+                            if (topPos.transform.childCount == 0)
+                            {
+                                ShowHint(currentCard, topPos);
+                                return true;
+                            }
+                        }
+                    }
+                    break;
+                }
+
+                if (CanStack(currentCard.CardValue, card.CardValue, true))
+                {
+                    ShowHint(currentCard, card.gameObject);
+                    return true;
+                }
+            }
+
+            //Check lastCardInBottom[i - 1] with other bottom columns
+            //TODO: optimize
+            for (int j = 0; j < lastCardInBottom.Length; ++j)
+            {
+                if(currentCard.position != lastCardInBottom[j].position)
+                {
+                    CardElement targetCardToCheck = lastCardInBottom[j];
+                    if(targetCardToCheck == null)
+                    {
+                        ushort cardValue = (ushort)Utilities.Instance.ExtractBit(currentCard.CardValue, 12, 1);
+
+                        if (cardValue == (ushort)Solitaire.CardValue.King)
+                        {
+                            foreach (GameObject bottomPos in m_BottomList)
+                            {
+                                if (bottomPos.transform.childCount == 0)
+                                {
+                                    ShowHint(currentCard, bottomPos);
+                                    return true;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                    CardElement cardCanMove = GetBottomCardToMove(currentCard, targetCardToCheck);
+                    if(cardCanMove != null)
+                    {
+                        if(cardCanMove.NextInStack)
+                        {
+                            ShowHintForStack(cardCanMove, targetCardToCheck.gameObject);
+                        }
+                        else
+                        {
+                            ShowHint(cardCanMove, targetCardToCheck.gameObject);
+                        }
+                        return true;
+                    }
+                }
+            }
+            currentCard = lastCardInBottom[i];
+
+            if(currentCard == null)
+            {
+                break;
+            }
+        }
+
+        return false;
+    }
+
+    private CardElement GetBottomCardToMove(CardElement card, CardElement target)
+    {
+        if(card && card.IsFaceUp)
+        {
+            if (CanStack(card.CardValue, target.CardValue))
+            {
+                return card;
+            }
+            else
+            {
+                return GetBottomCardToMove(card.PrevInStack, target);
+            }
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    private CardElement[] GetAllLastCardsInStack(List<CardElement> listCards, bool isTop)
+    {
+        CardElement[] list = isTop ? new CardElement[4] : new CardElement[7];
+
+        int index = 0;
+        foreach(CardElement element in listCards)
+        {
+            if(element.IsFaceUp && !element.NextInStack)
+            {
+                list[index] = element;
+                index++;
+            }
+        }
+
+        return list;
+    }
+
+    private void ShowHint(CardElement target, GameObject destination)
+    {
+        Vector3 clonePos = target.transform.position;
+        clonePos.z = -10.0f - Common.ZOFFSET;
+        CardElement cloneCard = Instantiate(target, clonePos, Quaternion.identity);
+        cloneCard.IsSelected = true;
+        Utilities.Instance.MoveToWithCallBack(cloneCard.gameObject, destination.transform.position, 1.0f, "DestroyAfterMove");
+    }
+
+    private void ShowHintForStack(CardElement target, GameObject destination)
+    {
+        CardElement nextInStack = null;
+        CardElement cloneCard = null;
+
+        nextInStack = target;
+        Vector3 dest = destination.transform.position;
+        Vector3 clonePos = target.transform.position;
+        clonePos.z = -10.0f - Common.ZOFFSET;
+        while (nextInStack)
+        {
+            cloneCard = Instantiate(nextInStack, clonePos, Quaternion.identity);
+            cloneCard.IsSelected = true;
+            Utilities.Instance.MoveToWithCallBack(cloneCard.gameObject, dest, 1.0f, "DestroyAfterMove");
+
+            nextInStack = nextInStack.NextInStack;
+            if(!nextInStack)
+            {
+                break;
+            }
+            clonePos.x = nextInStack.transform.position.x;
+            clonePos.y = nextInStack.transform.position.y;
+            clonePos.z -= Common.ZOFFSET;
+            dest.y -= Common.YOFFSET;
+            dest.z -= Common.ZOFFSET;
+        }
     }
 }

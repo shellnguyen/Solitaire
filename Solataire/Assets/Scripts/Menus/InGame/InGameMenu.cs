@@ -20,6 +20,7 @@ public class InGameMenu : MonoBehaviour
     [SerializeField] private Button m_BtnNew;
     [SerializeField] private Button m_BtnOption;
     [SerializeField] private Button m_BtnCards;
+    [SerializeField] private Button m_BtnHowToPlay;
     [SerializeField] private Button m_BtnHint;
     [SerializeField] private Button m_BtnUndo;
     [SerializeField] private Button m_BtnExit;
@@ -68,6 +69,7 @@ public class InGameMenu : MonoBehaviour
         m_BtnUndo.onClick.AddListener(OnUndoClicked);
         m_BtnHint.onClick.AddListener(OnHintClicked);
         m_BtnExit.onClick.AddListener(OnExitClicked);
+        m_BtnHowToPlay.onClick.AddListener(OnHowToPlayClicked);
     }
 
     private void OnNewGameClicked()
@@ -87,6 +89,7 @@ public class InGameMenu : MonoBehaviour
     private void OnCardClicked()
     {
         //todo
+        Utilities.Instance.DispatchEvent(Solitaire.Event.ShowPopup, "card_skin", 0);
     }
 
     private void OnUndoClicked()
@@ -95,9 +98,15 @@ public class InGameMenu : MonoBehaviour
         Utilities.Instance.DispatchEvent(Solitaire.Event.UndoMove, "undo_move", 0);
     }
 
+    private void OnHowToPlayClicked()
+    {
+        Utilities.Instance.DispatchEvent(Solitaire.Event.ShowPopup, "how_to_play", 0);
+    }
+
     private void OnHintClicked()
     {
         //todo
+        Utilities.Instance.DispatchEvent(Solitaire.Event.ShowHint, "show_hint", 0);
     }
 
     private void OnExitClicked()

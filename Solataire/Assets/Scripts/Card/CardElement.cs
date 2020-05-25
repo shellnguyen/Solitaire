@@ -160,13 +160,15 @@ public class CardElement : MonoBehaviour
     {
     }
 
-    public void SetCardProperties(GameController controller, ushort cardValue, string cardName)
+    public void SetCardProperties(GameController controller, ushort cardValue, string cardName, Sprite backSkin)
     {
         m_GameController = controller;
         m_CardName = cardName;
         m_CardValue = cardValue;
 
         m_Front = m_SpriteAtlas.GetSprite(m_CardName);
+        m_Back = backSkin;
+        m_Renderer.sprite = m_Back;
         position = Solitaire.CardPosition.Deck;
     }
 
@@ -321,6 +323,7 @@ public class CardElement : MonoBehaviour
 
     public void OnCardMove()
     {
+        Utilities.Instance.DispatchEvent(Solitaire.Event.PlayAudio, "play_one", 2);
         if (m_NextInStack && ((m_NextInStack.position & (Solitaire.CardPosition.Top1 | Solitaire.CardPosition.Top2 | Solitaire.CardPosition.Top3 | Solitaire.CardPosition.Top4)) == 0))
         {
             m_NextInStack.transform.position = new Vector3(transform.position.x, transform.position.y - Common.YOFFSET, transform.position.z - Common.ZOFFSET);
@@ -422,5 +425,20 @@ public class CardElement : MonoBehaviour
         {
             return m_NextInStack.GetLastCardInStack();
         }
+    }
+
+    public void SetCardBack(Sprite skin)
+    {
+        m_Back = skin;
+        if(!m_IsFaceUp)
+        {
+            m_Renderer.sprite = m_Back;
+        }
+    }
+
+    //Use for Hint feature. Destroy the clone card after move
+    public void DestroyAfterMove()
+    {
+        Destroy(gameObject);
     }
 }
