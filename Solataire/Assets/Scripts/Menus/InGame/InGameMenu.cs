@@ -20,9 +20,14 @@ public class InGameMenu : MonoBehaviour
     [SerializeField] private Button m_BtnNew;
     [SerializeField] private Button m_BtnOption;
     [SerializeField] private Button m_BtnCards;
+    [SerializeField] private Button m_BtnHowToPlay;
     [SerializeField] private Button m_BtnHint;
     [SerializeField] private Button m_BtnUndo;
     [SerializeField] private Button m_BtnExit;
+
+    [SerializeField] private RawImage m_UndoIcon;
+    [SerializeField] private TextMeshProUGUI m_UndoText;
+    [SerializeField] private Color m_UndoColor;
 
     //[SerializeField] private EventManager m_EventManager;
 
@@ -31,6 +36,7 @@ public class InGameMenu : MonoBehaviour
         m_MenuCanvas.worldCamera = Camera.main;
         //m_EventManager.Register(Solitaire.Event.OnDataChanged, OnDataChanged);
         EventManager.Instance.Register(Solitaire.Event.OnDataChanged, OnDataChanged);
+        EventManager.Instance.Register(Solitaire.Event.ChangeUIStatue, OnBtnUndoChanged);
 
         SetupButton();
     }
@@ -39,11 +45,13 @@ public class InGameMenu : MonoBehaviour
     {
         //m_EventManager.Unregister(Solitaire.Event.OnDataChanged, OnDataChanged);
         EventManager.Instance.Unregister(Solitaire.Event.OnDataChanged, OnDataChanged);
+        EventManager.Instance.Unregister(Solitaire.Event.ChangeUIStatue, OnBtnUndoChanged);
     }
 
     // Start is called before the first frame update
     private void Start()
     {
+        m_UndoColor = Color.white;
         //m_GameText.text = Enum.GetName(typeof(Solitaire.GameMode), m_GameData.gameMode);
     }
 
@@ -61,6 +69,7 @@ public class InGameMenu : MonoBehaviour
         m_BtnUndo.onClick.AddListener(OnUndoClicked);
         m_BtnHint.onClick.AddListener(OnHintClicked);
         m_BtnExit.onClick.AddListener(OnExitClicked);
+        m_BtnHowToPlay.onClick.AddListener(OnHowToPlayClicked);
     }
 
     private void OnNewGameClicked()
@@ -80,16 +89,24 @@ public class InGameMenu : MonoBehaviour
     private void OnCardClicked()
     {
         //todo
+        Utilities.Instance.DispatchEvent(Solitaire.Event.ShowPopup, "card_skin", 0);
     }
 
     private void OnUndoClicked()
     {
         //todo
+        Utilities.Instance.DispatchEvent(Solitaire.Event.UndoMove, "undo_move", 0);
+    }
+
+    private void OnHowToPlayClicked()
+    {
+        Utilities.Instance.DispatchEvent(Solitaire.Event.ShowPopup, "how_to_play", 0);
     }
 
     private void OnHintClicked()
     {
         //todo
+        Utilities.Instance.DispatchEvent(Solitaire.Event.ShowHint, "show_hint", 0);
     }
 
     private void OnExitClicked()
@@ -132,6 +149,28 @@ public class InGameMenu : MonoBehaviour
                         break;
                     }
             }
+        }
+    }
+
+    private void OnBtnUndoChanged(EventParam param)
+    {
+        string tag = param.GetString("tag");
+        if(tag.Equals("undo"))
+        {
+            m_BtnUndo.interactable = param.GetBoolean(tag);
+            
+            if(m_BtnUndo.IsInteractable())
+            {
+                m_UndoColor.a = 1.0f;
+            }
+            else
+            {
+                m_UndoColor.a = 0.5f;
+            }
+
+            m_UndoIcon.color = m_UndoColor;
+            m_UndoText.color = m_UndoColor;
+
         }
     }
 }

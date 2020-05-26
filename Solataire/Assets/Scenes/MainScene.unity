@@ -1415,7 +1415,7 @@ MonoBehaviour:
   m_Back: {fileID: 21300000, guid: 4ddf0429a9a684c4ca2f0b756be55b64, type: 3}
   m_Empty: {fileID: 21300000, guid: 425ee8d1ce516514696174131594d832, type: 3}
   m_CurrentDrawCard: 0
-  isEmpty: 0
+  m_IsEmpty: 0
 --- !u!61 &1942099066
 BoxCollider2D:
   m_ObjectHideFlags: 0

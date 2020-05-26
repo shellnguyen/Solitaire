@@ -254,6 +254,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BlackBG: {fileID: 3309620695837875501}
   m_PopupCanvas: {fileID: 3309620694362483850}
+  m_IsClosable: 0
   m_ResultText: {fileID: 3309620695657513287}
   m_BtnPlayAgain: {fileID: 3309620694306922752}
   m_BtnQuit: {fileID: 3309620696050796337}
@@ -1384,6 +1385,7 @@ GameObject:
   - component: {fileID: 3309620696059028989}
   - component: {fileID: 3309620696059028988}
   - component: {fileID: 3309620696059028978}
+  - component: {fileID: 5532336185925853305}
   m_Layer: 5
   m_Name: ResultPopup
   m_TagString: Untagged
@@ -1411,7 +1413,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1000, y: 350}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3309620696059028989
 CanvasRenderer:
@@ -1465,7 +1467,7 @@ MonoBehaviour:
     m_Left: 0
     m_Right: 0
     m_Top: 0
-    m_Bottom: 0
+    m_Bottom: 10
   m_ChildAlignment: 1
   m_Spacing: 0
   m_ChildForceExpandWidth: 0
@@ -1474,3 +1476,17 @@ MonoBehaviour:
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
+--- !u!114 &5532336185925853305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3309620696059028990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 2
+  m_VerticalFit: 2

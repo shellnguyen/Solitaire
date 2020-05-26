@@ -7,4 +7,5 @@ public class ResourcesManager : ScriptableSingleton<ResourcesManager>
 {
     public List<AudioClip> AudioList;
     public List<Sprite> CardSprite;
+    public List<string> HintTexts;
 }

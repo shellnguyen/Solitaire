@@ -14,9 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AudioList:
   - {fileID: 8300000, guid: 53103dabc0c34d9468f87637d6b9ba9b, type: 3}
+  - {fileID: 8300000, guid: 12b794e0eab1c6e4c881e8b423d16970, type: 3}
+  - {fileID: 8300000, guid: b4abaf4aa088d6644ae34adb1ebc8148, type: 3}
   CardSprite:
   - {fileID: 21300000, guid: 4ddf0429a9a684c4ca2f0b756be55b64, type: 3}
   - {fileID: 21300000, guid: a1b65559fd6105745bc6b402f1fd26f5, type: 3}
   - {fileID: 21300000, guid: e339c66cffd1a1b408d1984d9dc3aaac, type: 3}
   - {fileID: 21300000, guid: d4261a9969944ef488c7de4e0a4c0e8e, type: 3}
   - {fileID: 21300000, guid: 9d5f58a8af9ee8047b2843d5d370d17c, type: 3}
+  HintTexts:
+  - The goal is to create a stack of cards from low to high in each of the four foundation
+    piles in the upper-right corner. Each pile can contain only one suit.
+  - Aces are low and kings are high. The four foundation piles must begin with aces
+    and end with kings.
+  - You can move cards from one column to another. Cards in columns must be placed
+    in descending order and must alternate between red and black.
+  - Tap the deck in upper-left corner to draw more cards.

@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d5daf3c961062345aea75c601da9643, type: 3}
   m_Name: CommonSetting
   m_EditorClassIdentifier: 
-  m_HasAudio: 0
-  m_EnableAds: 0
+  enableAudio: 1
+  enableAds: 1
+  currentCardSkin: 0

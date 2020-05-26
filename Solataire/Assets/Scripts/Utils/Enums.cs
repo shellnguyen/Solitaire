@@ -71,6 +71,30 @@ namespace Solitaire
         Lose
     }
 
+    public enum NetworkType
+    {
+        Admob,
+        UnityAds
+    }
+
+    public enum AdsType
+    {
+        Banner,
+        Incentivized,
+        Interstitial
+    }
+
+    public enum BannerPosition
+    {
+        None,
+        Bottom,
+        BottomLeft,
+        BottomRight,
+        Top,
+        TopLeft,
+        TopRight
+    }
+
     public enum Event
     {
         OnDataChanged,
@@ -79,10 +103,15 @@ namespace Solitaire
         OnValueChanged,
         OnStartGame,
         OnNewGame,
-        OnGameResult,
         PlayEffect,
         PlayAudio,
-        OnUndo,
-        OnAutoResolve
+        OnSettingChanged,
+        UndoMove,
+        ChangeUIStatue,
+        PostAdsInitialized,
+        SaveData,
+        LoadData,
+        OnSkinChanged,
+        ShowHint
     }
 }

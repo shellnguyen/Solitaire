@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,6 +26,16 @@ public class MainMenu : MonoBehaviour
     //Ads
     [SerializeField] private GameObject m_AdsPanel;
 
+    private void OnEnable()
+    {
+        //EventManager.Instance.Register(Solitaire.Event.PostAdsInitialized, TriggerAds);
+    }
+
+    private void OnDisable()
+    {
+        //EventManager.Instance.Unregister(Solitaire.Event.PostAdsInitialized, TriggerAds);
+    }
+
     private void Awake()
     {
         m_AspectFitter.aspectRatio = (float)Screen.width / (float)Screen.height;
@@ -43,6 +51,14 @@ public class MainMenu : MonoBehaviour
         m_BtnSetting.onClick.AddListener(delegate { OnButtonPressed(13); });
         m_BtnLeaderboard.onClick.AddListener(delegate { OnButtonPressed(12); });
         m_BtnChallenge.onClick.AddListener(delegate { OnButtonPressed(11); });
+
+        //Utilities.Instance.DispatchEvent(Solitaire.Event.LoadData, "load_data", 0);
+        //AdsController.Instance.Initialized();
+        AppController.Instance.LoadSetting();
+    }
+
+    private void Start()
+    {
     }
 
     // Update is called once per frame
@@ -50,6 +66,11 @@ public class MainMenu : MonoBehaviour
     {
         
     }
+
+    //private void TriggerAds(EventParam param)
+    //{
+    //    AdsController.Instance.ShowBanner();
+    //}
 
     public void OnButtonPressed(int buttonId)
     {
@@ -78,6 +99,10 @@ public class MainMenu : MonoBehaviour
                 }
             default: //GameButton
                 {
+                    if(GameSetting.Instance.enableAds)
+                    {
+                        AdsController.Instance.HideBanner();
+                    }
                     SceneLoader.Instance.LoadScene(buttonId);
                     break;
                 }

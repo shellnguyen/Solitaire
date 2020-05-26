@@ -5,21 +5,24 @@ using UnityEngine.U2D;
 
 public class CardElement : MonoBehaviour
 {
-    [SerializeField]private GameController m_GameController;
-    [SerializeField]private Sprite m_Front;
-    [SerializeField]private Sprite m_Back;
-    [SerializeField]private SpriteAtlas m_SpriteAtlas;
-    [SerializeField]private SpriteRenderer m_Renderer;
-    [SerializeField]private ushort m_CardValue;
-    [SerializeField]private string m_CardName;
-    [SerializeField]private CardElement m_PrevFaceDown;
-    [SerializeField]private CardElement m_NextInStack;
-    [SerializeField]private GameObject m_Collided;
+    [SerializeField] private GameController m_GameController;
+    [SerializeField] private Sprite m_Front;
+    [SerializeField] private Sprite m_Back;
+    [SerializeField] private SpriteAtlas m_SpriteAtlas;
+    [SerializeField] private SpriteRenderer m_Renderer;
+    [SerializeField] private ushort m_CardValue;
+    [SerializeField] private string m_CardName;
+    [SerializeField] private CardElement m_PrevFaceDown;
+    [SerializeField] private CardElement m_PrevInStack;
+    [SerializeField] private CardElement m_NextInStack;
+    [SerializeField] private GameObject m_Collided;
+    [SerializeField] private bool m_IsSelected;
+    [SerializeField] private bool m_IsFaceUp;
+    [SerializeField] private byte m_CollidedTag;
+    [SerializeField] private bool m_IsDragging;
+
     private Vector3 m_PrevPos;
-    [SerializeField]private bool m_IsSelected;
-    private bool m_IsFaceUp;
-    [SerializeField]private byte m_CollidedTag;
-    [SerializeField]private bool m_IsDragging;
+
     public Solitaire.CardPosition position;
 
     public bool IsSelected
@@ -108,10 +111,37 @@ public class CardElement : MonoBehaviour
         }
     }
 
+    public CardElement NextInStack
+    {
+        get
+        {
+            return m_NextInStack;
+        }
+
+        set
+        {
+            m_NextInStack = value;
+        }
+    }
+
+    public CardElement PrevInStack
+    {
+        get
+        {
+            return m_PrevInStack;
+        }
+
+        set
+        {
+            m_PrevInStack = value;
+        }
+    }
+
     private void Awake()
     {
         m_Renderer = GetComponent<SpriteRenderer>();
         m_NextInStack = null;
+        m_PrevInStack = null;
         m_PrevFaceDown = null;
         m_PrevPos = Vector3.zero;
         m_IsSelected = false;
@@ -130,13 +160,15 @@ public class CardElement : MonoBehaviour
     {
     }
 
-    public void SetCardProperties(GameController controller, ushort cardValue, string cardName)
+    public void SetCardProperties(GameController controller, ushort cardValue, string cardName, Sprite backSkin)
     {
         m_GameController = controller;
         m_CardName = cardName;
         m_CardValue = cardValue;
 
         m_Front = m_SpriteAtlas.GetSprite(m_CardName);
+        m_Back = backSkin;
+        m_Renderer.sprite = m_Back;
         position = Solitaire.CardPosition.Deck;
     }
 
@@ -217,10 +249,10 @@ public class CardElement : MonoBehaviour
         return m_NextInStack ? true : false;
     }
 
-    public bool HasPrevFaceDown()
-    {
-        return m_PrevFaceDown ? true : false;
-    }
+    //public bool HasPrevFaceDown()
+    //{
+    //    return m_PrevFaceDown ? true : false;
+    //}
 
     public void OnSelectedChange(bool changeStack = true)
     {
@@ -291,6 +323,7 @@ public class CardElement : MonoBehaviour
 
     public void OnCardMove()
     {
+        Utilities.Instance.DispatchEvent(Solitaire.Event.PlayAudio, "play_one", 2);
         if (m_NextInStack && ((m_NextInStack.position & (Solitaire.CardPosition.Top1 | Solitaire.CardPosition.Top2 | Solitaire.CardPosition.Top3 | Solitaire.CardPosition.Top4)) == 0))
         {
             m_NextInStack.transform.position = new Vector3(transform.position.x, transform.position.y - Common.YOFFSET, transform.position.z - Common.ZOFFSET);
@@ -298,15 +331,10 @@ public class CardElement : MonoBehaviour
         }
     }
 
-    public void SetNextInStack(CardElement card)
-    {
-        m_NextInStack = card;
-    }
-
-    public void SetPrevFaceDown(CardElement card)
-    {
-        m_PrevFaceDown = card;
-    }
+    //public void SetPrevFaceDown(CardElement card)
+    //{
+    //    m_PrevFaceDown = card;
+    //}
 
     public void SetCardPosition(Solitaire.CardPosition position)
     {
@@ -333,11 +361,11 @@ public class CardElement : MonoBehaviour
 
     public void FlipPreDownCard()
     {
-        if(m_PrevFaceDown)
+        if(m_PrevInStack && !m_PrevInStack.IsFaceUp)
         {
-            m_PrevFaceDown.gameObject.layer = 8;
-            m_PrevFaceDown.IsFaceUp = true;
-            m_PrevFaceDown = null;
+            m_PrevInStack.gameObject.layer = 8;
+            m_PrevInStack.IsFaceUp = true;
+            m_PrevInStack = null;
         }
     }
 
@@ -397,5 +425,20 @@ public class CardElement : MonoBehaviour
         {
             return m_NextInStack.GetLastCardInStack();
         }
+    }
+
+    public void SetCardBack(Sprite skin)
+    {
+        m_Back = skin;
+        if(!m_IsFaceUp)
+        {
+            m_Renderer.sprite = m_Back;
+        }
+    }
+
+    //Use for Hint feature. Destroy the clone card after move
+    public void DestroyAfterMove()
+    {
+        Destroy(gameObject);
     }
 }

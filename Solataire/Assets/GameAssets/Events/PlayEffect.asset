@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ff0438b8a76b2345b46e887d6036e47, type: 3}
   m_Name: PlayEffect
   m_EditorClassIdentifier: 
-  id: 7
+  id: 6

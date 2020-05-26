@@ -21,6 +21,7 @@ public class ResultPopup : Popup
         set
         {
             m_IsWin = value;
+            SetResultText();
         }
     }
 
@@ -49,11 +50,13 @@ public class ResultPopup : Popup
         {
             case 1:
                 {
+                    this.gameObject.SetActive(false);
                     Utilities.Instance.DispatchEvent(Solitaire.Event.OnNewGame, "new_game", "");
                     break;
                 }
             case 2:
                 {
+                    this.gameObject.SetActive(false);
                     SceneLoader.Instance.LoadScene(1); // Return to main menu
                     break;
                 }
