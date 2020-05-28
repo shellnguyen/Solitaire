@@ -38,6 +38,7 @@ public class Builder
         options.locationPathName = "builds/AndroidRelease_" + PlayerSettings.bundleVersion + "/"  + PlayerSettings.productName + ".aab";
         options.options = BuildOptions.CompressWithLz4HC;
         EditorUserBuildSettings.buildAppBundle = true;
+        PlayerSettings.Android.bundleVersionCode++;
 
         BuildReport report = BuildPipeline.BuildPlayer(options);
         BuildSummary summary = report.summary;
